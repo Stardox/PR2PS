@@ -83,7 +83,7 @@ Example: <br />
 `PR2PS.GameServer.exe 127.0.0.1 9000 http://127.0.0.1:12345 MyServer` <br />
 
 If no arguments will be supplied then the game server will be launched with the following configuration: <br />
-`PR2PS.GameServer.exe 127.0.0.1 9160 http://127.0.0.1:12345 Local`
+`PR2PS.GameServer.exe 127.0.0.1 9160 http://127.0.0.1:8080 Local`
 
 After the startup, the game server will attempt to contact web server so that it can be added to the list of playable game servers.
 
