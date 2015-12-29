@@ -93,26 +93,24 @@ Final step includes making the game client to connect to the specified address. 
 
 After launching the tool, following parameters has to be supplied:
 
-**Standalone Flash Projector executable**
+**Standalone Flash Projector executable** <br />
 This file is not included in this project and has to be downloaded manually from Adobe site: <br />
 https://www.adobe.com/support/flashplayer/debug_downloads.html <br />
-On the download page look for **Download the Flash Player projector**, file should be called: <br />
+On the download page look for *Download the Flash Player projector*, file should be called: <br />
 `flashplayer_XY_sa.exe`
 
-**Modified Platform Racing 2 client**
+**Modified Platform Racing 2 client** <br />
 The *swf* file is included in same folder as ClientBuilder and is called *client.swf*.
 
-**Web server url**
+**Web server url** <br />
 Put the web server (PR2PS.Web) host address here.
 
-**Levels server url**
+**Levels server url** <br />
 At this point, the server does not support level hosting, therefore all levels should be downloaded from: <br />
 `http://pr2hub.com/levels`
 
-**Destination folder**
-This is where all the client files will be copied to. Content of 
-
-After the build, 
+**Destination folder** <br />
+This is where all the client files will be copied to. After the build, launch the client using *Run.bat*.
 
 # Original work
 
