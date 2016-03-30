@@ -287,10 +287,6 @@ namespace PR2PS.ClientBuilder
             {
                 errors.Add("- Could not find the Flash Projector executable. Make sure that you entered a valid path.");
             }
-            //else if (Path.GetExtension(this.textBoxFlashProjector.Text).ToUpper() != ".EXE")
-            //{
-            //
-            //}
 
             // 2.) Check if client SWF file has been specified.
             if (String.IsNullOrWhiteSpace(this.textBoxClientFile.Text))
@@ -347,13 +343,21 @@ namespace PR2PS.ClientBuilder
         private String getBATContent()
         {
             StringBuilder strBuilder = new StringBuilder();
+
+            strBuilder.Append('\"');
             strBuilder.Append(Path.GetFileName(this.textBoxFlashProjector.Text));
+            strBuilder.Append('\"');
+
             strBuilder.Append(' ');
+
+            strBuilder.Append('\"');
             strBuilder.Append(Path.GetFileName(this.textBoxClientFile.Text));
             strBuilder.Append("?mainURL=");
             strBuilder.Append(Uri.EscapeDataString(this.textBoxWebServerURL.Text).Replace("%", "%%"));
-            strBuilder.Append("^&levelsURL=");
+            strBuilder.Append("&levelsURL=");
             strBuilder.Append(Uri.EscapeDataString(this.textBoxLevelsServerURL.Text).Replace("%", "%%"));
+            strBuilder.Append('\"');
+
             return strBuilder.ToString();
         }
 
