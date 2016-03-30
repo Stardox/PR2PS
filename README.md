@@ -54,23 +54,23 @@ This server is not safe to be hosted publicly. Many security checks have not bee
 
 ## PR2PS.Web
 
-PR2PS.Web has to launched first in the following fashion:
+PR2PS.Web has to launched first in the following fashion: <br />
 `PR2PS.Web.exe host_url`
 
 Where:
 - *host_url*	- Is address, where the web server should be hosted at.
 
-Example:
-`PR2PS.Web.exe http://127.0.0.1:12345`
+Example: <br />
+`PR2PS.Web.exe http://127.0.0.1:12345` <br />
 
-If no arguments will be supplied then the web server will be launched with the following configuration:
-`PR2PS.Web.exe http://127.0.0.1:8080`
+If no arguments will be supplied then the web server will be launched with the following configuration: <br />
+`PR2PS.Web.exe http://127.0.0.1:8080` <br />
 
 After the startup, database file *PR2DB.sqlite* will be generated and seeded (if it has not been already). You can delete the database file anytime if you want to start over.
 
 ## PR2PS.GameServer
 
-Next up it is neccessary to launch one or more instances of PR2PS.GameServer in following fashion:
+Next up it is neccessary to launch one or more instances of PR2PS.GameServer in following fashion: <br />
 `PR2PS.GameServer.exe host_ip host_port web_url server_name`
 
 Where:
@@ -79,11 +79,11 @@ Where:
 - *web_url*		- Is the url of web server.
 - *server_name*	- Is the name of the server (Derron, Carina, Asdf, etc.).
 
-Example:
-`PR2PS.GameServer.exe 127.0.0.1 9000 http://127.0.0.1:12345 MyServer`
+Example: <br />
+`PR2PS.GameServer.exe 127.0.0.1 9000 http://127.0.0.1:12345 MyServer` <br />
 
-If no arguments will be supplied then the game server will be launched with the following configuration:
-`PR2PS.GameServer.exe 127.0.0.1 9160 http://127.0.0.1:12345 Local`
+If no arguments will be supplied then the game server will be launched with the following configuration: <br />
+`PR2PS.GameServer.exe 127.0.0.1 9160 http://127.0.0.1:8080 Local`
 
 After the startup, the game server will attempt to contact web server so that it can be added to the list of playable game servers.
 
@@ -93,26 +93,24 @@ Final step includes making the game client to connect to the specified address. 
 
 After launching the tool, following parameters has to be supplied:
 
-**Standalone Flash Projector executable**
-This file is not included in this project and has to be downloaded manually from Adobe site:
-https://www.adobe.com/support/flashplayer/debug_downloads.html
-On the download page look for **Download the Flash Player projector**, file should be called:
+**Standalone Flash Projector executable** <br />
+This file is not included in this project and has to be downloaded manually from Adobe site: <br />
+https://www.adobe.com/support/flashplayer/debug_downloads.html <br />
+On the download page look for *Download the Flash Player projector*, file should be called: <br />
 `flashplayer_XY_sa.exe`
 
-**Modified Platform Racing 2 client**
+**Modified Platform Racing 2 client** <br />
 The *swf* file is included in same folder as ClientBuilder and is called *client.swf*.
 
-**Web server url**
+**Web server url** <br />
 Put the web server (PR2PS.Web) host address here.
 
-**Levels server url**
-At this point, the server does not support level hosting, therefore all levels should be downloaded from:
+**Levels server url** <br />
+At this point, the server does not support level hosting, therefore all levels should be downloaded from: <br />
 `http://pr2hub.com/levels`
 
-**Destination folder**
-This is where all the client files will be copied to. Content of 
-
-After the build, 
+**Destination folder** <br />
+This is where all the client files will be copied to. After the build, launch the client using *Run.bat*.
 
 # Original work
 
