@@ -41,6 +41,9 @@ namespace PR2PS.Common.Constants
         public const String STR_NO_REASON = "none";
         public const String SERVER_OPEN = "open";
         public const String SERVER_DOWN = "down";
+        public const String NAH = "nah";
+        public const String FORFEIT = "forfeit";
+        public const String ONE = "1";
     }
 
     public static class MimeTypes
@@ -50,11 +53,29 @@ namespace PR2PS.Common.Constants
         public const String MIME_TEXT_XML = "text/xml";
     }
 
+    // TODO - Cleanup this.
     public static class Separators
     {
         public static readonly Char[] SEPARATOR_COMMA = new Char[] { ',' };
         // Backtick.
         public const Char ARG_CHAR = '`';
+        public const Char EOT_CHAR = '\x04';
+        public const Char COMMA_CHAR = ',';
+        public const Char PERIOD_CHAR = '.';
+        public static Char[] UNDERSCORE_SEPARATOR = new Char[] { '_' };
+        public static Char[] COMMA_SEPARATOR = new Char[] { ',' };
+        public static Char[] ARG_SEPARATOR = new Char[] { '`' };
+        public static Char[] EOT_SEPARATOR = new Char[] { EOT_CHAR };
+    }
+
+    public static class GameRooms
+    {
+        public const String ROOM_NONE = "none";
+        public const String ROOM_MAIN = "main";
+        public const String ROOM_CAMPAIGN = "campaign";
+        public const String ROOM_ALLTIMEBEST = "best";
+        public const String ROOM_TODAYSBEST = "best_today";
+        public const String ROOM_SEARCH = "search";
     }
 
     // How about more appropriate name.

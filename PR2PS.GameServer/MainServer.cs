@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.AspNet.SignalR.Client;
+using PR2Hub.Core;
+using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using System.IO;
-using Microsoft.AspNet.SignalR.Client;
 using TimerTimer = System.Timers.Timer;
-using Microsoft.AspNet.SignalR.Client.Transports;
-using PR2Hub.Core;
 
 namespace PR2PS.GameServer
 {
@@ -48,7 +44,7 @@ namespace PR2PS.GameServer
             this.hubConnectionURL = hubConnectionURL;
             this.listener = new TcpListener(new IPEndPoint(ip, port));
             this.gameServer = new PR2Server(name);
-            this.keepAliveTimer = new TimerTimer(Constants.KEEPALIVE_INTERVAL);
+            this.keepAliveTimer = new TimerTimer(GameConstants.KEEPALIVE_INTERVAL);
             this.keepAliveTimer.Elapsed += keepAliveTimer_Elapsed;
         }
 

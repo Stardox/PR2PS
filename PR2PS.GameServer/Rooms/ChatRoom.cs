@@ -1,8 +1,6 @@
-﻿using System;
+﻿using PR2PS.Common.Constants;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PR2PS.GameServer
 {
@@ -93,14 +91,14 @@ namespace PR2PS.GameServer
                         }
                         else
                         {
-                            foundCli.AccData.HatSeq = Constants.PARTS_ALL_HATS;
-                            foundCli.AccData.HeadSeq = Constants.PARTS_ALL_HEADS;
-                            foundCli.AccData.BodySeq = Constants.PARTS_ALL_BODIES;
-                            foundCli.AccData.FeetSeq = Constants.PARTS_ALL_FEET;
-                            foundCli.AccData.HatSeqEpic = Constants.PARTS_ALL_HATS;
-                            foundCli.AccData.HeadSeqEpic = Constants.PARTS_ALL_HEADS;
-                            foundCli.AccData.BodySeqEpic = Constants.PARTS_ALL_BODIES;
-                            foundCli.AccData.FeetSeqEpic = Constants.PARTS_ALL_FEET;
+                            foundCli.AccData.HatSeq = BodyParts.PARTS_ALL_HATS;
+                            foundCli.AccData.HeadSeq = BodyParts.PARTS_ALL_HEADS;
+                            foundCli.AccData.BodySeq = BodyParts.PARTS_ALL_BODIES;
+                            foundCli.AccData.FeetSeq = BodyParts.PARTS_ALL_FEET;
+                            foundCli.AccData.HatSeqEpic = BodyParts.PARTS_ALL_HATS;
+                            foundCli.AccData.HeadSeqEpic = BodyParts.PARTS_ALL_HEADS;
+                            foundCli.AccData.BodySeqEpic = BodyParts.PARTS_ALL_BODIES;
+                            foundCli.AccData.FeetSeqEpic = BodyParts.PARTS_ALL_FEET;
                             foundCli.AccData.ObtainedRankTokens = 150;
 
                             sender.SendMessage(String.Format("systemChat`Success! User '{0}' has unlocked everything.", commandParts[1]));

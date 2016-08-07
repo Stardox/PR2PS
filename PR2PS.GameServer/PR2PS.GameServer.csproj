@@ -113,6 +113,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PR2PS.Common\PR2PS.Common.csproj">
+      <Project>{ef9d9b4a-47d6-496d-8dbb-19011d54f024}</Project>
+      <Name>PR2PS.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

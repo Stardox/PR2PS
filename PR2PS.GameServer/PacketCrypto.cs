@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PR2PS.Common.Constants;
+using System;
 
 namespace PR2PS.GameServer
 {
@@ -20,7 +16,7 @@ namespace PR2PS.GameServer
 
         public String GetPacketWithHash(String packetWithoutHash)
         {
-            return String.Concat(Constants.NAH, Constants.ARG_CHAR, packetWithoutHash);
+            return String.Concat(StatusMessages.NAH, Separators.ARG_CHAR, packetWithoutHash);
         }
     }
 }

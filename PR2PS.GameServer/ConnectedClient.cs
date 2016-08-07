@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNet.SignalR.Client;
+using PR2Hub.Core;
+using PR2PS.Common.Constants;
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
-using Microsoft.AspNet.SignalR.Client;
-using PR2Hub.Core;
 
 namespace PR2PS.GameServer
 {
@@ -120,18 +118,18 @@ namespace PR2PS.GameServer
         /// <param name="recvMsg">Received message in its raw format.</param>
         public void HandleReceivedMessage(String recvMsg)
         {
-            if (recvMsg.Equals(Constants.POLICY_FILE_XML_REQUEST))
+            if (recvMsg.Equals(GameConstants.POLICY_FILE_XML_REQUEST))
             {
                 // Client is requesting policy file, send it.
-                Byte[] sendData = sendData = ASCIIEncoding.ASCII.GetBytes(Constants.POLICY_FILE_XML_RESPONSE);
+                Byte[] sendData = sendData = ASCIIEncoding.ASCII.GetBytes(GameConstants.POLICY_FILE_XML_RESPONSE);
                 connection.Write(sendData, 0, sendData.Length);
             }
-            else if(Regex.Match(recvMsg, Constants.PACKET_REGEX).Success)
+            else if(Regex.Match(recvMsg, GameConstants.PACKET_REGEX).Success)
             {
                 // Successfuly verified received message as PR2 message.
 
                 // Split message according to EOT incase that client sent multiple messages concatenated.
-                String[] packets = recvMsg.Split(Constants.EOT_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
+                String[] packets = recvMsg.Split(Separators.EOT_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
 
                 // Iterate through every single message and process it.
                 foreach (String packet in packets)
@@ -139,7 +137,7 @@ namespace PR2PS.GameServer
                     // First off verify, whether 3 bytes long hash matches.
                     if (hasher.VerifyPacket(packet))
                     {
-                        String[] msgSegments = packet.Split(Constants.ARG_SEPARATOR);
+                        String[] msgSegments = packet.Split(Separators.ARG_SEPARATOR);
 
                         #region Handle these requests even if client has not been authentificated yet.
 
@@ -239,7 +237,7 @@ namespace PR2PS.GameServer
                                     if (msgSegments.Length < 4)
                                     {
                                         // If for some reason client has not specified room name, set it to none.
-                                        this.gameServer.MoveClientToChatRoom(Constants.ROOM_NONE, this);
+                                        this.gameServer.MoveClientToChatRoom(GameRooms.ROOM_NONE, this);
                                     }
                                     else
                                     {
@@ -266,7 +264,7 @@ namespace PR2PS.GameServer
                                     if (msgSegments.Length < 4)
                                     {
                                         // If for some reason client has not specified room name, set it to none.
-                                        this.gameServer.MoveClientToRightRoom(Constants.ROOM_NONE, this);
+                                        this.gameServer.MoveClientToRightRoom(GameRooms.ROOM_NONE, this);
                                     }
                                     else
                                     {
@@ -278,7 +276,7 @@ namespace PR2PS.GameServer
                                     if (msgSegments.Length < 4)
                                     {
                                         // If for some reason client has not specified room name, set it to none.
-                                        this.gameServer.MoveClientToGameRoom(Constants.ROOM_NONE, this);
+                                        this.gameServer.MoveClientToGameRoom(GameRooms.ROOM_NONE, this);
                                     }
                                     else
                                     {
@@ -485,7 +483,7 @@ namespace PR2PS.GameServer
         public void SendMessage(String message)
         {
             String packetWithoutHash = String.Format("{0}`{1}", this.sendCount++, message);
-            String finalPacket = String.Concat(hasher.GetPacketWithHash(packetWithoutHash), Constants.EOT_CHAR);
+            String finalPacket = String.Concat(hasher.GetPacketWithHash(packetWithoutHash), Separators.EOT_CHAR);
             
             String logMsg = String.Format("To {0}: {1}", this.endPoint, finalPacket);
             //Console.WriteLine(logMsg);

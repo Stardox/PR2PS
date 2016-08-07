@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
 using PR2Hub.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PR2PS.GameServer
 {
@@ -19,7 +15,7 @@ namespace PR2PS.GameServer
         /// <param name="port">Port to which listener is attached.</param>
         public static void RegisterServer(this IHubProxy proxy, String serverName, IPAddress address, Int32 port)
         {
-            proxy.Invoke(Constants.RPC_REGISTER, serverName, address.ToString(), port.ToString());
+            proxy.Invoke(GameConstants.RPC_REGISTER, serverName, address.ToString(), port.ToString());
         }
 
         /// <summary>
@@ -28,7 +24,7 @@ namespace PR2PS.GameServer
         /// <param name="serverName">Human readable server name.</param>
         public static void ServerAlive(this IHubProxy proxy, String serverName)
         {
-            proxy.Invoke(Constants.RPC_ALIVE, serverName);
+            proxy.Invoke(GameConstants.RPC_ALIVE, serverName);
         }
 
         /// <summary>

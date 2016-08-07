@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNet.SignalR.Client;
-using PR2Hub.Core;
+﻿using PR2Hub.Core;
+using PR2PS.Common.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace PR2PS.GameServer
@@ -71,11 +70,11 @@ namespace PR2PS.GameServer
             this.oneSecTimer.Elapsed += oneSecTimer_Elapsed;
             this.oneSecTimer.Start();
 
-            this.chatRooms.Add(Constants.ROOM_MAIN, new ChatRoom(Constants.ROOM_MAIN, true, this));
-            this.rightRooms.Add(Constants.ROOM_CAMPAIGN, new RightRoom(Constants.ROOM_CAMPAIGN, this));
-            this.rightRooms.Add(Constants.ROOM_ALLTIMEBEST, new RightRoom(Constants.ROOM_ALLTIMEBEST, this));
-            this.rightRooms.Add(Constants.ROOM_TODAYSBEST, new RightRoom(Constants.ROOM_TODAYSBEST, this));
-            this.rightRooms.Add(Constants.ROOM_SEARCH, new RightRoom(Constants.ROOM_SEARCH, this));
+            this.chatRooms.Add(GameRooms.ROOM_MAIN, new ChatRoom(GameRooms.ROOM_MAIN, true, this));
+            this.rightRooms.Add(GameRooms.ROOM_CAMPAIGN, new RightRoom(GameRooms.ROOM_CAMPAIGN, this));
+            this.rightRooms.Add(GameRooms.ROOM_ALLTIMEBEST, new RightRoom(GameRooms.ROOM_ALLTIMEBEST, this));
+            this.rightRooms.Add(GameRooms.ROOM_TODAYSBEST, new RightRoom(GameRooms.ROOM_TODAYSBEST, this));
+            this.rightRooms.Add(GameRooms.ROOM_SEARCH, new RightRoom(GameRooms.ROOM_SEARCH, this));
         }
 
         /// <summary>
@@ -127,11 +126,11 @@ namespace PR2PS.GameServer
                     // Client has been successfuly removed from the dictionary.
 
                     // Remove from chat room if in one.
-                    this.MoveClientToChatRoom(Constants.ROOM_NONE, client);
+                    this.MoveClientToChatRoom(GameRooms.ROOM_NONE, client);
                     // Remove from right room if in one.
-                    this.MoveClientToRightRoom(Constants.ROOM_NONE, client);
+                    this.MoveClientToRightRoom(GameRooms.ROOM_NONE, client);
                     // Forfeit and remove from game if in one.
-                    this.MoveClientToGameRoom(Constants.ROOM_NONE, client);
+                    this.MoveClientToGameRoom(GameRooms.ROOM_NONE, client);
 
                     // Upload character information back to the web server and logout client.
                     client.PushUpdateRPC();
@@ -252,9 +251,9 @@ namespace PR2PS.GameServer
 
             if (user == null)
             {
-                if (this.chatRooms[Constants.ROOM_MAIN] != null)
+                if (this.chatRooms[GameRooms.ROOM_MAIN] != null)
                 {
-                    this.chatRooms[Constants.ROOM_MAIN].PushSystemMessage(message);
+                    this.chatRooms[GameRooms.ROOM_MAIN].PushSystemMessage(message);
                 }
             }
             else
@@ -279,7 +278,7 @@ namespace PR2PS.GameServer
             {
                 foreach (ConnectedClient cli in this.clientsAuth.Values)
                 {
-                    destClient.SendMessage(String.Format("addUser`{0}`{1}`{2}`{3}", cli.AccData.Username, cli.AccData.Group, cli.AccData.Rank, cli.AccData.HatSeq.Split(Constants.COMMA_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Length - 1));
+                    destClient.SendMessage(String.Format("addUser`{0}`{1}`{2}`{3}", cli.AccData.Username, cli.AccData.Group, cli.AccData.Rank, cli.AccData.HatSeq.Split(Separators.COMMA_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Length - 1));
                 }
             }
         }
@@ -291,7 +290,7 @@ namespace PR2PS.GameServer
         /// <param name="client">Client.</param>
         public void MoveClientToChatRoom(String chatRoomName, ConnectedClient client)
         {
-            if (chatRoomName == Constants.ROOM_NONE)
+            if (chatRoomName == GameRooms.ROOM_NONE)
             {
                 // Firstly check if client even is in chatroom.
                 if (client.ChatRoom != null)
@@ -403,7 +402,7 @@ namespace PR2PS.GameServer
             {
                 foreach (ChatRoom room in this.chatRooms.Values)
                 {
-                    strBuilder.Append(Constants.ARG_SEPARATOR);
+                    strBuilder.Append(Separators.ARG_SEPARATOR);
                     strBuilder.Append(room.Name);
                     strBuilder.Append(" - ");
                     strBuilder.Append(room.MembersCount);
@@ -422,7 +421,7 @@ namespace PR2PS.GameServer
         {
             switch (rightRoomName)
             { 
-                case Constants.ROOM_NONE:
+                case GameRooms.ROOM_NONE:
                     // Firstly check if client even is in rightroom.
                     if (client.RightRoom != null)
                     {
@@ -432,10 +431,10 @@ namespace PR2PS.GameServer
                     }
                     break;
 
-                case Constants.ROOM_CAMPAIGN:
-                case Constants.ROOM_ALLTIMEBEST:
-                case Constants.ROOM_TODAYSBEST:
-                case Constants.ROOM_SEARCH:
+                case GameRooms.ROOM_CAMPAIGN:
+                case GameRooms.ROOM_ALLTIMEBEST:
+                case GameRooms.ROOM_TODAYSBEST:
+                case GameRooms.ROOM_SEARCH:
                     if (client.RightRoom == null)
                     {
                         // Client is not in any rightroom atm, no need to move it.
@@ -503,7 +502,7 @@ namespace PR2PS.GameServer
         {
             switch (gameRoomName)
             {
-                case Constants.ROOM_NONE:
+                case GameRooms.ROOM_NONE:
                     // Firstly check if client even is ingame.
                     if (client.Game != null)
                     {

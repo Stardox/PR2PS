@@ -1,10 +1,10 @@
 ﻿using PR2Hub.Core;
+using PR2PS.Common.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using GameMode = PR2PS.GameServer.Constants.GameMode;
+using GameMode = PR2PS.GameServer.GameConstants.GameMode;
 
 namespace PR2PS.GameServer
 {
@@ -100,7 +100,7 @@ namespace PR2PS.GameServer
                 // Update levelId from levelId_version format to levelId.
                 if (this.levelId.Contains('_'))
                 {
-                    this.levelId = this.levelId.Split(Constants.UNDERSCORE_SEPARATOR)[0];
+                    this.levelId = this.levelId.Split(Separators.UNDERSCORE_SEPARATOR)[0];
                 }
 
                 // Fill list of racers and assign hats.
@@ -398,8 +398,8 @@ namespace PR2PS.GameServer
                         String.Format(
                         "`{0}`{1}`{2}",
                         racer.AccData.Username,
-                        racer.FinishedInfo.Value.Completed ? racer.FinishedInfo.Value.FinishTime.TotalSeconds.ToString().Replace(Constants.COMMA_CHAR, Constants.PERIOD_CHAR) : Constants.FORFEIT,
-                        racer.Client != null ? Constants.ONE : String.Empty
+                        racer.FinishedInfo.Value.Completed ? racer.FinishedInfo.Value.FinishTime.TotalSeconds.ToString().Replace(Separators.COMMA_CHAR, Separators.PERIOD_CHAR) : StatusMessages.FORFEIT,
+                        racer.Client != null ? StatusMessages.ONE : String.Empty
                         ));
                 }
             }
@@ -538,7 +538,7 @@ namespace PR2PS.GameServer
             if (foundRacer != null)
             {
                 foundRacer.FinishedDrawing = true;
-                this.gameMode = Constants.GameModeMap[msgSegments[4]]; // TODO - From DB instead from client.
+                this.gameMode = GameConstants.GameModeMap[msgSegments[4]]; // TODO - From DB instead from client.
 
                 this.sendFinishDrawing(foundRacer);
                 this.checkFinishDrawing();
@@ -597,7 +597,7 @@ namespace PR2PS.GameServer
             StringBuilder strBuilder = new StringBuilder();
             for (int i = 3; i < msgSegments.Length; i++)
             {
-                strBuilder.Append(Constants.ARG_CHAR);
+                strBuilder.Append(Separators.ARG_CHAR);
                 strBuilder.Append(msgSegments[i]);
             }
             String varData = strBuilder.ToString();
@@ -626,7 +626,7 @@ namespace PR2PS.GameServer
             StringBuilder strBuilder = new StringBuilder();
             for (int i = 3; i < msgSegments.Length; i++)
             {
-                strBuilder.Append(Constants.ARG_CHAR);
+                strBuilder.Append(Separators.ARG_CHAR);
                 strBuilder.Append(msgSegments[i]);
             }
             String effectData = strBuilder.ToString();
@@ -653,7 +653,7 @@ namespace PR2PS.GameServer
             StringBuilder strBuilder = new StringBuilder();
             for (int i = 3; i < msgSegments.Length; i++)
             {
-                strBuilder.Append(Constants.ARG_CHAR);
+                strBuilder.Append(Separators.ARG_CHAR);
                 strBuilder.Append(msgSegments[i]);
             }
             String activateData = strBuilder.ToString();
@@ -912,12 +912,12 @@ namespace PR2PS.GameServer
             {
                 if (this.myHats.Count == 0)
                 {
-                    return Constants.ARG_CHAR.ToString();
+                    return Separators.ARG_CHAR.ToString();
                 }
 
                 for (Int32 hatId = this.myHats.Count -1; hatId >= 0; hatId--)
                 {
-                    strBuilder.Append(Constants.ARG_CHAR);
+                    strBuilder.Append(Separators.ARG_CHAR);
                     strBuilder.Append(this.myHats.ElementAt(hatId).ToString());
                 }
             }
