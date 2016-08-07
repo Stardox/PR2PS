@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
-using PR2PS.Common;
 using PR2PS.Common.Constants;
+using PR2PS.Common.Extensions;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JSONClasses;
@@ -62,7 +62,7 @@ namespace PR2PS.Web.Controllers
                     }));
                 }
 
-                String rawloginDataJSON = Base64.Decode(loginData.I);
+                String rawloginDataJSON = loginData.I.FromBase64ToString();
                 LoginDataJSON loginDataJSON = JsonConvert.DeserializeObject<LoginDataJSON>(rawloginDataJSON);
 
                 using (DatabaseContext db = new  DatabaseContext())

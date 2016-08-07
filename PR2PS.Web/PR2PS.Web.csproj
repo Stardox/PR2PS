@@ -152,7 +152,6 @@
     <Compile Include="Core\JSONClasses\UserInfoJSON.cs" />
     <Compile Include="Core\JSONClasses\ServerJSON.cs" />
     <Compile Include="Core\Management\SessionInstance.cs" />
-    <Compile Include="Core\Base64.cs" />
     <Compile Include="Core\Management\ServerInstance.cs" />
     <Compile Include="Core\Management\ServerManager.cs" />
     <Compile Include="Core\Management\SessionManager.cs" />

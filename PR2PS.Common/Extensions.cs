@@ -1,12 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace PR2PS.Common
+namespace PR2PS.Common.Extensions
 {
-    public static class Extensions
+    public static class Base64Extensions
+    {
+        public static String ToBase64(this String data)
+        {
+            return Encoding.UTF8.GetBytes(data).ToBase64();
+        }
+
+        public static String ToBase64(this Byte[] data)
+        {
+            return Convert.ToBase64String(data);
+        }
+
+        public static String FromBase64ToString(this String data)
+        {
+            return Encoding.UTF8.GetString(data.FromBase64ToArray());
+        }
+
+        public static Byte[] FromBase64ToArray(this String data)
+        {
+            return Convert.FromBase64String(data);
+        }
+    }
+
+    // What about more appropriate name?
+    public static class Other
     {
         /// <summary>
         /// Returns human readable ban expiration information.
