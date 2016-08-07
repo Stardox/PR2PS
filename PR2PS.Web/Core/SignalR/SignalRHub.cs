@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
+using PR2PS.Common.Constants;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.DataAccess;
 using PR2PS.Web.DataAccess.Entities;
@@ -105,7 +106,7 @@ namespace PR2PS.Web.Core.SignalR
 
                     if (accFromDb != null)
                     {
-                        accFromDb.Status = Constants.STR_OFFLINE;
+                        accFromDb.Status = StatusMessages.STR_OFFLINE;
                         accFromDb.CustomizeInfo = accFromDb.CustomizeInfo;
                         accFromDb.Experience = accFromDb.Experience;
                         db.SaveChanges();

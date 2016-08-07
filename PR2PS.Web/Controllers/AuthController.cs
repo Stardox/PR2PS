@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
+using PR2PS.Common;
+using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JSONClasses;
@@ -71,7 +73,7 @@ namespace PR2PS.Web.Controllers
                     {
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
-                            Error = Constants.ERR_NO_USER_WITH_SUCH_NAME
+                            Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
                         }));
                     }
 
@@ -79,7 +81,7 @@ namespace PR2PS.Web.Controllers
                     {
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
-                            Error = Constants.ERR_WRONG_PASS
+                            Error = ErrorMessages.ERR_WRONG_PASS
                         }));
                     }
 
@@ -91,7 +93,7 @@ namespace PR2PS.Web.Controllers
                     {
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
-                            Error = Constants.ERR_NO_SUCH_SERVER
+                            Error = ErrorMessages.ERR_NO_SUCH_SERVER
                         }));
                     }
 
@@ -110,9 +112,9 @@ namespace PR2PS.Web.Controllers
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
                             Error = String.Format(
-                                Constants.ERR_BANNED,
+                                ErrorMessages.ERR_BANNED,
                                 foundBan.Issuer.Username,
-                                String.IsNullOrWhiteSpace(foundBan.Reason) ? Constants.STR_NO_REASON: foundBan.Reason,
+                                String.IsNullOrWhiteSpace(foundBan.Reason) ? StatusMessages.STR_NO_REASON: foundBan.Reason,
                                 foundBan.Id,
                                 foundBan.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString())
                         }));
@@ -128,7 +130,7 @@ namespace PR2PS.Web.Controllers
 
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
-                            Error = Constants.ERR_ALREADY_IN
+                            Error = ErrorMessages.ERR_ALREADY_IN
                         }));
                     }
 
@@ -177,7 +179,7 @@ namespace PR2PS.Web.Controllers
                     IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
                     context.Clients.Client(foundServer.SignalRClientId).LoginSuccessful(session.LoginId, accData);
 
-                    accModel.Status = String.Concat(Constants.STR_PLAYING_ON, session.Server);
+                    accModel.Status = String.Concat(StatusMessages.STR_PLAYING_ON, session.Server);
                     accModel.LoginDate = DateTime.UtcNow;
                     accModel.LoginIP = this.Request.GetRemoteIPAddress();
                     accModel.CustomizeInfo = accModel.CustomizeInfo;
@@ -197,7 +199,7 @@ namespace PR2PS.Web.Controllers
                         GuildOwner = 0, // TODO.
                         LastRead = 0, // TODO.
                         LastRecv = 0, // TODO.
-                        Status = Constants.STR_SUCCESS,
+                        Status = StatusMessages.STR_SUCCESS,
                         Time = 0, // TODO,
                         Token = session.Token.ToString(),
                         UserId = accModel.Id
@@ -254,7 +256,7 @@ namespace PR2PS.Web.Controllers
                     {
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
-                            Error = Constants.ERR_USER_EXISTS
+                            Error = ErrorMessages.ERR_USER_EXISTS
                         }));
                     }
 
@@ -272,7 +274,7 @@ namespace PR2PS.Web.Controllers
 
                     return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new
                     {
-                        result = Constants.STR_SUCCESS,
+                        result = StatusMessages.STR_SUCCESS,
                     }));
                 }
             }

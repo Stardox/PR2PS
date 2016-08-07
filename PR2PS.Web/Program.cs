@@ -44,7 +44,7 @@ namespace PR2PS.Web
             try
             {
                 Console.WriteLine("Attempting to start web server...");
-                serverCheckTimer = new Timer(Constants.SERVER_KEEPALIVE_TIMER_MILLIS);
+                serverCheckTimer = new Timer(WebConstants.SERVER_KEEPALIVE_TIMER_MILLIS);
                 serverCheckTimer.Elapsed += serverCheckTimer_Elapsed;
                 serverCheckTimer.Start();
 

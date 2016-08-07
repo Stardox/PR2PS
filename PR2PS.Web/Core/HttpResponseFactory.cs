@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PR2PS.Common;
+using PR2PS.Common.Constants;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,7 +13,7 @@ namespace PR2PS.Web.Core
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.OK);
             msg.Content = new StringContent(content);
-            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(Constants.MIME_TEXT_PLAIN);
+            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeTypes.MIME_TEXT_PLAIN);
             return msg;
         }
 
@@ -19,7 +21,7 @@ namespace PR2PS.Web.Core
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.OK);
             msg.Content = new StringContent(content);
-            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(Constants.MIME_TEXT_JSON);
+            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeTypes.MIME_TEXT_JSON);
             return msg;
         }
 
@@ -27,7 +29,7 @@ namespace PR2PS.Web.Core
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.OK);
             msg.Content = new StringContent(content);
-            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(Constants.MIME_TEXT_XML);
+            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeTypes.MIME_TEXT_XML);
             return msg;
         }
 
@@ -35,7 +37,7 @@ namespace PR2PS.Web.Core
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.InternalServerError);
             msg.Content = new StringContent(content);
-            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(Constants.MIME_TEXT_PLAIN);
+            msg.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeTypes.MIME_TEXT_PLAIN);
             return msg;
         }
     }

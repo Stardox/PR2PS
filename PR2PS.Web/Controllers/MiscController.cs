@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.JSONClasses;
 using PR2PS.Web.Core.Management;
@@ -76,7 +77,7 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                return HttpResponseFactory.Response200XML(Constants.FILE_POLICY_XML);
+                return HttpResponseFactory.Response200XML(WebConstants.FILE_POLICY_XML);
             }
             catch (Exception ex)
             {
@@ -102,7 +103,7 @@ namespace PR2PS.Web.Controllers
                 {
                     return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                     {
-                        Error = Constants.ERR_NO_USER_WITH_SUCH_NAME
+                        Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
                     }));
                 }
 
@@ -116,7 +117,7 @@ namespace PR2PS.Web.Controllers
                     Status = foundUser.Status,
 
                     Rank = foundUser.CustomizeInfo.Rank,
-                    Hats = foundUser.CustomizeInfo.HatSeq.Split(Constants.SEPARATOR_COMMA, StringSplitOptions.RemoveEmptyEntries).Length - 1, // TODO - Less retarded approach.
+                    Hats = foundUser.CustomizeInfo.HatSeq.Split(Separators.SEPARATOR_COMMA, StringSplitOptions.RemoveEmptyEntries).Length - 1, // TODO - Less retarded approach.
                     Hat = foundUser.CustomizeInfo.Hat.ToString(),
                     HatColor = foundUser.CustomizeInfo.HatColor.ToString(),
                     HatColor2 = foundUser.CustomizeInfo.HatColor2.ToString(),

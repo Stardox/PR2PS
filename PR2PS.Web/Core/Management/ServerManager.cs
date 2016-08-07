@@ -1,10 +1,8 @@
-﻿using PR2PS.Web.Core.JSONClasses;
+﻿using PR2PS.Common.Constants;
+using PR2PS.Web.Core.JSONClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PR2PS.Web.Core.Management
 {
@@ -61,7 +59,7 @@ namespace PR2PS.Web.Core.Management
                     Address = address,
                     Port = port,
                     Population = 0,
-                    Status = Constants.SERVER_OPEN,
+                    Status = StatusMessages.SERVER_OPEN,
                     Guild_id = "0", // TODO.
                     Happy_hour = "0", // TODO.
                     Tournament = "0", // TODO.

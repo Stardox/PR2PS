@@ -24,7 +24,7 @@ namespace PR2PS.Web.Core.Management
 
         public Boolean IsAlive()
         {
-            if ((DateTime.UtcNow - this.lastCheck).TotalMilliseconds > Constants.SERVER_KEEPALIVE_INTERVAL_MILLIS)
+            if ((DateTime.UtcNow - this.lastCheck).TotalMilliseconds > WebConstants.SERVER_KEEPALIVE_INTERVAL_MILLIS)
             {
                 return false;
             }

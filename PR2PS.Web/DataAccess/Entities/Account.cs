@@ -1,4 +1,4 @@
-﻿using PR2PS.Web.Core;
+﻿using PR2PS.Common.Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,7 +34,7 @@ namespace PR2PS.Web.DataAccess.Entities
             this.Group = 1;
             this.RegisterDate = DateTime.UtcNow;
             this.LoginDate = DateTime.UtcNow;
-            this.Status = Constants.STR_OFFLINE;
+            this.Status = StatusMessages.STR_OFFLINE;
 
             //this.Bans = new List<Ban>();
             //this.Messages = new List<Message>();

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JSONClasses;
@@ -25,11 +26,11 @@ namespace PR2PS.Web.Controllers
             try
             {
                 String campaignMaps;
-                if (!Constants.FILE_CAMPAIGN.TryGetValue(campaignId, out campaignMaps))
+                if (!WebConstants.FILE_CAMPAIGN.TryGetValue(campaignId, out campaignMaps))
                 {
                     return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                     {
-                        Error = Constants.ERR_NO_SUCH_LEVELS
+                        Error = ErrorMessages.ERR_NO_SUCH_LEVELS
                     }));
                 }
 
@@ -57,7 +58,7 @@ namespace PR2PS.Web.Controllers
                 {
                     return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                     {
-                        Error = Constants.ERR_SEARCH_FAILED
+                        Error = ErrorMessages.ERR_SEARCH_FAILED
                     }));
                 }
 

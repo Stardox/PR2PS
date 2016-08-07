@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
-using Newtonsoft.Json;
+using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
-using PR2PS.Web.Core.JSONClasses;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
 using PR2PS.Web.DataAccess;
@@ -28,7 +27,7 @@ namespace PR2PS.Web.Controllers
             {
                 if (banData == null)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", Constants.ERR_NO_FORM_DATA));
+                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NO_FORM_DATA));
                 }
 
                 // TODO - Probably some more validation like length and special characters contraints.
@@ -39,18 +38,18 @@ namespace PR2PS.Web.Controllers
                 SessionInstance issuerSession = SessionManager.Instance.GetSessionByToken(banData.Token);
                 if (issuerSession == null)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", Constants.ERR_NOT_LOGGED_IN));
+                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NOT_LOGGED_IN));
                 }
 
                 if (issuerSession.AccounData.Group < 2)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", Constants.ERR_NO_RIGHTS));
+                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NO_RIGHTS));
                 }
 
                 Int32 duration;
                 if (!Int32.TryParse(banData.Duration, out duration) || duration < 0)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", Constants.ERR_INVALID_DURATION));
+                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_INVALID_DURATION));
                 }
 
                 using (DatabaseContext db = new DatabaseContext())
@@ -60,7 +59,7 @@ namespace PR2PS.Web.Controllers
 
                     if (receiver == null)
                     {
-                        return HttpResponseFactory.Response200Plain(String.Concat("error=", Constants.ERR_NO_USER_WITH_SUCH_NAME));
+                        return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME));
                     }
 
                     if (receiver.Group == 3)

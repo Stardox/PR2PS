@@ -1,4 +1,4 @@
-﻿using PR2PS.Web.Core;
+﻿using PR2PS.Common.Constants;
 using PR2PS.Web.DataAccess.Entities;
 using SQLite.CodeFirst;
 using System;
@@ -22,14 +22,14 @@ namespace PR2PS.Web.DataAccess
                 Group = 3,
                 CustomizeInfo = new CustomizeInfo()
                 {
-                    HatSeq = Constants.PARTS_ALL_HATS,
-                    HeadSeq = Constants.PARTS_ALL_HEADS,
-                    BodySeq = Constants.PARTS_ALL_BODIES,
-                    FeetSeq = Constants.PARTS_ALL_FEET,
-                    HatSeqEpic = Constants.PARTS_ALL_HATS,
-                    HeadSeqEpic = Constants.PARTS_ALL_HEADS,
-                    BodySeqEpic = Constants.PARTS_ALL_BODIES,
-                    FeetSeqEpic = Constants.PARTS_ALL_FEET,
+                    HatSeq = BodyParts.PARTS_ALL_HATS,
+                    HeadSeq = BodyParts.PARTS_ALL_HEADS,
+                    BodySeq = BodyParts.PARTS_ALL_BODIES,
+                    FeetSeq = BodyParts.PARTS_ALL_FEET,
+                    HatSeqEpic = BodyParts.PARTS_ALL_HATS,
+                    HeadSeqEpic = BodyParts.PARTS_ALL_HEADS,
+                    BodySeqEpic = BodyParts.PARTS_ALL_BODIES,
+                    FeetSeqEpic = BodyParts.PARTS_ALL_FEET,
                     ObtainedRankTokens = 150
                 },
                 Experience = new Experience()

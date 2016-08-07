@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using PR2PS.Common;
+using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JSONClasses;
@@ -30,7 +32,7 @@ namespace PR2PS.Web.Controllers
                 {
                     return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                     {
-                        Error = Constants.ERR_NO_QUERY_DATA
+                        Error = ErrorMessages.ERR_NO_QUERY_DATA
                     }));
                 }
 
@@ -41,7 +43,7 @@ namespace PR2PS.Web.Controllers
                 {
                     return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                     {
-                        Error = Constants.ERR_NOT_LOGGED_IN
+                        Error = ErrorMessages.ERR_NOT_LOGGED_IN
                     }));
                 }
 
@@ -52,7 +54,7 @@ namespace PR2PS.Web.Controllers
                     {
                         return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
                         {
-                            Error = Constants.ERR_NO_USER_WITH_SUCH_NAME
+                            Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
                         }));
                     }
 
