@@ -1,5 +1,5 @@
 ﻿using PR2PS.Common.Constants;
-using PR2PS.Web.DataAccess.Entities;
+using PR2PS.DataAccess.Entities;
 using SQLite.CodeFirst;
 using System;
 using System.Data.Entity;

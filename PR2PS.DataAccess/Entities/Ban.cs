@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PR2PS.Web.DataAccess.Entities
+namespace PR2PS.DataAccess.Entities
 {
     public class Ban : BaseEntity
     {

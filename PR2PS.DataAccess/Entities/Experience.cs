@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PR2PS.Web.DataAccess.Entities
+namespace PR2PS.DataAccess.Entities
 {
     public class Experience : BaseEntity
     {

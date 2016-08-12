@@ -1,4 +1,4 @@
-﻿using PR2PS.Web.DataAccess.Entities;
+﻿using PR2PS.DataAccess.Entities;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 

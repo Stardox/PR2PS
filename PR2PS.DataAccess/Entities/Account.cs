@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PR2PS.Web.DataAccess.Entities
+namespace PR2PS.DataAccess.Entities
 {
     public class Account : BaseEntity
     {
@@ -35,9 +35,6 @@ namespace PR2PS.Web.DataAccess.Entities
             this.RegisterDate = DateTime.UtcNow;
             this.LoginDate = DateTime.UtcNow;
             this.Status = StatusMessages.STR_OFFLINE;
-
-            //this.Bans = new List<Ban>();
-            //this.Messages = new List<Message>();
         }
     }
 }
