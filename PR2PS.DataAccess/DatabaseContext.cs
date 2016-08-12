@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace PR2PS.Web.DataAccess
+namespace PR2PS.DataAccess
 {
     public class DatabaseContext : DbContext
     {

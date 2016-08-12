@@ -5,7 +5,7 @@ using System;
 using System.Data.Entity;
 using System.Web.Helpers;
 
-namespace PR2PS.Web.DataAccess
+namespace PR2PS.DataAccess
 {
     public class DatabaseInitializer : SqliteCreateDatabaseIfNotExists<DatabaseContext>
     {
@@ -18,7 +18,7 @@ namespace PR2PS.Web.DataAccess
             Account adminAcc = new Account()
             {
                 Username = "Admin",
-                PasswordHash = Crypto.HashPassword(""),
+                PasswordHash = Crypto.HashPassword(""), // TODO - Find an alternative to this to get rid of the dependency on System.Web.
                 Group = 3,
                 CustomizeInfo = new CustomizeInfo()
                 {

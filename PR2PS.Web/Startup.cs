@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Owin;
-using PR2PS.Web.DataAccess;
+using PR2PS.DataAccess;
 using System.Web.Http;
 
 namespace PR2PS.Web

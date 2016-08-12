@@ -8,7 +8,7 @@ using PR2PS.Web.Core.JSONClasses;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
 using PR2PS.DataAccess.Entities;
-using PR2PS.Web.DataAccess;
+using PR2PS.DataAccess;
 using System;
 using System.Linq;
 using System.Net.Http;
