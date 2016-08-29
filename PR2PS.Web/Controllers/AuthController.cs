@@ -65,7 +65,7 @@ namespace PR2PS.Web.Controllers
                 String rawloginDataJSON = loginData.I.FromBase64ToString();
                 LoginDataJSON loginDataJSON = JsonConvert.DeserializeObject<LoginDataJSON>(rawloginDataJSON);
 
-                using (DatabaseContext db = new  DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext())
                 {
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == loginDataJSON.User_name.ToUpper());
                         
