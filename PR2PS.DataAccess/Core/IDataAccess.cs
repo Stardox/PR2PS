@@ -1,13 +1,9 @@
 ﻿using PR2PS.DataAccess.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PR2PS.DataAccess.Engine
+namespace PR2PS.DataAccess.Core
 {
-    public interface IQueryEngine
+    public interface IDataAccess
     {
         Account FindAccountById(Int64 accountId);
         Account FindAccountByUsername(String username);

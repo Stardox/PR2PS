@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PR2PS.DataAccess.Entities;
+﻿using PR2PS.DataAccess.Entities;
+using System;
 
-namespace PR2PS.DataAccess.Engine
+namespace PR2PS.DataAccess.Core
 {
-    public class QueryEngine : IQueryEngine
+    public class DataAccess : IDataAccess
     {
         private DatabaseContext dbContext;
 
-        public QueryEngine(DatabaseContext dbContext)
+        public DataAccess(DatabaseContext dbContext)
         {
             this.dbContext = dbContext;
         }
