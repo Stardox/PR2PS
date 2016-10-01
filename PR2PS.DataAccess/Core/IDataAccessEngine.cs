@@ -3,7 +3,7 @@ using System;
 
 namespace PR2PS.DataAccess.Core
 {
-    public interface IDataAccess
+    public interface IDataAccessEngine
     {
         Account FindAccountById(Int64 accountId);
         Account FindAccountByUsername(String username);

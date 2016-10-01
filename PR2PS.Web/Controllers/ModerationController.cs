@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNet.SignalR;
 using PR2PS.Common.Constants;
+using PR2PS.DataAccess.Core;
+using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
-using PR2PS.DataAccess;
-using PR2PS.DataAccess.Entities;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -52,7 +52,7 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_INVALID_DURATION));
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account receiver = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == banData.Banned_Name.ToUpper());
                     Account issuer = db.Accounts.FirstOrDefault(acc => acc.Id == issuerSession.AccounData.UserId);

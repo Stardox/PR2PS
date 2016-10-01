@@ -2,13 +2,13 @@
 using Newtonsoft.Json;
 using PR2PS.Common.Constants;
 using PR2PS.Common.Extensions;
+using PR2PS.DataAccess.Core;
+using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JSONClasses;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
-using PR2PS.DataAccess.Entities;
-using PR2PS.DataAccess;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -19,6 +19,13 @@ namespace PR2PS.Web.Controllers
 {
     public class AuthController : ApiController
     {
+        private IDataAccessEngine dataAccess { get; set; }
+
+        public AuthController(IDataAccessEngine dataAccess)
+        {
+            this.dataAccess = dataAccess;
+        }
+
         /// <summary>
         /// Checks if user is logged in.
         /// TODO - Only partially implemented.
@@ -65,7 +72,7 @@ namespace PR2PS.Web.Controllers
                 String rawloginDataJSON = loginData.I.FromBase64ToString();
                 LoginDataJSON loginDataJSON = JsonConvert.DeserializeObject<LoginDataJSON>(rawloginDataJSON);
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == loginDataJSON.User_name.ToUpper());
                         
@@ -250,7 +257,7 @@ namespace PR2PS.Web.Controllers
                 if (String.IsNullOrEmpty(registerData.Password)) registerData.Password = String.Empty;
                 if (String.IsNullOrEmpty(registerData.Email)) registerData.Email = String.Empty;
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     if (db.Accounts.Any(a => a.Username.ToUpper() == registerData.Name.ToUpper()))
                     {
@@ -310,7 +317,7 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain("error=You are not logged in.");
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account me = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     if (!Crypto.VerifyHashedPassword(me.PasswordHash, changePassData.Old_Pass))

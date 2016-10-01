@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using PR2PS.Common.Constants;
+using PR2PS.DataAccess.Core;
+using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.JSONClasses;
 using PR2PS.Web.Core.Management;
-using PR2PS.DataAccess;
-using PR2PS.DataAccess.Entities;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -97,7 +97,7 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                DatabaseContext db = new DatabaseContext();
+                DatabaseContext db = new DatabaseContext("PR2Context");
                 Account foundUser = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == name.ToUpper());
                 if (foundUser == null)
                 {

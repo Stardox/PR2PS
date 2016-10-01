@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNet.SignalR;
 using PR2PS.Common.Constants;
-using PR2PS.Web.Core.Management;
-using PR2PS.DataAccess;
+using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
+using PR2PS.Web.Core.Management;
 using System;
 using System.Linq;
 
@@ -48,7 +48,7 @@ namespace PR2PS.Web.Core.SignalR
         {
             if (accData == null) return;
 
-            using (DatabaseContext db = new DatabaseContext())
+            using (DatabaseContext db = new DatabaseContext("PR2Context"))
             {
                 Account accFromDb = db.Accounts.FirstOrDefault(acc => acc.Id == accData.UserId);
 
@@ -100,7 +100,7 @@ namespace PR2PS.Web.Core.SignalR
             if (session != null)
             {
                 SessionManager.Instance.RemoveSession(session);
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accFromDb = db.Accounts.FirstOrDefault(acc => session.AccounData.UserId == acc.Id);
 
@@ -149,7 +149,7 @@ namespace PR2PS.Web.Core.SignalR
                         break;
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accFromDb = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == receiver.ToUpper());
 

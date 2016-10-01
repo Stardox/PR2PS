@@ -69,10 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\DataAccess.cs" />
-    <Compile Include="DatabaseContext.cs" />
-    <Compile Include="DatabaseInitializer.cs" />
-    <Compile Include="Core\IDataAccess.cs" />
+    <Compile Include="Core\DataAccessEngine.cs" />
+    <Compile Include="Core\DatabaseContext.cs" />
+    <Compile Include="Core\DatabaseInitializer.cs" />
+    <Compile Include="Core\IDataAccessEngine.cs" />
     <Compile Include="Entities\Account.cs" />
     <Compile Include="Entities\Ban.cs" />
     <Compile Include="Entities\BaseEntity.cs" />

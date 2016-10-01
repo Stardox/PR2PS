@@ -5,7 +5,7 @@ using System;
 using System.Data.Entity;
 using System.Web.Helpers;
 
-namespace PR2PS.DataAccess
+namespace PR2PS.DataAccess.Core
 {
     public class DatabaseInitializer : SqliteCreateDatabaseIfNotExists<DatabaseContext>
     {
@@ -13,7 +13,7 @@ namespace PR2PS.DataAccess
 
         protected override void Seed(DatabaseContext context)
         {
-            Console.WriteLine("Creating and seeding the database...");
+            Console.WriteLine("Attempting to create and seed the database...");
 
             Account adminAcc = new Account()
             {

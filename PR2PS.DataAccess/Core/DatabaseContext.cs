@@ -1,15 +1,16 @@
 ﻿using PR2PS.DataAccess.Entities;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace PR2PS.DataAccess
+namespace PR2PS.DataAccess.Core
 {
     public class DatabaseContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Ban> Bans { get; set; }
 
-        public DatabaseContext() : base("PR2Context") { }
+        public DatabaseContext(String connectionString) : base(connectionString) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

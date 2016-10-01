@@ -3,11 +3,11 @@ using System;
 
 namespace PR2PS.DataAccess.Core
 {
-    public class DataAccess : IDataAccess
+    public class DataAccessEngine : IDataAccessEngine
     {
         private DatabaseContext dbContext;
 
-        public DataAccess(DatabaseContext dbContext)
+        public DataAccessEngine(DatabaseContext dbContext)
         {
             this.dbContext = dbContext;
         }

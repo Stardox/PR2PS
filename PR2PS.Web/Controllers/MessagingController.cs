@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using PR2PS.Common.Constants;
 using PR2PS.Common.Extensions;
+using PR2PS.DataAccess.Core;
+using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JSONClasses;
 using PR2PS.Web.Core.Management;
-using PR2PS.DataAccess;
-using PR2PS.DataAccess.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +47,7 @@ namespace PR2PS.Web.Controllers
                     }));
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     if (accModel == null)
@@ -107,7 +107,7 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain("error=You are not logged in.");
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account sender = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     Account recipient = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == sendMessageData.To_Name.ToUpper());
@@ -187,7 +187,7 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain("error=You are not logged in.");
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     Message message = accModel.Messages.FirstOrDefault(m => m.Id == reportMessageData.Message_Id.Value);
@@ -225,7 +225,7 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain("error=You are not logged in.");
                 }
 
-                using (DatabaseContext db = new DatabaseContext())
+                using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     IEnumerable<Message> messages = accModel.Messages.Where(m => !m.IsDeleted);
