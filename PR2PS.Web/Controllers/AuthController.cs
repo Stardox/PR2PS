@@ -6,7 +6,7 @@ using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
-using PR2PS.Web.Core.JSONClasses;
+using PR2PS.Web.Core.JsonModels;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
 using System;
@@ -53,43 +53,35 @@ namespace PR2PS.Web.Controllers
             {
                 // TODO - Token processing, version check and more checks based on received data.
 
-                if (loginData == null)
+                if (loginData == null || String.IsNullOrEmpty(loginData.I))
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
-                        Error = "No login data received."
-                    }));
-                }
-
-                if (String.IsNullOrEmpty(loginData.I))
-                {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
-                    {
-                        Error = "Missing login parameter 'i'."
-                    }));
+                        Error = ErrorMessages.ERR_NO_LOGIN_DATA
+                    });
                 }
 
                 String rawloginDataJSON = loginData.I.FromBase64ToString();
-                LoginDataJSON loginDataJSON = JsonConvert.DeserializeObject<LoginDataJSON>(rawloginDataJSON);
+                LoginDataJson loginDataJSON = JsonConvert.DeserializeObject<LoginDataJson>(rawloginDataJSON);
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
-                    Account accModel = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == loginDataJSON.User_name.ToUpper());
+                    Account accModel = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == loginDataJSON.UserName.ToUpper());
                         
                     if (accModel == null)
                     {
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
-                        }));
+                        });
                     }
 
-                    if (!Crypto.VerifyHashedPassword(accModel.PasswordHash, loginDataJSON.User_pass))
+                    if (!Crypto.VerifyHashedPassword(accModel.PasswordHash, loginDataJSON.UserPass))
                     {
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = ErrorMessages.ERR_WRONG_PASS
-                        }));
+                        });
                     }
 
                     // We made it this far, therefore user exists and has been authenticated.
@@ -98,10 +90,10 @@ namespace PR2PS.Web.Controllers
                     ServerInstance foundServer = ServerManager.Instance.GetServer(loginDataJSON.Server.Server_name);
                     if (foundServer == null)
                     {
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = ErrorMessages.ERR_NO_SUCH_SERVER
-                        }));
+                        });
                     }
 
                     // Check whether this user is banned.
@@ -116,7 +108,7 @@ namespace PR2PS.Web.Controllers
                         .FirstOrDefault();
                     if (foundBan != null)
                     {
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = String.Format(
                                 ErrorMessages.ERR_BANNED,
@@ -124,7 +116,7 @@ namespace PR2PS.Web.Controllers
                                 String.IsNullOrWhiteSpace(foundBan.Reason) ? StatusMessages.STR_NO_REASON: foundBan.Reason,
                                 foundBan.Id,
                                 foundBan.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString())
-                        }));
+                        });
                     }
 
                     // Check whether this user already has session.
@@ -135,10 +127,10 @@ namespace PR2PS.Web.Controllers
                         IHubContext context2 = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
                         context2.Clients.Client(foundServer.SignalRClientId).ForceLogout(session.AccounData.UserId, session.IP);
 
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = ErrorMessages.ERR_ALREADY_IN
-                        }));
+                        });
                     }
 
                     // No he has not, but thats good, lets make him one.
@@ -177,7 +169,7 @@ namespace PR2PS.Web.Controllers
 
                     session = new SessionInstance(
                         Guid.NewGuid(),
-                        loginDataJSON.Login_id,
+                        loginDataJSON.LoginId,
                         accData,
                         loginDataJSON.Server.Server_name,
                         this.Request.GetRemoteIPAddress(),
@@ -196,7 +188,7 @@ namespace PR2PS.Web.Controllers
                     SessionManager.Instance.StoreSession(session);
 
                     // Success.
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new LoginReplyJSON()
+                    return HttpResponseFactory.Response200Json(new LoginReplyJson()
                     {
                         Ant = false, // TODO.
                         Email = false, // TODO.
@@ -210,7 +202,7 @@ namespace PR2PS.Web.Controllers
                         Time = 0, // TODO,
                         Token = session.Token.ToString(),
                         UserId = accModel.Id
-                    }));
+                    });
                 }
             }
             catch (Exception ex)
@@ -246,10 +238,10 @@ namespace PR2PS.Web.Controllers
             {
                 if (registerData == null)
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
-                        Error = "No register data received."
-                    }));
+                        Error = ErrorMessages.ERR_NO_REGISTER_DATA
+                    });
                 }
 
                 // TODO - Probably some more validation like length and special characters contraints.
@@ -261,10 +253,10 @@ namespace PR2PS.Web.Controllers
                 {
                     if (db.Accounts.Any(a => a.Username.ToUpper() == registerData.Name.ToUpper()))
                     {
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = ErrorMessages.ERR_USER_EXISTS
-                        }));
+                        });
                     }
 
                     Account newAcc = new Account()
@@ -279,7 +271,7 @@ namespace PR2PS.Web.Controllers
                     db.Accounts.Add(newAcc);
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new
+                    return HttpResponseFactory.Response200Json(JsonConvert.SerializeObject(new
                     {
                         result = StatusMessages.STR_SUCCESS,
                     }));

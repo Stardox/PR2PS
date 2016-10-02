@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace PR2PS.Web.Core.JSONClasses
+namespace PR2PS.Web.Core.JsonModels
 {
-    public class ErrorJSON
+    public class ErrorJson : IJsonModel
     {
         [JsonProperty(PropertyName = "error")]
         public String Error { get; set; }

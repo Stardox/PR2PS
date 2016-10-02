@@ -13,9 +13,12 @@ namespace PR2PS.Common.Constants
     public static class ErrorMessages
     {
         public const String ERR_NO_USER_WITH_SUCH_NAME = "Could not find user with that name.";
+        public const String ERR_NO_SERVERS = "No servers available.";
         public const String ERR_NO_SUCH_SERVER = "No such server exists.";
         public const String ERR_NO_SUCH_LEVELS = "No such level collection exists.";
         public const String ERR_NO_FORM_DATA = "No form data received.";
+        public const String ERR_NO_LOGIN_DATA = "No login data received.";
+        public const String ERR_NO_REGISTER_DATA = "No register data received.";
         public const String ERR_WRONG_PASS = "The password is incorrect.";
         public const String ERR_USER_EXISTS = "User with specified username already exists.";
         public const String ERR_ALREADY_IN = "This account was already logged in. Please relog in.";

@@ -5,7 +5,7 @@ using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
-using PR2PS.Web.Core.JSONClasses;
+using PR2PS.Web.Core.JsonModels;
 using PR2PS.Web.Core.Management;
 using System;
 using System.Collections.Generic;
@@ -30,10 +30,10 @@ namespace PR2PS.Web.Controllers
                     || !getMessagesData.Count.HasValue
                     || !getMessagesData.Start.HasValue)
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
                         Error = ErrorMessages.ERR_NO_QUERY_DATA
-                    }));
+                    });
                 }
 
                 if (String.IsNullOrEmpty(getMessagesData.Token)) getMessagesData.Token = String.Empty;
@@ -41,10 +41,10 @@ namespace PR2PS.Web.Controllers
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(getMessagesData.Token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
                         Error = ErrorMessages.ERR_NOT_LOGGED_IN
-                    }));
+                    });
                 }
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
@@ -52,20 +52,20 @@ namespace PR2PS.Web.Controllers
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     if (accModel == null)
                     {
-                        return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                        return HttpResponseFactory.Response200Json(new ErrorJson
                         {
                             Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
-                        }));
+                        });
                     }
 
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new MessageListJSON()
+                    return HttpResponseFactory.Response200Json(new MessageListJson()
                     {
                         Messages = accModel.Messages
                             .Where(m => !m.IsDeleted)
                             .OrderByDescending(m => m.DateSent)
                             .Skip(getMessagesData.Start.Value)
                             .Take(getMessagesData.Count.Value)
-                            .Select(m => new MessageJSON
+                            .Select(m => new MessageJson
                             {
                                 Message_id = m.Id,
                                 Message = m.Content,
@@ -76,7 +76,7 @@ namespace PR2PS.Web.Controllers
                             })
                             .ToList(),
                         Success = true
-                    }));
+                    });
                 }             
             }
             catch(Exception ex)

@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PR2PS.Web.Core.JSONClasses
+namespace PR2PS.Web.Core.JsonModels
 {
-    public class MessageJSON
+    public class MessageJson : IJsonModel
     {
         [JsonProperty(PropertyName = "message_id")]
         public Int64 Message_id { get; set; }
@@ -26,14 +22,5 @@ namespace PR2PS.Web.Core.JSONClasses
 
         [JsonProperty(PropertyName = "group")]
         public Byte Group { get; set; }
-    }
-
-    public class MessageListJSON
-    {
-        [JsonProperty(PropertyName = "messages")]
-        public List<MessageJSON> Messages { get; set; }
-
-        [JsonProperty(PropertyName = "success")]
-        public Boolean Success { get; set; }
     }
 }

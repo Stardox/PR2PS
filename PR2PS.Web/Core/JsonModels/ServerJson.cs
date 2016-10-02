@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace PR2PS.Web.Core.JSONClasses
+namespace PR2PS.Web.Core.JsonModels
 {
-    public class ServerJSON
+    public class ServerJson : IJsonModel
     {
         [JsonProperty(PropertyName = "server_id")]
         public Int32 Server_id { get; set; }
@@ -26,11 +23,5 @@ namespace PR2PS.Web.Core.JSONClasses
         public String Tournament { get; set; }
         [JsonProperty(PropertyName = "happy_hour")]
         public String Happy_hour { get; set; }
-    }
-
-    public class ServerListJSON
-    {
-        [JsonProperty(PropertyName = "servers")]
-        public List<ServerJSON> Servers { get; set; }
     }
 }

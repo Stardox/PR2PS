@@ -2,7 +2,7 @@
 using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
-using PR2PS.Web.Core.JSONClasses;
+using PR2PS.Web.Core.JsonModels;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -28,10 +28,10 @@ namespace PR2PS.Web.Controllers
                 String campaignMaps;
                 if (!WebConstants.FILE_CAMPAIGN.TryGetValue(campaignId, out campaignMaps))
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
                         Error = ErrorMessages.ERR_NO_SUCH_LEVELS
-                    }));
+                    });
                 }
 
                 return HttpResponseFactory.Response200Plain(campaignMaps);
@@ -56,10 +56,10 @@ namespace PR2PS.Web.Controllers
             {
                 if (searchData == null)
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
                         Error = ErrorMessages.ERR_SEARCH_FAILED
-                    }));
+                    });
                 }
 
                 using (WebClient webClient = new WebClient())

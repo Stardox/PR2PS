@@ -1,5 +1,5 @@
 ﻿using PR2PS.Common.Constants;
-using PR2PS.Web.Core.JSONClasses;
+using PR2PS.Web.Core.JsonModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,13 +95,13 @@ namespace PR2PS.Web.Core.Management
             }
         }
 
-        public List<ServerJSON> GetServers()
+        public List<ServerJson> GetServers()
         {
             lock (this.serversLock)
             {
                 return this.servers.Values
                     .Select(serv =>
-                        new ServerJSON()
+                        new ServerJson()
                         {
                             Address = serv.Address,
                             Guild_id = serv.Guild_id,
@@ -113,7 +113,7 @@ namespace PR2PS.Web.Core.Management
                             Status = serv.Status,
                             Tournament = serv.Tournament
                         })
-                    .ToList<ServerJSON>();
+                    .ToList<ServerJson>();
             }
         }
 

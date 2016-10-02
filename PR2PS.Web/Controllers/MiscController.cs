@@ -3,7 +3,7 @@ using PR2PS.Common.Constants;
 using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
-using PR2PS.Web.Core.JSONClasses;
+using PR2PS.Web.Core.JsonModels;
 using PR2PS.Web.Core.Management;
 using System;
 using System.Globalization;
@@ -23,10 +23,10 @@ namespace PR2PS.Web.Controllers
         [HttpPost]
         public HttpResponseMessage NotImplementedYet()
         {
-            return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+            return HttpResponseFactory.Response200Json(new ErrorJson
             {
                 Error = "This feature is not implemented yet."
-            }));
+            });
         }
 
         /// <summary>
@@ -51,16 +51,16 @@ namespace PR2PS.Web.Controllers
             {
                 if (ServerManager.Instance.ServerCount <= 0)
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
-                        Error = "No servers available."
-                    }));
+                        Error = ErrorMessages.ERR_NO_SERVERS
+                    });
                 }
 
-                return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ServerListJSON
+                return HttpResponseFactory.Response200Json(new ServerListJson
                 {
                     Servers = ServerManager.Instance.GetServers()
-                }));
+                });
             }
             catch (Exception ex)
             {
@@ -77,7 +77,7 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                return HttpResponseFactory.Response200XML(WebConstants.FILE_POLICY_XML);
+                return HttpResponseFactory.Response200Xml(WebConstants.FILE_POLICY_XML);
             }
             catch (Exception ex)
             {
@@ -101,13 +101,13 @@ namespace PR2PS.Web.Controllers
                 Account foundUser = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == name.ToUpper());
                 if (foundUser == null)
                 {
-                    return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new ErrorJSON
+                    return HttpResponseFactory.Response200Json(new ErrorJson
                     {
                         Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
-                    }));
+                    });
                 }
 
-                return HttpResponseFactory.Response200JSON(JsonConvert.SerializeObject(new UserInfoJSON
+                return HttpResponseFactory.Response200Json(new UserInfoJson
                 {
                     UserId = foundUser.Id.ToString(),
                     Name = foundUser.Username,
@@ -136,7 +136,7 @@ namespace PR2PS.Web.Controllers
 
                     Friend = 0, // TODO.
                     Ignored = 0 // TODO.
-                }));
+                });
             }
             catch (Exception ex)
             {

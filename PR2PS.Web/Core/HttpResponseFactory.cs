@@ -1,5 +1,6 @@
-﻿using PR2PS.Common;
+﻿using Newtonsoft.Json;
 using PR2PS.Common.Constants;
+using PR2PS.Web.Core.JsonModels;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -17,7 +18,12 @@ namespace PR2PS.Web.Core
             return msg;
         }
 
-        public static HttpResponseMessage Response200JSON(String content)
+        public static HttpResponseMessage Response200Json(IJsonModel model)
+        {
+            return Response200Json(JsonConvert.SerializeObject(model));
+        }
+
+        public static HttpResponseMessage Response200Json(String content)
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.OK);
             msg.Content = new StringContent(content);
@@ -25,7 +31,7 @@ namespace PR2PS.Web.Core
             return msg;
         }
 
-        public static HttpResponseMessage Response200XML(String content)
+        public static HttpResponseMessage Response200Xml(String content)
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.OK);
             msg.Content = new StringContent(content);
