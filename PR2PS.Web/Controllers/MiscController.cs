@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using PR2PS.Common.Constants;
+﻿using PR2PS.Common.Constants;
 using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
@@ -16,24 +15,11 @@ namespace PR2PS.Web.Controllers
     public class MiscController : ApiController
     {
         /// <summary>
-        /// Default action. This gets called once no valid route is found.
-        /// </summary>
-        /// <returns>Error message indicating that the feature is not implemented yet.</returns>
-        [HttpGet]
-        [HttpPost]
-        public HttpResponseMessage NotImplementedYet()
-        {
-            return HttpResponseFactory.Response200Json(new ErrorJson
-            {
-                Error = "This feature is not implemented yet."
-            });
-        }
-
-        /// <summary>
         /// Gets welcome page.
         /// </summary>
         /// <returns>Gets welcome page lol.</returns>
         [HttpGet]
+        [Route("")]
         public HttpResponseMessage GetWelcomeMessage()
         {
             // TODO - Nicer welcome page. :-)
@@ -45,6 +31,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <returns>List of available game servers.</returns>
         [HttpGet]
+        [Route("files/server_status_2.txt")]
         public HttpResponseMessage GetServerStatus()
         {
             try
@@ -73,6 +60,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <returns>The crossdomain policy XML if found or internal server error otherwise.</returns>
         [HttpGet]
+        [Route("crossdomain.xml")]
         public HttpResponseMessage GetPolicyFile()
         {
             try
@@ -93,7 +81,8 @@ namespace PR2PS.Web.Controllers
         /// <param name="rand">Random string.</param>
         /// <returns>JSON containing found user data or internal server error if something goes wrong.</returns>
         [HttpGet]
-        public HttpResponseMessage GetPlayerInfo(String name, String token, String rand)
+        [Route("get_player_info_2.php")]
+        public HttpResponseMessage GetPlayerInfo(String name = "", String token = "", String rand = "")
         {
             try
             {

@@ -22,6 +22,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <returns>List of private messages or error.</returns>
         [HttpPost]
+        [Route("messages_get.php")]
         public HttpResponseMessage GetMessages([FromBody] GetMessagesFormModel getMessagesData)
         {
             try
@@ -90,6 +91,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <returns>Status indicating whether action was successful.</returns>
         [HttpPost]
+        [Route("message_send.php")]
         public HttpResponseMessage SendMessage([FromBody] SendMessageFormModel sendMessageData)
         {
             try
@@ -142,6 +144,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <returns>Status indicating whether action was successful.</returns>
         [HttpPost]
+        [Route("message_report.php")]
         public HttpResponseMessage ReportMessage([FromBody] DeleteOrReportMessageFormModel reportMessageData)
         {
             try
@@ -171,6 +174,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <returns>Status indicating whether action was successful.</returns>
         [HttpPost]
+        [Route("message_delete.php")]
         public HttpResponseMessage DeleteMessage([FromBody] DeleteOrReportMessageFormModel reportMessageData)
         {
             try
@@ -215,7 +219,8 @@ namespace PR2PS.Web.Controllers
         /// <param name="rand">Random string.</param>
         /// <returns>Status indicating whether action was successful.</returns>
         [HttpGet]
-        public HttpResponseMessage DeleteAllMessages(String token, String rand)
+        [Route("messages_delete_all.php")]
+        public HttpResponseMessage DeleteAllMessages(String token = "", String rand = "")
         {
             try
             {

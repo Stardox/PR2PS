@@ -21,6 +21,7 @@ namespace PR2PS.Web.Controllers
         /// <param name="banData">Ban form data (receiver, duration, reason, etc.).</param>
         /// <returns>Success if has been banned error otherwise.</returns>
         [HttpPost]
+        [Route("ban_user.php")]
         public HttpResponseMessage Ban([FromBody] BanFormModel banData)
         {
             try

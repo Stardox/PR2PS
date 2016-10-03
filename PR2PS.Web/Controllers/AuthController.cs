@@ -34,7 +34,8 @@ namespace PR2PS.Web.Controllers
         /// <param name="rand">Random string.</param>
         /// <returns>Username if found session exists or empty string otherwise.</returns>
         [HttpGet]
-        public HttpResponseMessage CheckLogin(String token, String rand)
+        [Route("check_login.php")]
+        public HttpResponseMessage CheckLogin(String token = "", String rand = "")
         {
             // TODO - check token and return username if available.
             return HttpResponseFactory.Response200Plain("user_name=");
@@ -47,6 +48,7 @@ namespace PR2PS.Web.Controllers
         /// <param name="loginData">Login form data.</param>
         /// <returns>Login attempt result or internal server error.</returns>
         [HttpPost]
+        [Route("login.php")]
         public HttpResponseMessage Login([FromBody] LoginFormModel loginData)
         {
             try
@@ -219,7 +221,8 @@ namespace PR2PS.Web.Controllers
         /// <param name="rand">Random string.</param>
         /// <returns>This method always returns succes, lol.</returns>
         [HttpGet]
-        public HttpResponseMessage Logout(String token, String rand)
+        [Route("logout.php")]
+        public HttpResponseMessage Logout(String token = "", String rand = "")
         {
             // TODO - Figure out how real PR2 identifies your session since token is always empty.
             // Probably using cookies or idk. For now we will rely on actual game server (TCP).
@@ -232,6 +235,7 @@ namespace PR2PS.Web.Controllers
         /// <param name="registerData">Register form data (username, password, etc).</param>
         /// <returns>Success if profile has been created or error otherwise.</returns>
         [HttpPost]
+        [Route("register_user.php")]
         public HttpResponseMessage Register([FromBody] RegisterFormModel registerData)
         {
             try
@@ -289,6 +293,7 @@ namespace PR2PS.Web.Controllers
         /// <param name="registerData">Register form data (username, password, etc).</param>
         /// <returns>Success if profile has been created or error otherwise.</returns>
         [HttpPost]
+        [Route("change_password.php")]
         public HttpResponseMessage ChangePassword([FromBody] ChangePassFormModel changePassData)
         {
             try

@@ -21,7 +21,8 @@ namespace PR2PS.Web.Controllers
         /// <param name="campaignId">Campaign levels collection id (1 is original campaign, 2 is speed campaign, etc).</param>
         /// <returns>File containing campaign maps if exists or internal server error otherwise.</returns>
         [HttpGet]
-        public HttpResponseMessage GetCampaign(Int32 campaignId, String token, String rand)
+        [Route("files/lists/campaign/{campaignId}")]
+        public HttpResponseMessage GetCampaign(Int32 campaignId = 1, String token = "", String rand = "")
         {
             try
             {
@@ -48,6 +49,7 @@ namespace PR2PS.Web.Controllers
         /// <param name="searchData">Search query.</param>
         /// <returns>List of found maps.</returns>
         [HttpPost]
+        [Route("search_levels.php")]
         public HttpResponseMessage SearchLevels([FromBody] SearchLevelsFormModel searchData)
         {
             // TODO - This is temporary solution, will perform request to Jiggy.
