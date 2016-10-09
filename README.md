@@ -2,11 +2,13 @@
 
 Aim of this project is to recreate the Platform Racing 2 server engine with all functionality (and maybe more).
 
-Server is written in C# and currently consists of three projects organized in Visual Studio solution.
+Server is written in C# and currently consists of several projects organized in Visual Studio solution.
+
+There is possibility of porting this to .NET Core for multiplatform support.
 
 ## PR2PS.Web
 
-This represents a central web server with database. You can think of it as of a PR2HUB 'equivalent'. Server uses ASP.NET WebApi hosted from the console application along with SQLite database engine for easier portability. The web server communicates with separate game servers using SignalR RPC.
+This represents a central web server. You can think of it as of a PR2Hub 'equivalent'. Server uses ASP.NET WebApi 2 hosted from the console application for easier portability. The web server communicates with separate game servers using SignalR RPC.
 
 ## PR2PS.GameServer
 
@@ -15,6 +17,14 @@ This represents an actual TCP game server (Derron, Carina, etc.). The server com
 ## PR2PS.ClientBuilder
 
 This is just a simple WinForms application which is used for 'generating' game client so that you can connect to specified web server. This application basically takes a modified Platform Racing 2 client *swf* file along with standalone Flash Projector executable, places it in specified folder and creates *bat* file which will launch the client with specified parameters.
+
+## PR2PS.DataAccess
+
+This acts as data access layer with simple business layer on top of it consumed by PR2PS.Web. Entity Framework (code first approach) is used as ORM, while SQLite is used as database engine for easier portability.
+
+## PR2PS.Common
+
+This libary contains constants, extensions, helper methods and other common constructs. This library is consumend by multiple PR2PS assemblies.
 
 # Features
 
@@ -33,17 +43,17 @@ Here is short list of stuff what is and what is not working at this point.
 
 ## Not implemented
 
-- Web server UI
-- User warnings
-- Temporary and trial moderators
-- Private message reporting
-- All time best, Today's best and Newest tabs
 - Level editor
 - Local level host (currently downloads maps from pr2hub)
-- Friend list and Ignore list functionality
-- Guilds
 - Experience system
 - Prize system
+- Friend list and Ignore list functionality
+- Private message reporting
+- Web server UI
+- All time best, Today's best and Newest tabs
+- User warnings
+- Temporary and trial moderators
+- Guilds
 - Many more
 
 # Set up
@@ -117,7 +127,7 @@ This is where all the client files will be copied to. After the build, launch th
 This project is based on game of Jiggmin (Jacob Grahn) called Platform Racing 2.
 
 ## Jiggmin
-https://github.com/Jiggmin
+https://github.com/Jiggmin <br />
 https://www.youtube.com/user/Jiggmin
 
 ## Platform Racing 2 game
