@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 using PR2PS.Common.Constants;
+using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
@@ -69,7 +70,7 @@ namespace PR2PS.Web.Controllers
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accModel = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == loginDataJSON.UserName.ToUpper());
-                        
+
                     if (accModel == null)
                     {
                         return HttpResponseFactory.Response200Json(new ErrorJson
@@ -115,7 +116,7 @@ namespace PR2PS.Web.Controllers
                             Error = String.Format(
                                 ErrorMessages.ERR_BANNED,
                                 foundBan.Issuer.Username,
-                                String.IsNullOrWhiteSpace(foundBan.Reason) ? StatusMessages.STR_NO_REASON: foundBan.Reason,
+                                String.IsNullOrWhiteSpace(foundBan.Reason) ? StatusMessages.STR_NO_REASON : foundBan.Reason,
                                 foundBan.Id,
                                 foundBan.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString())
                         });
@@ -124,7 +125,7 @@ namespace PR2PS.Web.Controllers
                     // Check whether this user already has session.
                     SessionInstance session = SessionManager.Instance.GetSessionByUsername(accModel.Username);
                     if (session != null)
-                    { 
+                    {
                         // He has, lets log him out.
                         IHubContext context2 = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
                         context2.Clients.Client(foundServer.SignalRClientId).ForceLogout(session.AccounData.UserId, session.IP);
@@ -207,6 +208,10 @@ namespace PR2PS.Web.Controllers
                     });
                 }
             }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Json(new ErrorJson { Error = ex.Message });
+            }
             catch (Exception ex)
             {
                 return HttpResponseFactory.Response500Plain(ex.Message);
@@ -242,44 +247,16 @@ namespace PR2PS.Web.Controllers
             {
                 if (registerData == null)
                 {
-                    return HttpResponseFactory.Response200Json(new ErrorJson
-                    {
-                        Error = ErrorMessages.ERR_NO_REGISTER_DATA
-                    });
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NO_REGISTER_DATA });
                 }
 
-                // TODO - Probably some more validation like length and special characters contraints.
-                if (String.IsNullOrEmpty(registerData.Name)) registerData.Name = String.Empty;
-                if (String.IsNullOrEmpty(registerData.Password)) registerData.Password = String.Empty;
-                if (String.IsNullOrEmpty(registerData.Email)) registerData.Email = String.Empty;
+                this.dataAccess.RegisterUser(registerData.Name, registerData.Password, registerData.Email, this.Request.GetRemoteIPAddress());
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    if (db.Accounts.Any(a => a.Username.ToUpper() == registerData.Name.ToUpper()))
-                    {
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = ErrorMessages.ERR_USER_EXISTS
-                        });
-                    }
-
-                    Account newAcc = new Account()
-                    {
-                        Username = registerData.Name,
-                        PasswordHash = Crypto.HashPassword(registerData.Password),
-                        Email = registerData.Email,
-                        RegisterIP = this.Request.GetRemoteIPAddress(),
-                        CustomizeInfo = new CustomizeInfo(),
-                        Experience = new Experience()
-                    };
-                    db.Accounts.Add(newAcc);
-                    db.SaveChanges();
-
-                    return HttpResponseFactory.Response200Json(JsonConvert.SerializeObject(new
-                    {
-                        result = StatusMessages.STR_SUCCESS,
-                    }));
-                }
+                return HttpResponseFactory.Response200Json(new ResultJson { Result = StatusMessages.STR_SUCCESS });
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Json(new ErrorJson { Error = ex.Message });
             }
             catch (Exception ex)
             {

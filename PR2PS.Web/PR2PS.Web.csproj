@@ -157,6 +157,7 @@
     <Compile Include="Core\FormModels\LoginFormModel.cs" />
     <Compile Include="Core\FormModels\SearchLevelsFormModel.cs" />
     <Compile Include="Core\HttpResponseFactory.cs" />
+    <Compile Include="Core\JsonModels\ResultJson.cs" />
     <Compile Include="Core\JsonModels\ErrorJson.cs" />
     <Compile Include="Core\JsonModels\IJsonModel.cs" />
     <Compile Include="Core\JsonModels\LoginDataJson.cs" />

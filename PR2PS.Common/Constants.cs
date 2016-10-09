@@ -1,5 +1,6 @@
 ﻿using System;
 
+// TODO - Consider using getters or static readonly fields. Const keyword can be dangerous.
 namespace PR2PS.Common.Constants
 {
     public static class BodyParts
@@ -28,6 +29,12 @@ namespace PR2PS.Common.Constants
         public const String ERR_INVALID_DURATION = "You have specified invalid duration.";
         public const String ERR_SEARCH_FAILED = "Error occured while searching through levels.";
         public const String ERR_NO_QUERY_DATA = "No query data specified.";
+        public const String ERR_USERNAME_TOO_LONG = "Your name can not be more than 20 characters long.";
+        public const String ERR_PASSWORD_TOO_LONG = "Your password can not be more than 20 characters long.";
+        public const String ERR_EMAIL_TOO_LONG = "Your email address can not be more than 254 characters long.";
+        public const String ERR_USERNAME_INVALID = "There is an invalid character in your name. The allowed characters are a-z, A-Z, 1-9, and !#$%&()*+.:;=?@~- .";
+        public const String ERR_PASSWORD_INVALID = "There is an invalid character in your password. The allowed characters are a-z, A-Z, 1-9, and !#$%&()*+.:;=?@~- .";
+        public const String ERR_EMAIL_INVALID = "The provided email is in incorrect format.";
     }
 
     public static class StatusMessages
@@ -79,6 +86,17 @@ namespace PR2PS.Common.Constants
         public const String ROOM_ALLTIMEBEST = "best";
         public const String ROOM_TODAYSBEST = "best_today";
         public const String ROOM_SEARCH = "search";
+    }
+
+    public static class ValidationConstraints
+    {
+        public const Byte USERNAME_LENGTH = 20;
+        public const Byte PASSWORD_LENGTH = 20;
+        public const Byte EMAIL_LENGTH = 254;
+
+        public const String USERNAME_PATTERN = @"^[a-zA-Z0-9 \-!#\$%&\(\)\*\+\.:;=\?@~]*$";
+        public const String PASSWORD_PATTERN = @"^[a-zA-Z0-9 \-!#\$%&\(\)\*\+\.:;=\?@~]*$";
+        public const String EMAIL_PATTERN = @"^([0-9a-zA-Z]([-\.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})?$";
     }
 
     // How about more appropriate name.
