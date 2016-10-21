@@ -68,10 +68,10 @@ namespace PR2PS.Web.Controllers
                             .Take(getMessagesData.Count.Value)
                             .Select(m => new MessageJson
                             {
-                                Message_id = m.Id,
+                                MessageId = m.Id,
                                 Message = m.Content,
                                 Time = m.DateSent,
-                                User_id = m.Sender.Id,
+                                UserId = m.Sender.Id,
                                 Name = m.Sender.Username,
                                 Group = m.Sender.Group
                             })

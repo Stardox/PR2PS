@@ -104,11 +104,11 @@ namespace PR2PS.Web.Core.Management
                         new ServerJson()
                         {
                             Address = serv.Address,
-                            Guild_id = serv.Guild_id,
-                            Happy_hour = serv.Happy_hour,
+                            GuildId = serv.Guild_id,
+                            HappyHour = serv.Happy_hour,
                             Population = serv.Population,
                             Port = serv.Port,
-                            Server_id = serv.Server_id,
+                            ServerId = serv.Server_id,
                             Server_name = serv.Server_name,
                             Status = serv.Status,
                             Tournament = serv.Tournament
