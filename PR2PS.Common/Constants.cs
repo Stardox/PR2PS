@@ -14,6 +14,7 @@ namespace PR2PS.Common.Constants
     public static class ErrorMessages
     {
         public const String ERR_NO_USER_WITH_SUCH_NAME = "Could not find user with that name.";
+        public const String ERR_NO_SUCH_USER = "No such user exists.";
         public const String ERR_NO_SERVERS = "No servers available.";
         public const String ERR_NO_SUCH_SERVER = "No such server exists.";
         public const String ERR_NO_SUCH_LEVELS = "No such level collection exists.";

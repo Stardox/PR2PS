@@ -1,5 +1,6 @@
 ﻿using PR2PS.Common.Constants;
 using PR2PS.Common.Exceptions;
+using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.Entities;
 using System;
 using System.Linq;
@@ -66,19 +67,61 @@ namespace PR2PS.DataAccess.Core
             this.dbContext.SaveChanges();
         }
 
-        public Account FindAccountById(Int64 accountId)
+        public Account AuthenticateUser(String username, String password, String ipAddress)
         {
-            throw new NotImplementedException();
+            username = username ?? String.Empty;
+            password = password ?? String.Empty;
+
+            Account acc = this.dbContext.Accounts.FirstOrDefault(a => a.Username.ToUpper() == username.ToUpper());
+            if (acc == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
+            }
+            else if (!Crypto.VerifyHashedPassword(acc.PasswordHash, password))
+            {
+                throw new PR2Exception(ErrorMessages.ERR_WRONG_PASS);
+            }
+
+            DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQL functions.
+            Ban ban = this.dbContext
+                          .Bans
+                          .Where(b => (b.Receiver.Id == acc.Id || (b.IsIPBan && b.IPAddress == ipAddress))
+                                       && DateTime.Compare(b.ExpirationDate, utcDateTime) > 0)
+                          .OrderByDescending(b => b.ExpirationDate)
+                          .FirstOrDefault();
+            if (ban != null)
+            {
+                throw new PR2Exception(String.Format(
+                    ErrorMessages.ERR_BANNED,
+                    ban.Issuer.Username,
+                    String.IsNullOrWhiteSpace(ban.Reason) ? StatusMessages.STR_NO_REASON : ban.Reason,
+                    ban.Id,
+                    ban.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString()));
+            }
+
+            return acc;
         }
 
-        public Account FindAccountByUsername(String username)
+        public void UpdateAccountStatus(Int64 id, String status, String ipAddress)
         {
-            throw new NotImplementedException();
+            Account acc = this.dbContext.Accounts.FirstOrDefault(a => a.Id == id);
+
+            this.UpdateAccountStatus(acc, status, ipAddress);
         }
 
-        public Ban FindBanByAccountIdAndIP(Int64 accountId, String ipAddress)
+        public void UpdateAccountStatus(Account account, String status, String ipAddress)
         {
-            throw new NotImplementedException();
+            if (account == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+
+            DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQL functions.
+            account.LoginDate = utcDateTime;
+            account.LoginIP = ipAddress;
+            account.Status = status;
+
+            this.dbContext.SaveChanges();
         }
     }
 }

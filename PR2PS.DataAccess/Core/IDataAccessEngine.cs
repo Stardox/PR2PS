@@ -14,8 +14,29 @@ namespace PR2PS.DataAccess.Core
         /// <param name="ipAddress">IPv4 address from which the request originates.</param>
         void RegisterUser(String username, String password, String email, String ipAddress);
 
-        Account FindAccountById(Int64 accountId);
-        Account FindAccountByUsername(String username);
-        Ban FindBanByAccountIdAndIP(Int64 accountId, String ipAddress);
+        /// <summary>
+        /// Authenticate user according to credentials and performs check, whether user is banned.
+        /// </summary>
+        /// <param name="username">Account username.</param>
+        /// <param name="password">Account password.</param>
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        /// <returns>Account instance on success, exception otherwise.</returns>
+        Account AuthenticateUser(String username, String password, String ipAddress);
+
+        /// <summary>
+        /// Updates user's login status, login date and login ip address.
+        /// </summary>
+        /// <param name="id">Id of user Account which should be updated.</param>
+        /// <param name="status">Account status text. Example: Playing on Derron.</param>
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        void UpdateAccountStatus(Int64 id, String status, String ipAddress);
+
+        /// <summary>
+        /// Updates user's login status, login date and login ip address.
+        /// </summary>
+        /// <param name="account">In memory persited user Account record which should be updated.</param>
+        /// <param name="status">Account status text. Example: Playing on Derron.</param>
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        void UpdateAccountStatus(Account account, String status, String ipAddress);
     }
 }

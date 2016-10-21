@@ -43,11 +43,11 @@ namespace PR2PS.Web.Controllers
         }
 
         /// <summary>
-        /// Authenticate user and if everything is good then create session and notify
-        /// appropriate game server that the user is clean.
+        /// Authenticate user and if successful, then create session for him and notify
+        /// appropriate game server that the authentication has been successful.
         /// </summary>
         /// <param name="loginData">Login form data.</param>
-        /// <returns>Login attempt result or internal server error.</returns>
+        /// <returns>Login attempt status or error.</returns>
         [HttpPost]
         [Route("login.php")]
         public HttpResponseMessage Login([FromBody] LoginFormModel loginData)
@@ -58,155 +58,101 @@ namespace PR2PS.Web.Controllers
 
                 if (loginData == null || String.IsNullOrEmpty(loginData.I))
                 {
-                    return HttpResponseFactory.Response200Json(new ErrorJson
-                    {
-                        Error = ErrorMessages.ERR_NO_LOGIN_DATA
-                    });
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NO_LOGIN_DATA });
                 }
 
                 String rawloginDataJSON = loginData.I.FromBase64ToString();
                 LoginDataJson loginDataJSON = JsonConvert.DeserializeObject<LoginDataJson>(rawloginDataJSON);
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
+                // Authenticate user.
+                Account acc = this.dataAccess.AuthenticateUser(loginDataJSON.UserName, loginDataJSON.UserPass, this.Request.GetRemoteIPAddress());
+
+                // Check if such server even exists.
+                ServerInstance server = ServerManager.Instance.GetServer(loginDataJSON.Server.Server_name);
+                if (server == null)
                 {
-                    Account accModel = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == loginDataJSON.UserName.ToUpper());
-
-                    if (accModel == null)
-                    {
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
-                        });
-                    }
-
-                    if (!Crypto.VerifyHashedPassword(accModel.PasswordHash, loginDataJSON.UserPass))
-                    {
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = ErrorMessages.ERR_WRONG_PASS
-                        });
-                    }
-
-                    // We made it this far, therefore user exists and has been authenticated.
-
-                    // Check if such server even exists.
-                    ServerInstance foundServer = ServerManager.Instance.GetServer(loginDataJSON.Server.Server_name);
-                    if (foundServer == null)
-                    {
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = ErrorMessages.ERR_NO_SUCH_SERVER
-                        });
-                    }
-
-                    // Check whether this user is banned.
-                    String ip = this.Request.GetRemoteIPAddress();
-                    DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQLite functions.
-                    Ban foundBan = db.Bans
-                        .Where(ban =>
-                            (ban.Receiver.Id == accModel.Id ||
-                            (ban.IsIPBan && ban.IPAddress == ip)) &&
-                            DateTime.Compare(ban.ExpirationDate, utcDateTime) > 0)
-                        .OrderByDescending(ban => ban.ExpirationDate)
-                        .FirstOrDefault();
-                    if (foundBan != null)
-                    {
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = String.Format(
-                                ErrorMessages.ERR_BANNED,
-                                foundBan.Issuer.Username,
-                                String.IsNullOrWhiteSpace(foundBan.Reason) ? StatusMessages.STR_NO_REASON : foundBan.Reason,
-                                foundBan.Id,
-                                foundBan.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString())
-                        });
-                    }
-
-                    // Check whether this user already has session.
-                    SessionInstance session = SessionManager.Instance.GetSessionByUsername(accModel.Username);
-                    if (session != null)
-                    {
-                        // He has, lets log him out.
-                        IHubContext context2 = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-                        context2.Clients.Client(foundServer.SignalRClientId).ForceLogout(session.AccounData.UserId, session.IP);
-
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = ErrorMessages.ERR_ALREADY_IN
-                        });
-                    }
-
-                    // No he has not, but thats good, lets make him one.
-                    AccountDataDTO accData = new AccountDataDTO()
-                    {
-                        UserId = accModel.Id,
-                        Username = accModel.Username,
-                        Group = accModel.Group,
-                        Hat = accModel.CustomizeInfo.Hat,
-                        Head = accModel.CustomizeInfo.Head,
-                        Body = accModel.CustomizeInfo.Body,
-                        Feet = accModel.CustomizeInfo.Feet,
-                        HatColor = accModel.CustomizeInfo.HatColor,
-                        HeadColor = accModel.CustomizeInfo.HeadColor,
-                        BodyColor = accModel.CustomizeInfo.BodyColor,
-                        FeetColor = accModel.CustomizeInfo.FeetColor,
-                        HatColor2 = accModel.CustomizeInfo.HatColor2,
-                        HeadColor2 = accModel.CustomizeInfo.HeadColor2,
-                        BodyColor2 = accModel.CustomizeInfo.BodyColor2,
-                        FeetColor2 = accModel.CustomizeInfo.FeetColor2,
-                        HatSeq = accModel.CustomizeInfo.HatSeq,
-                        HeadSeq = accModel.CustomizeInfo.HeadSeq,
-                        BodySeq = accModel.CustomizeInfo.BodySeq,
-                        FeetSeq = accModel.CustomizeInfo.FeetSeq,
-                        HatSeqEpic = accModel.CustomizeInfo.HatSeqEpic,
-                        HeadSeqEpic = accModel.CustomizeInfo.HeadSeqEpic,
-                        BodySeqEpic = accModel.CustomizeInfo.BodySeqEpic,
-                        FeetSeqEpic = accModel.CustomizeInfo.FeetSeqEpic,
-                        Speed = accModel.CustomizeInfo.Speed,
-                        Accel = accModel.CustomizeInfo.Accel,
-                        Jump = accModel.CustomizeInfo.Jump,
-                        Rank = accModel.CustomizeInfo.Rank,
-                        UsedRankTokens = accModel.CustomizeInfo.UsedRankTokens,
-                        ObtainedRankTokens = accModel.CustomizeInfo.ObtainedRankTokens
-                    };
-
-                    session = new SessionInstance(
-                        Guid.NewGuid(),
-                        loginDataJSON.LoginId,
-                        accData,
-                        loginDataJSON.Server.Server_name,
-                        this.Request.GetRemoteIPAddress(),
-                        this.Request.GetRemotePort());
-
-                    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-                    context.Clients.Client(foundServer.SignalRClientId).LoginSuccessful(session.LoginId, accData);
-
-                    accModel.Status = String.Concat(StatusMessages.STR_PLAYING_ON, session.Server);
-                    accModel.LoginDate = DateTime.UtcNow;
-                    accModel.LoginIP = this.Request.GetRemoteIPAddress();
-                    accModel.CustomizeInfo = accModel.CustomizeInfo;
-                    accModel.Experience = accModel.Experience;
-                    db.SaveChanges();
-
-                    SessionManager.Instance.StoreSession(session);
-
-                    // Success.
-                    return HttpResponseFactory.Response200Json(new LoginReplyJson()
-                    {
-                        Ant = false, // TODO.
-                        Email = false, // TODO.
-                        Emblem = "", // TODO.
-                        Guild = "0", // TODO.
-                        GuildName = "", // TODO.
-                        GuildOwner = 0, // TODO.
-                        LastRead = 0, // TODO.
-                        LastRecv = 0, // TODO.
-                        Status = StatusMessages.STR_SUCCESS,
-                        Time = 0, // TODO,
-                        Token = session.Token.ToString(),
-                        UserId = accModel.Id
-                    });
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NO_SUCH_SERVER });
                 }
+
+                // Check whether this user already has session.
+                SessionInstance session = SessionManager.Instance.GetSessionByUsername(acc.Username);
+                if (session != null)
+                {
+                    // He has, lets log him out.
+                    IHubContext context2 = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
+                    context2.Clients.Client(server.SignalRClientId).ForceLogout(session.AccounData.UserId, session.IP);
+
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_ALREADY_IN });
+                }
+
+                // No, he has no session. Lets make him one.
+                AccountDataDTO accData = new AccountDataDTO()
+                {
+                    UserId = acc.Id,
+                    Username = acc.Username,
+                    Group = acc.Group,
+                    Hat = acc.CustomizeInfo.Hat,
+                    Head = acc.CustomizeInfo.Head,
+                    Body = acc.CustomizeInfo.Body,
+                    Feet = acc.CustomizeInfo.Feet,
+                    HatColor = acc.CustomizeInfo.HatColor,
+                    HeadColor = acc.CustomizeInfo.HeadColor,
+                    BodyColor = acc.CustomizeInfo.BodyColor,
+                    FeetColor = acc.CustomizeInfo.FeetColor,
+                    HatColor2 = acc.CustomizeInfo.HatColor2,
+                    HeadColor2 = acc.CustomizeInfo.HeadColor2,
+                    BodyColor2 = acc.CustomizeInfo.BodyColor2,
+                    FeetColor2 = acc.CustomizeInfo.FeetColor2,
+                    HatSeq = acc.CustomizeInfo.HatSeq,
+                    HeadSeq = acc.CustomizeInfo.HeadSeq,
+                    BodySeq = acc.CustomizeInfo.BodySeq,
+                    FeetSeq = acc.CustomizeInfo.FeetSeq,
+                    HatSeqEpic = acc.CustomizeInfo.HatSeqEpic,
+                    HeadSeqEpic = acc.CustomizeInfo.HeadSeqEpic,
+                    BodySeqEpic = acc.CustomizeInfo.BodySeqEpic,
+                    FeetSeqEpic = acc.CustomizeInfo.FeetSeqEpic,
+                    Speed = acc.CustomizeInfo.Speed,
+                    Accel = acc.CustomizeInfo.Accel,
+                    Jump = acc.CustomizeInfo.Jump,
+                    Rank = acc.CustomizeInfo.Rank,
+                    UsedRankTokens = acc.CustomizeInfo.UsedRankTokens,
+                    ObtainedRankTokens = acc.CustomizeInfo.ObtainedRankTokens
+                };
+
+                session = new SessionInstance(
+                    Guid.NewGuid(),
+                    loginDataJSON.LoginId,
+                    accData,
+                    loginDataJSON.Server.Server_name,
+                    this.Request.GetRemoteIPAddress(),
+                    this.Request.GetRemotePort());
+
+                SessionManager.Instance.StoreSession(session);
+
+                // Notify relevant server that authentication succeeded.
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
+                context.Clients.Client(server.SignalRClientId).LoginSuccessful(session.LoginId, accData);
+
+                this.dataAccess.UpdateAccountStatus(
+                    acc,
+                    String.Concat(StatusMessages.STR_PLAYING_ON, session.Server),
+                    this.Request.GetRemoteIPAddress());
+
+                return HttpResponseFactory.Response200Json(new LoginReplyJson
+                {
+                    Ant = false, // TODO - Has Ant set.
+                    Email = false, // TODO - Has email set.
+                    Emblem = "", // TODO - Guild emblem URL.
+                    Guild = "0", // TODO - Guild id.
+                    GuildName = "", // TODO - Guild name.
+                    GuildOwner = 0, // TODO - Guild owner uid.
+                    LastRead = 0, // TODO - Seconds since UNIX time when user last read PMs.
+                    LastRecv = 0, // TODO - Seconds since UNIX time when user last received PM.
+                    Status = StatusMessages.STR_SUCCESS,
+                    Time = 0, // TODO - Seconds since UNIX time.
+                    Token = session.Token.ToString(),
+                    UserId = acc.Id
+                });
             }
             catch (PR2Exception ex)
             {
