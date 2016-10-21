@@ -28,7 +28,7 @@ namespace PR2PS.Web.Controllers
             {
                 if (banData == null)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NO_FORM_DATA));
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
                 }
 
                 // TODO - Probably some more validation like length and special characters contraints.
@@ -39,18 +39,18 @@ namespace PR2PS.Web.Controllers
                 SessionInstance issuerSession = SessionManager.Instance.GetSessionByToken(banData.Token);
                 if (issuerSession == null)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NOT_LOGGED_IN));
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
                 if (issuerSession.AccounData.Group < 2)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NO_RIGHTS));
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_RIGHTS);
                 }
 
                 Int32 duration;
                 if (!Int32.TryParse(banData.Duration, out duration) || duration < 0)
                 {
-                    return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_INVALID_DURATION));
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_INVALID_DURATION);
                 }
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
@@ -60,12 +60,12 @@ namespace PR2PS.Web.Controllers
 
                     if (receiver == null)
                     {
-                        return HttpResponseFactory.Response200Plain(String.Concat("error=", ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME));
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
                     }
 
                     if (receiver.Group == 3)
                     {
-                        return HttpResponseFactory.Response200Plain(String.Concat("error=", "Administrators are absolute!"));                        
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "Administrators are absolute!");                        
                     }
 
                     Ban ban = new Ban
@@ -85,7 +85,7 @@ namespace PR2PS.Web.Controllers
                     receiver.Bans.Add(ban);
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200Plain("success=true");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, "true");
                 }
             }
             catch (Exception ex)

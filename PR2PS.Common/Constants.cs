@@ -38,6 +38,14 @@ namespace PR2PS.Common.Constants
         public const String ERR_EMAIL_INVALID = "The provided email is in incorrect format.";
     }
 
+    public static class StatusKeys
+    {
+        public const String ERROR = "error";
+        public const String MESSAGE = "message";
+        public const String SUCCESS = "success";
+        public const String USERNAME = "user_name";
+    }
+
     public static class StatusMessages
     {
         public const String STR_PLAYING_ON = "Playing on ";
@@ -78,6 +86,7 @@ namespace PR2PS.Common.Constants
         public static Char[] ARG_SEPARATOR = new Char[] { '`' };
         public static Char[] EOT_SEPARATOR = new Char[] { EOT_CHAR };
         public const String ARG_STR = "`";
+        public const Char EQ_CHAR = '=';
     }
 
     public static class GameRooms

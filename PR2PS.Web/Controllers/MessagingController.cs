@@ -98,7 +98,7 @@ namespace PR2PS.Web.Controllers
             {
                 if (sendMessageData == null)
                 {
-                    return HttpResponseFactory.Response200Plain("error=No form data received.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "No form data received.");
                 }
 
                 if (String.IsNullOrEmpty(sendMessageData.To_Name)) sendMessageData.To_Name = String.Empty;
@@ -106,7 +106,7 @@ namespace PR2PS.Web.Controllers
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(sendMessageData.Token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200Plain("error=You are not logged in.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You are not logged in.");
                 }
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
@@ -116,7 +116,7 @@ namespace PR2PS.Web.Controllers
                     
                     if (recipient == null)
                     {
-                        return HttpResponseFactory.Response200Plain("error=Could not find a user with that name.");
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "Could not find a user with that name.");
                     }
 
                     recipient.Messages.Add(new Message
@@ -129,7 +129,7 @@ namespace PR2PS.Web.Controllers
                     });
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200Plain("message=Your message was sent succesfully!");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, "Your message was sent succesfully!");
                 }
             }
             catch (Exception ex)
@@ -152,16 +152,16 @@ namespace PR2PS.Web.Controllers
                 if (reportMessageData == null
                     || !reportMessageData.Message_Id.HasValue)
                 {
-                    return HttpResponseFactory.Response200Plain("error=No form data received.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "No form data received.");
                 }
 
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(reportMessageData.Token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200Plain("error=You are not logged in.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You are not logged in.");
                 }
 
-                return HttpResponseFactory.Response200Plain("error=This feature is not implemented yet.");
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "This feature is not implemented yet.");
             }
             catch (Exception ex)
             {
@@ -182,13 +182,13 @@ namespace PR2PS.Web.Controllers
                 if (reportMessageData == null
                     || !reportMessageData.Message_Id.HasValue)
                 {
-                    return HttpResponseFactory.Response200Plain("error=No form data received.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "No form data received.");
                 }
 
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(reportMessageData.Token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200Plain("error=You are not logged in.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You are not logged in.");
                 }
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
@@ -197,13 +197,13 @@ namespace PR2PS.Web.Controllers
                     Message message = accModel.Messages.FirstOrDefault(m => m.Id == reportMessageData.Message_Id.Value);
                     if (message == null)
                     {
-                        return HttpResponseFactory.Response200Plain("error=Could not find such message.");
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "Could not find such message.");
                     }
 
                     message.IsDeleted = true;
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200Plain("success=true");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, "true");
                 }
             }
             catch (Exception ex)
@@ -227,7 +227,7 @@ namespace PR2PS.Web.Controllers
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200Plain("error=You are not logged in.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You are not logged in.");
                 }
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
@@ -237,7 +237,7 @@ namespace PR2PS.Web.Controllers
                     
                     if (messages == null || !messages.Any())
                     {
-                        return HttpResponseFactory.Response200Plain("error=You have no messages to delete.");
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You have no messages to delete.");
                     }
 
                     foreach (Message message in messages)
@@ -246,7 +246,7 @@ namespace PR2PS.Web.Controllers
                     }
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200Plain("success=true");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, "true");
                 }
             }
             catch (Exception ex)

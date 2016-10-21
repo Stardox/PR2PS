@@ -10,6 +10,11 @@ namespace PR2PS.Web.Core
 {
     public static class HttpResponseFactory
     {
+        public static HttpResponseMessage Response200Plain(String key, String value)
+        {
+            return Response200Plain(String.Concat(key, Separators.EQ_CHAR, value));
+        }
+
         public static HttpResponseMessage Response200Plain(String content)
         {
             HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.OK);
