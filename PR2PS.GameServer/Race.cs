@@ -1,5 +1,5 @@
-﻿using PR2Hub.Core;
-using PR2PS.Common.Constants;
+﻿using PR2PS.Common.Constants;
+using PR2PS.Common.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

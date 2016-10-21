@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PR2PS.Common.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

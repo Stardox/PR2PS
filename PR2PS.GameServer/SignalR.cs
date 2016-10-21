@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
-using PR2Hub.Core;
+using PR2PS.Common.DTO;
 using System;
 using System.Net;
 

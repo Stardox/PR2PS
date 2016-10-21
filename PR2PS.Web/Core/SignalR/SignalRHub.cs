@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using PR2PS.Common.Constants;
+using PR2PS.Common.DTO;
 using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core.Management;

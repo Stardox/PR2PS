@@ -77,6 +77,7 @@ namespace PR2PS.Common.Constants
         public static Char[] COMMA_SEPARATOR = new Char[] { ',' };
         public static Char[] ARG_SEPARATOR = new Char[] { '`' };
         public static Char[] EOT_SEPARATOR = new Char[] { EOT_CHAR };
+        public const String ARG_STR = "`";
     }
 
     public static class GameRooms

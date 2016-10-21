@@ -78,7 +78,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountDataDTO.cs" />
     <Compile Include="OccupancyInfo.cs" />
     <Compile Include="Race.cs" />
     <Compile Include="Rooms\RightRoom.cs" />

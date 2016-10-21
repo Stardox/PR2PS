@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 using PR2PS.Common.Constants;
+using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.Core;
@@ -86,39 +87,7 @@ namespace PR2PS.Web.Controllers
                 }
 
                 // No, he has no session. Lets make him one.
-                AccountDataDTO accData = new AccountDataDTO()
-                {
-                    UserId = acc.Id,
-                    Username = acc.Username,
-                    Group = acc.Group,
-                    Hat = acc.CustomizeInfo.Hat,
-                    Head = acc.CustomizeInfo.Head,
-                    Body = acc.CustomizeInfo.Body,
-                    Feet = acc.CustomizeInfo.Feet,
-                    HatColor = acc.CustomizeInfo.HatColor,
-                    HeadColor = acc.CustomizeInfo.HeadColor,
-                    BodyColor = acc.CustomizeInfo.BodyColor,
-                    FeetColor = acc.CustomizeInfo.FeetColor,
-                    HatColor2 = acc.CustomizeInfo.HatColor2,
-                    HeadColor2 = acc.CustomizeInfo.HeadColor2,
-                    BodyColor2 = acc.CustomizeInfo.BodyColor2,
-                    FeetColor2 = acc.CustomizeInfo.FeetColor2,
-                    HatSeq = acc.CustomizeInfo.HatSeq,
-                    HeadSeq = acc.CustomizeInfo.HeadSeq,
-                    BodySeq = acc.CustomizeInfo.BodySeq,
-                    FeetSeq = acc.CustomizeInfo.FeetSeq,
-                    HatSeqEpic = acc.CustomizeInfo.HatSeqEpic,
-                    HeadSeqEpic = acc.CustomizeInfo.HeadSeqEpic,
-                    BodySeqEpic = acc.CustomizeInfo.BodySeqEpic,
-                    FeetSeqEpic = acc.CustomizeInfo.FeetSeqEpic,
-                    Speed = acc.CustomizeInfo.Speed,
-                    Accel = acc.CustomizeInfo.Accel,
-                    Jump = acc.CustomizeInfo.Jump,
-                    Rank = acc.CustomizeInfo.Rank,
-                    UsedRankTokens = acc.CustomizeInfo.UsedRankTokens,
-                    ObtainedRankTokens = acc.CustomizeInfo.ObtainedRankTokens
-                };
-
+                AccountDataDTO accData = acc.ToAccountDataDTO();
                 session = new SessionInstance(
                     Guid.NewGuid(),
                     loginDataJSON.LoginId,

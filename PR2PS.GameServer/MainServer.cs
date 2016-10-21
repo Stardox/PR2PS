@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR.Client;
-using PR2Hub.Core;
+using PR2PS.Common.DTO;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -79,7 +79,7 @@ namespace PR2PS.GameServer
                     hubConnection.Start().Wait();
                     break;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Console.WriteLine("Attempt {0} failed...", i);
                     if (i == 5)

@@ -145,7 +145,6 @@
     <Compile Include="Controllers\MessagingController.cs" />
     <Compile Include="Controllers\MiscController.cs" />
     <Compile Include="Controllers\ModerationController.cs" />
-    <Compile Include="Core\AccountDataDTO.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\FormModels\BanFormModel.cs" />
