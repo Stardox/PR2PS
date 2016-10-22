@@ -36,6 +36,10 @@ namespace PR2PS.Common.Constants
         public const String ERR_USERNAME_INVALID = "There is an invalid character in your name. The allowed characters are a-z, A-Z, 1-9, and !#$%&()*+.:;=?@~- .";
         public const String ERR_PASSWORD_INVALID = "There is an invalid character in your password. The allowed characters are a-z, A-Z, 1-9, and !#$%&()*+.:;=?@~- .";
         public const String ERR_EMAIL_INVALID = "The provided email is in incorrect format.";
+        public const String ERR_NOT_IMPLEMENTED = "This feature is not implemented yet.";
+        public const String ERR_MESSAGE_NOT_FOUND = "Could not find such message.";
+        public const String ERR_NO_MESSAGES = "You have no messages to delete.";
+        public const String ERR_ADMINS_ARE_ABSOLUTE = "Administrators are absolute!";
     }
 
     public static class StatusKeys
@@ -63,6 +67,9 @@ namespace PR2PS.Common.Constants
         public const String NAH = "nah";
         public const String FORFEIT = "forfeit";
         public const String ONE = "1";
+        public const String TRUE = "true";
+        public const String PASSWORD_CHANGED = "The password has been changed succesfully!";
+        public const String MESSAGE_SENT = "Your message was sent succesfully!";
     }
 
     public static class MimeTypes

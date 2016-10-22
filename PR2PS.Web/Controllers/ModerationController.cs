@@ -65,7 +65,7 @@ namespace PR2PS.Web.Controllers
 
                     if (receiver.Group == 3)
                     {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "Administrators are absolute!");                        
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_ADMINS_ARE_ABSOLUTE);                        
                     }
 
                     Ban ban = new Ban
@@ -85,7 +85,7 @@ namespace PR2PS.Web.Controllers
                     receiver.Bans.Add(ban);
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, "true");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
                 }
             }
             catch (Exception ex)

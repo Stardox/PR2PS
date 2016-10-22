@@ -146,7 +146,7 @@ namespace PR2PS.Web.Controllers
         {
             // TODO - Figure out how real PR2 identifies your session since token is always empty.
             // Probably using cookies or idk. For now we will rely on actual game server (TCP).
-            return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, "true");
+            return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace PR2PS.Web.Controllers
             {
                 if (changePassData == null)
                 {
-                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "No data received.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
                 }
 
                 // TODO - Probably some more validation like length and special characters contraints.
@@ -203,7 +203,7 @@ namespace PR2PS.Web.Controllers
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(changePassData.Token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You are not logged in.");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
@@ -211,13 +211,13 @@ namespace PR2PS.Web.Controllers
                     Account me = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
                     if (!Crypto.VerifyHashedPassword(me.PasswordHash, changePassData.Old_Pass))
                     {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "You have entered a wrong password.");
+                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_WRONG_PASS);
                     }
 
                     me.PasswordHash = Crypto.HashPassword(changePassData.New_Pass);
                     db.SaveChanges();
 
-                    return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, "The password has been changed succesfully!");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.PASSWORD_CHANGED);
                 }
             }
             catch (Exception ex)
