@@ -30,17 +30,17 @@ namespace PR2PS.Web.Controllers
 
         /// <summary>
         /// Checks if user is logged in.
-        /// TODO - Only partially implemented.
         /// </summary>
         /// <param name="token">Session token to identify the user.</param>
         /// <param name="rand">Random string.</param>
-        /// <returns>Username if found session exists or empty string otherwise.</returns>
+        /// <returns>Key-value pair containing username. Example: user_name=Admin</returns>
         [HttpGet]
         [Route("check_login.php")]
         public HttpResponseMessage CheckLogin(String token = "", String rand = "")
         {
-            // TODO - check token and return username if available.
-            return HttpResponseFactory.Response200Plain(StatusKeys.USERNAME, null);
+            SessionInstance session = SessionManager.Instance.GetSessionByToken(token);
+
+            return HttpResponseFactory.Response200Plain(StatusKeys.USERNAME, session?.AccounData.Username);
         }
 
         /// <summary>
