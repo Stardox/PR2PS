@@ -195,30 +195,19 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
                 }
 
-                // TODO - Probably some more validation like length and special characters contraints.
-                if (String.IsNullOrEmpty(changePassData.Token)) changePassData.Token = String.Empty;
-                if (String.IsNullOrEmpty(changePassData.Old_Pass)) changePassData.Old_Pass = String.Empty;
-                if (String.IsNullOrEmpty(changePassData.New_Pass)) changePassData.New_Pass = String.Empty;
-
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(changePassData.Token);
                 if (mySession == null)
                 {
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    Account me = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
-                    if (!Crypto.VerifyHashedPassword(me.PasswordHash, changePassData.Old_Pass))
-                    {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_WRONG_PASS);
-                    }
+                this.dataAccess.ChangePassword(mySession.AccounData.UserId, changePassData.Old_Pass, changePassData.New_Pass);
 
-                    me.PasswordHash = Crypto.HashPassword(changePassData.New_Pass);
-                    db.SaveChanges();
-
-                    return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.PASSWORD_CHANGED);
-                }
+                return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.PASSWORD_CHANGED);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
             catch (Exception ex)
             {

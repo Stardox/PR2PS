@@ -18,6 +18,11 @@ namespace PR2PS.DataAccess.Core
             this.dbContext = dbContext;
         }
 
+        public Account GetAccountById(Int64 id)
+        {
+            return this.dbContext.Accounts.FirstOrDefault(a => a.Id == id);
+        }
+
         public void RegisterUser(String username, String password, String email, String ipAddress)
         {
             username = username ?? String.Empty;
@@ -104,9 +109,7 @@ namespace PR2PS.DataAccess.Core
 
         public void UpdateAccountStatus(Int64 id, String status, String ipAddress)
         {
-            Account acc = this.dbContext.Accounts.FirstOrDefault(a => a.Id == id);
-
-            this.UpdateAccountStatus(acc, status, ipAddress);
+            this.UpdateAccountStatus(this.GetAccountById(id), status, ipAddress);
         }
 
         public void UpdateAccountStatus(Account account, String status, String ipAddress)
@@ -120,6 +123,35 @@ namespace PR2PS.DataAccess.Core
             account.LoginDate = utcDateTime;
             account.LoginIP = ipAddress;
             account.Status = status;
+
+            this.dbContext.SaveChanges();
+        }
+
+        public void ChangePassword(Int64 id, String oldPassword, String newPassword)
+        {
+            Account acc = this.GetAccountById(id);
+            if (acc == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+
+            oldPassword = oldPassword ?? String.Empty;
+            newPassword = newPassword ?? String.Empty;
+
+            if (newPassword.Length > ValidationConstraints.PASSWORD_LENGTH)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_PASSWORD_TOO_LONG);
+            }
+            else if (!Regex.IsMatch(newPassword, ValidationConstraints.PASSWORD_PATTERN))
+            {
+                throw new PR2Exception(ErrorMessages.ERR_PASSWORD_INVALID);
+            }
+            else if (!Crypto.VerifyHashedPassword(acc.PasswordHash, oldPassword))
+            {
+                throw new PR2Exception(ErrorMessages.ERR_WRONG_PASS);
+            }
+
+            acc.PasswordHash = Crypto.HashPassword(newPassword);
 
             this.dbContext.SaveChanges();
         }

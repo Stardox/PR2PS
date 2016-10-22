@@ -6,6 +6,13 @@ namespace PR2PS.DataAccess.Core
     public interface IDataAccessEngine
     {
         /// <summary>
+        /// Get user's account by its unique id.
+        /// </summary>
+        /// <param name="id">Account id.</param>
+        /// <returns>Found account or null.</returns>
+        Account GetAccountById(Int64 id);
+
+        /// <summary>
         /// Checks if account data is valid and if so then creates new user Account.
         /// </summary>
         /// <param name="username">Account username.</param>
@@ -38,5 +45,13 @@ namespace PR2PS.DataAccess.Core
         /// <param name="status">Account status text. Example: Playing on Derron.</param>
         /// <param name="ipAddress">IPv4 address from which the request originates.</param>
         void UpdateAccountStatus(Account account, String status, String ipAddress);
+
+        /// <summary>
+        /// Changes user's password.
+        /// </summary>
+        /// <param name="id">User's unique id.</param>
+        /// <param name="oldPassword">Old password for verification.</param>
+        /// <param name="newPassword">New password.</param>
+        void ChangePassword(Int64 id, String oldPassword, String newPassword);
     }
 }
