@@ -1,5 +1,6 @@
 ﻿using PR2PS.DataAccess.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace PR2PS.DataAccess.Core
 {
@@ -33,10 +34,10 @@ namespace PR2PS.DataAccess.Core
         /// <summary>
         /// Updates user's login status, login date and login ip address.
         /// </summary>
-        /// <param name="id">Id of user Account which should be updated.</param>
+        /// <param name="userId">Id of user Account which should be updated.</param>
         /// <param name="status">Account status text. Example: Playing on Derron.</param>
         /// <param name="ipAddress">IPv4 address from which the request originates.</param>
-        void UpdateAccountStatus(Int64 id, String status, String ipAddress);
+        void UpdateAccountStatus(Int64 userId, String status, String ipAddress);
 
         /// <summary>
         /// Updates user's login status, login date and login ip address.
@@ -49,9 +50,18 @@ namespace PR2PS.DataAccess.Core
         /// <summary>
         /// Changes user's password.
         /// </summary>
-        /// <param name="id">User's unique id.</param>
+        /// <param name="userId">User's unique id.</param>
         /// <param name="oldPassword">Old password for verification.</param>
         /// <param name="newPassword">New password.</param>
-        void ChangePassword(Int64 id, String oldPassword, String newPassword);
+        void ChangePassword(Int64 userId, String oldPassword, String newPassword);
+
+        /// <summary>
+        /// Gets all private messages associated with user.
+        /// </summary>
+        /// <param name="userId">User's unique id.</param>
+        /// <param name="start">Number of messages (relative to first) which should be skipped.</param>
+        /// <param name="count">Number of messages to get.</param>
+        /// <returns></returns>
+        IEnumerable<Message> GetMessages(Int64 userId, Int32? start, Int32? count);
     }
 }

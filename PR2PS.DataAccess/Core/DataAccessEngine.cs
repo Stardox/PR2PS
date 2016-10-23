@@ -3,6 +3,7 @@ using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
@@ -107,9 +108,9 @@ namespace PR2PS.DataAccess.Core
             return acc;
         }
 
-        public void UpdateAccountStatus(Int64 id, String status, String ipAddress)
+        public void UpdateAccountStatus(Int64 userId, String status, String ipAddress)
         {
-            this.UpdateAccountStatus(this.GetAccountById(id), status, ipAddress);
+            this.UpdateAccountStatus(this.GetAccountById(userId), status, ipAddress);
         }
 
         public void UpdateAccountStatus(Account account, String status, String ipAddress)
@@ -127,9 +128,9 @@ namespace PR2PS.DataAccess.Core
             this.dbContext.SaveChanges();
         }
 
-        public void ChangePassword(Int64 id, String oldPassword, String newPassword)
+        public void ChangePassword(Int64 userId, String oldPassword, String newPassword)
         {
-            Account acc = this.GetAccountById(id);
+            Account acc = this.GetAccountById(userId);
             if (acc == null)
             {
                 throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
@@ -154,6 +155,24 @@ namespace PR2PS.DataAccess.Core
             acc.PasswordHash = Crypto.HashPassword(newPassword);
 
             this.dbContext.SaveChanges();
+        }
+
+        public IEnumerable<Message> GetMessages(Int64 userId, Int32? start, Int32? count)
+        {
+            Account acc = this.GetAccountById(userId);
+            if (acc == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+
+            start = start ?? 0;
+            count = count ?? 10;
+
+            return acc.Messages
+                      .Where(m => !m.IsDeleted)
+                      .OrderByDescending(m => m.DateSent)
+                      .Skip(start.Value)
+                      .Take(count.Value);
         }
     }
 }

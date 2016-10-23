@@ -12,16 +12,14 @@ using PR2PS.Web.Core.JsonModels;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
 using System;
-using System.Linq;
 using System.Net.Http;
-using System.Web.Helpers;
 using System.Web.Http;
 
 namespace PR2PS.Web.Controllers
 {
     public class AuthController : ApiController
     {
-        private IDataAccessEngine dataAccess { get; set; }
+        private IDataAccessEngine dataAccess;
 
         public AuthController(IDataAccessEngine dataAccess)
         {

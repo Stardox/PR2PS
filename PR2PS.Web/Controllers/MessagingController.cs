@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using PR2PS.Common.Constants;
+﻿using PR2PS.Common.Constants;
+using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
@@ -17,6 +17,13 @@ namespace PR2PS.Web.Controllers
 {
     public class MessagingController : ApiController
     {
+        private IDataAccessEngine dataAccess;
+
+        public MessagingController(IDataAccessEngine dataAccess)
+        {
+            this.dataAccess = dataAccess;
+        }
+
         /// <summary>
         /// Gets private messages.
         /// </summary>
@@ -27,60 +34,38 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                if (getMessagesData == null
-                    || !getMessagesData.Count.HasValue
-                    || !getMessagesData.Start.HasValue)
+                if (getMessagesData == null)
                 {
-                    return HttpResponseFactory.Response200Json(new ErrorJson
-                    {
-                        Error = ErrorMessages.ERR_NO_QUERY_DATA
-                    });
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NO_FORM_DATA } );
                 }
-
-                if (String.IsNullOrEmpty(getMessagesData.Token)) getMessagesData.Token = String.Empty;
 
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(getMessagesData.Token);
                 if (mySession == null)
                 {
-                    return HttpResponseFactory.Response200Json(new ErrorJson
-                    {
-                        Error = ErrorMessages.ERR_NOT_LOGGED_IN
-                    });
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NOT_LOGGED_IN } );
                 }
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
-                    if (accModel == null)
-                    {
-                        return HttpResponseFactory.Response200Json(new ErrorJson
-                        {
-                            Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
-                        });
-                    }
+                IEnumerable<Message> messages = this.dataAccess.GetMessages(mySession.AccounData.UserId, getMessagesData.Start, getMessagesData.Count);
 
-                    return HttpResponseFactory.Response200Json(new MessageListJson()
+                return HttpResponseFactory.Response200Json(new MessageListJson()
+                {
+                    Messages = messages.Select(m => new MessageJson
                     {
-                        Messages = accModel.Messages
-                            .Where(m => !m.IsDeleted)
-                            .OrderByDescending(m => m.DateSent)
-                            .Skip(getMessagesData.Start.Value)
-                            .Take(getMessagesData.Count.Value)
-                            .Select(m => new MessageJson
-                            {
-                                MessageId = m.Id,
-                                Message = m.Content,
-                                Time = m.DateSent,
-                                UserId = m.Sender.Id,
-                                Name = m.Sender.Username,
-                                Group = m.Sender.Group
-                            })
-                            .ToList(),
-                        Success = true
-                    });
-                }             
+                        MessageId = m.Id,
+                        Message = m.Content,
+                        Time = m.DateSent,
+                        UserId = m.Sender.Id,
+                        Name = m.Sender.Username,
+                        Group = m.Sender.Group
+                    }).ToList(),
+                    Success = true
+                });
             }
-            catch(Exception ex)
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Json(new ErrorJson { Error = ex.Message });
+            }
+            catch (Exception ex)
             {
                 return HttpResponseFactory.Response500Plain(ex.Message);
             }
