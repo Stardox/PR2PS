@@ -86,36 +86,23 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
                 }
 
-                if (String.IsNullOrEmpty(sendMessageData.To_Name)) sendMessageData.To_Name = String.Empty;
-
                 SessionInstance mySession = SessionManager.Instance.GetSessionByToken(sendMessageData.Token);
                 if (mySession == null)
                 {
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    Account sender = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
-                    Account recipient = db.Accounts.FirstOrDefault(a => a.Username.ToUpper() == sendMessageData.To_Name.ToUpper());
-                    
-                    if (recipient == null)
-                    {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
-                    }
+                this.dataAccess.SendMessage(
+                    mySession.AccounData.UserId,
+                    sendMessageData.To_Name,
+                    sendMessageData.Message,
+                    this.Request.GetRemoteIPAddress());
 
-                    recipient.Messages.Add(new Message
-                    {
-                        Sender = sender,
-                        Recipient = recipient,
-                        Content = sendMessageData.Message ?? String.Empty,
-                        DateSent = DateTime.UtcNow.GetSecondsSinceUnixTime(),
-                        IPAddress = this.Request.GetRemoteIPAddress()
-                    });
-                    db.SaveChanges();
-
-                    return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.MESSAGE_SENT);
-                }
+                return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.MESSAGE_SENT);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
             catch (Exception ex)
             {

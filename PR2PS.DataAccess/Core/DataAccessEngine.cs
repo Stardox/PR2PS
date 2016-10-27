@@ -24,6 +24,13 @@ namespace PR2PS.DataAccess.Core
             return this.dbContext.Accounts.FirstOrDefault(a => a.Id == id);
         }
 
+        public Account GetAccountByUsername(String username)
+        {
+            username = username ?? String.Empty;
+
+            return this.dbContext.Accounts.FirstOrDefault(a => a.Username.ToUpper() == username.ToUpper());
+        }
+
         public void RegisterUser(String username, String password, String email, String ipAddress)
         {
             username = username ?? String.Empty;
@@ -54,7 +61,7 @@ namespace PR2PS.DataAccess.Core
             {
                 throw new PR2Exception(ErrorMessages.ERR_EMAIL_INVALID);
             }
-            else if (this.dbContext.Accounts.Any(a => a.Username.ToUpper() == username.ToUpper()))
+            else if (this.GetAccountByUsername(username) != null)
             {
                 throw new PR2Exception(ErrorMessages.ERR_USER_EXISTS);
             }
@@ -78,7 +85,7 @@ namespace PR2PS.DataAccess.Core
             username = username ?? String.Empty;
             password = password ?? String.Empty;
 
-            Account acc = this.dbContext.Accounts.FirstOrDefault(a => a.Username.ToUpper() == username.ToUpper());
+            Account acc = this.GetAccountByUsername(username);
             if (acc == null)
             {
                 throw new PR2Exception(ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
@@ -173,6 +180,32 @@ namespace PR2PS.DataAccess.Core
                       .OrderByDescending(m => m.DateSent)
                       .Skip(start.Value)
                       .Take(count.Value);
+        }
+
+        public void SendMessage(Int64 senderId, String recipientUsername, String message, String ipAddress)
+        {
+            Account sender = this.GetAccountById(senderId);
+            if (sender == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+
+            Account recipient = this.GetAccountByUsername(recipientUsername);
+            if (recipient == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
+            }
+
+            recipient.Messages.Add(new Message
+            {
+                Sender = sender,
+                Recipient = recipient,
+                Content = message ?? String.Empty,
+                DateSent = DateTime.UtcNow.GetSecondsSinceUnixTime(),
+                IPAddress = ipAddress
+            });
+
+            this.dbContext.SaveChanges();
         }
     }
 }

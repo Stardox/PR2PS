@@ -14,6 +14,13 @@ namespace PR2PS.DataAccess.Core
         Account GetAccountById(Int64 id);
 
         /// <summary>
+        /// Get user's account by its username.
+        /// </summary>
+        /// <param name="username">Account's username.</param>
+        /// <returns>Found account or null.</returns>
+        Account GetAccountByUsername(String username);
+
+        /// <summary>
         /// Checks if account data is valid and if so then creates new user Account.
         /// </summary>
         /// <param name="username">Account username.</param>
@@ -63,5 +70,14 @@ namespace PR2PS.DataAccess.Core
         /// <param name="count">Number of messages to get.</param>
         /// <returns></returns>
         IEnumerable<Message> GetMessages(Int64 userId, Int32? start, Int32? count);
+
+        /// <summary>
+        /// Sends private message to specified user.
+        /// </summary>
+        /// <param name="senderId">Unique id of user who sent the message.</param>
+        /// <param name="recipientUsername">Username of user who shall receive the message.</param>
+        /// <param name="message">Message content.</param>
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        void SendMessage(Int64 senderId, String recipientUsername, String message, String ipAddress);
     }
 }
