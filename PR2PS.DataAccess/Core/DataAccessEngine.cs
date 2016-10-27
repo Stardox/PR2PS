@@ -207,5 +207,26 @@ namespace PR2PS.DataAccess.Core
 
             this.dbContext.SaveChanges();
         }
+
+        public void DeleteMessage(Int64 userId, Int64? messageId)
+        {
+            Account acc = this.GetAccountById(userId);
+            if (acc == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+
+            messageId = messageId ?? -1;
+
+            Message message = acc.Messages.FirstOrDefault(m => m.Id == messageId);
+            if (message == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_MESSAGE_NOT_FOUND);
+            }
+
+            message.IsDeleted = true;
+
+            this.dbContext.SaveChanges();
+        }
     }
 }

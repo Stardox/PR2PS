@@ -151,8 +151,7 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                if (reportMessageData == null
-                    || !reportMessageData.Message_Id.HasValue)
+                if (reportMessageData == null)
                 {
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
                 }
@@ -163,20 +162,13 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
-                    Message message = accModel.Messages.FirstOrDefault(m => m.Id == reportMessageData.Message_Id.Value);
-                    if (message == null)
-                    {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_MESSAGE_NOT_FOUND);
-                    }
+                this.dataAccess.DeleteMessage(mySession.AccounData.UserId, reportMessageData.Message_Id);
 
-                    message.IsDeleted = true;
-                    db.SaveChanges();
-
-                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
-                }
+                return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
             catch (Exception ex)
             {

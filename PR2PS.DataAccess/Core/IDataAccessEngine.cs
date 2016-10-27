@@ -79,5 +79,12 @@ namespace PR2PS.DataAccess.Core
         /// <param name="message">Message content.</param>
         /// <param name="ipAddress">IPv4 address from which the request originates.</param>
         void SendMessage(Int64 senderId, String recipientUsername, String message, String ipAddress);
+
+        /// <summary>
+        /// Deletes message with specified id.
+        /// </summary>
+        /// <param name="userId">User's unique id.</param>
+        /// <param name="messageId">Unique id of message to delete.</param>
+        void DeleteMessage(Int64 userId, Int64? messageId);
     }
 }
