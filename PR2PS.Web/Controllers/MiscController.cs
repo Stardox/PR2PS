@@ -14,6 +14,13 @@ namespace PR2PS.Web.Controllers
 {
     public class MiscController : ApiController
     {
+        private IDataAccessEngine dataAccess;
+
+        public MiscController(IDataAccessEngine dataAccess)
+        {
+            this.dataAccess = dataAccess;
+        }
+
         /// <summary>
         /// Gets welcome page.
         /// </summary>
@@ -86,46 +93,15 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                DatabaseContext db = new DatabaseContext("PR2Context");
-                Account foundUser = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == name.ToUpper());
-                if (foundUser == null)
+                // TODO - Handle token to check if lookup player is friend and/or ignored.
+
+                Account acc = this.dataAccess.GetAccountByUsername(name);
+                if (acc == null)
                 {
-                    return HttpResponseFactory.Response200Json(new ErrorJson
-                    {
-                        Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME
-                    });
+                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME });
                 }
 
-                return HttpResponseFactory.Response200Json(new UserInfoJson
-                {
-                    UserId = foundUser.Id.ToString(),
-                    Name = foundUser.Username,
-                    Group = foundUser.Group.ToString(),
-                    LoginDate = foundUser.LoginDate.ToString("dd/MMM/yyyy", CultureInfo.InvariantCulture),
-                    RegisterDate = foundUser.RegisterDate.ToString("dd/MMM/yyyy", CultureInfo.InvariantCulture),
-                    Status = foundUser.Status,
-
-                    Rank = foundUser.CustomizeInfo.Rank,
-                    Hats = foundUser.CustomizeInfo.HatSeq.Split(Separators.SEPARATOR_COMMA, StringSplitOptions.RemoveEmptyEntries).Length - 1, // TODO - Less retarded approach.
-                    Hat = foundUser.CustomizeInfo.Hat.ToString(),
-                    HatColor = foundUser.CustomizeInfo.HatColor.ToString(),
-                    HatColor2 = foundUser.CustomizeInfo.HatColor2.ToString(),
-                    Head = foundUser.CustomizeInfo.Head.ToString(),
-                    HeadColor = foundUser.CustomizeInfo.HeadColor.ToString(),
-                    HeadColor2 = foundUser.CustomizeInfo.HeadColor2.ToString(),
-                    Body = foundUser.CustomizeInfo.Body.ToString(),
-                    BodyColor = foundUser.CustomizeInfo.BodyColor.ToString(),
-                    BodyColor2 = foundUser.CustomizeInfo.BodyColor2.ToString(),
-                    Feet = foundUser.CustomizeInfo.Feet.ToString(),
-                    FeetColor = foundUser.CustomizeInfo.FeetColor.ToString(),
-                    FeetColor2 = foundUser.CustomizeInfo.FeetColor2.ToString(),
-
-                    GuildId = "0", // TODO - For now...
-                    GuildName = "", // TODO - For now...
-
-                    Friend = 0, // TODO.
-                    Ignored = 0 // TODO.
-                });
+                return HttpResponseFactory.Response200Json(UserInfoJson.ToUserInfoJson(acc));
             }
             catch (Exception ex)
             {

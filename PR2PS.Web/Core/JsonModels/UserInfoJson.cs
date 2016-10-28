@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
+using PR2PS.Common.Constants;
+using PR2PS.DataAccess.Entities;
 using System;
+using System.Globalization;
 
 namespace PR2PS.Web.Core.JsonModels
 {
@@ -76,5 +79,40 @@ namespace PR2PS.Web.Core.JsonModels
 
         [JsonProperty(PropertyName = "feetColor2")]
         public String FeetColor2 { get; set; }
+
+        // TODO - Questionable approach. Maybe this should be extension method.
+        public static UserInfoJson ToUserInfoJson(Account acc)
+        {
+            return new UserInfoJson
+            {
+                UserId = acc.Id.ToString(),
+                Name = acc.Username,
+                Group = acc.Group.ToString(),
+                LoginDate = acc.LoginDate.ToString(Other.DATE_FORMAT, CultureInfo.InvariantCulture),
+                RegisterDate = acc.RegisterDate.ToString(Other.DATE_FORMAT, CultureInfo.InvariantCulture),
+                Status = acc.Status,
+
+                Rank = acc.CustomizeInfo.Rank,
+                Hats = acc.CustomizeInfo.HatSeq.Split(Separators.SEPARATOR_COMMA, StringSplitOptions.RemoveEmptyEntries).Length - 1,
+                Hat = acc.CustomizeInfo.Hat.ToString(),
+                HatColor = acc.CustomizeInfo.HatColor.ToString(),
+                HatColor2 = acc.CustomizeInfo.HatColor2.ToString(),
+                Head = acc.CustomizeInfo.Head.ToString(),
+                HeadColor = acc.CustomizeInfo.HeadColor.ToString(),
+                HeadColor2 = acc.CustomizeInfo.HeadColor2.ToString(),
+                Body = acc.CustomizeInfo.Body.ToString(),
+                BodyColor = acc.CustomizeInfo.BodyColor.ToString(),
+                BodyColor2 = acc.CustomizeInfo.BodyColor2.ToString(),
+                Feet = acc.CustomizeInfo.Feet.ToString(),
+                FeetColor = acc.CustomizeInfo.FeetColor.ToString(),
+                FeetColor2 = acc.CustomizeInfo.FeetColor2.ToString(),
+
+                GuildId = "0", // TODO - Guild id.
+                GuildName = "", // TODO - Guild name.
+
+                Friend = 0, // TODO - 1 if is friend.
+                Ignored = 0 // TODO - 1 if is ignore.
+            };
+        }
     }
 }

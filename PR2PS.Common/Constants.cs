@@ -121,5 +121,6 @@ namespace PR2PS.Common.Constants
     public static class Other
     {
         public static readonly DateTime UNIX_TIME = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        public const String DATE_FORMAT = "dd/MMM/yyyy";
     }
 }
