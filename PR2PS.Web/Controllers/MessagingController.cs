@@ -194,24 +194,13 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    Account accModel = db.Accounts.FirstOrDefault(a => a.Id == mySession.AccounData.UserId);
-                    IEnumerable<Message> messages = accModel.Messages.Where(m => !m.IsDeleted);
-                    
-                    if (messages == null || !messages.Any())
-                    {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_MESSAGES);
-                    }
+                this.dataAccess.DeleteAllMessages(mySession.AccounData.UserId);
 
-                    foreach (Message message in messages)
-                    {
-                        message.IsDeleted = true;
-                    }
-                    db.SaveChanges();
-
-                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
-                }
+                return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
             catch (Exception ex)
             {

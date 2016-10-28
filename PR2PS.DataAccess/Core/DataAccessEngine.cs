@@ -228,5 +228,21 @@ namespace PR2PS.DataAccess.Core
 
             this.dbContext.SaveChanges();
         }
+
+        public void DeleteAllMessages(Int64 userId)
+        {
+            Account acc = this.GetAccountById(userId);
+            if (acc == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+
+            foreach (Message msg in acc.Messages)
+            {
+                msg.IsDeleted = true;
+            }
+
+            this.dbContext.SaveChanges();
+        }
     }
 }

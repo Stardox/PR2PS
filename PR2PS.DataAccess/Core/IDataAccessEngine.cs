@@ -86,5 +86,11 @@ namespace PR2PS.DataAccess.Core
         /// <param name="userId">User's unique id.</param>
         /// <param name="messageId">Unique id of message to delete.</param>
         void DeleteMessage(Int64 userId, Int64? messageId);
+
+        /// <summary>
+        /// Deletes all messages received by user.
+        /// </summary>
+        /// <param name="userId">User's unique id.</param>
+        void DeleteAllMessages(Int64 userId);
     }
 }
