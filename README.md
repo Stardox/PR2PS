@@ -85,7 +85,7 @@ Next up it is neccessary to launch one or more instances of PR2PS.GameServer in 
 
 Where:
 - *host_ip*		- Is IPv4 address to which the TCP listener will be bound.
-- *host_port*	- Is port port to which the TCP listener will be bound.
+- *host_port*	- Is port to which the TCP listener will be bound.
 - *web_url*		- Is the url of web server.
 - *server_name*	- Is the name of the server (Derron, Carina, Asdf, etc.).
 
