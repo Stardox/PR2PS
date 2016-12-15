@@ -132,15 +132,15 @@ namespace PR2PS.Web.Core.SignalR
                 switch(action)
                 {
                     case "permanent":
-                        if(session.AccounData.Group == 1)
+                        if(session.AccounData.Group == UserGroup.MEMBER)
                         {
-                            session.AccounData.Group = 2;
+                            session.AccounData.Group = UserGroup.MODERATOR;
                         }
                         break;
                     case "demod":
-                        if(session.AccounData.Group == 2)
+                        if(session.AccounData.Group == UserGroup.MODERATOR)
                         {
-                            session.AccounData.Group = 1;
+                            session.AccounData.Group = UserGroup.MEMBER;
                         }
                         break;
                     case "temporary":
@@ -163,9 +163,9 @@ namespace PR2PS.Web.Core.SignalR
                     switch (action)
                     {
                         case "permanent":
-                            if (accFromDb.Group == 1)
+                            if (accFromDb.Group == UserGroup.MEMBER)
                             {
-                                accFromDb.Group = 2;
+                                accFromDb.Group = UserGroup.MODERATOR;
                                 this.sendSystemMessage(
                                     serverName,
                                     String.Format("User '{0}' has been promoted to moderator.", receiver),
@@ -173,9 +173,9 @@ namespace PR2PS.Web.Core.SignalR
                             }
                             break;
                         case "demod":
-                            if (accFromDb.Group == 2)
+                            if (accFromDb.Group == UserGroup.MODERATOR)
                             {
-                                accFromDb.Group = 1;
+                                accFromDb.Group = UserGroup.MEMBER;
                                 this.sendSystemMessage(
                                     serverName,
                                     String.Format("User '{0}' has been demodded.", receiver),

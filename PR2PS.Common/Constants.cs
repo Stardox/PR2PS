@@ -117,6 +117,14 @@ namespace PR2PS.Common.Constants
         public const String EMAIL_PATTERN = @"^([0-9a-zA-Z]([-\.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})?$";
     }
 
+    public static class UserGroup
+    {
+        public const Byte GUEST = 0;
+        public const Byte MEMBER = 1;
+        public const Byte MODERATOR = 2;
+        public const Byte ADMINISTRATOR = 3;
+    }
+
     // How about more appropriate name.
     public static class Other
     {

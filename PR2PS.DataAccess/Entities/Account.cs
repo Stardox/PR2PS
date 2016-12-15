@@ -32,7 +32,7 @@ namespace PR2PS.DataAccess.Entities
 
         public Account()
         {
-            this.Group = 1;
+            this.Group = UserGroup.MEMBER;
             this.RegisterDate = DateTime.UtcNow;
             this.LoginDate = DateTime.UtcNow;
             this.Status = StatusMessages.STR_OFFLINE;

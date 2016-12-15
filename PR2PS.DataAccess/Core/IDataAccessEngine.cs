@@ -92,5 +92,17 @@ namespace PR2PS.DataAccess.Core
         /// </summary>
         /// <param name="userId">User's unique id.</param>
         void DeleteAllMessages(Int64 userId);
+
+        /// <summary>
+        /// Issues a ban for specified user.
+        /// </summary>
+        /// <param name="issuerId">Id of user who is issuing ban.</param>
+        /// <param name="receiverUsername">Username of user who is receiving ban.</param>
+        /// <param name="duration">Duration of ban in seconds.</param>
+        /// <param name="reason">Reasoning of issued ban.</param>
+        /// <param name="chatLog">Copy of chat log at the moment of ban.</param>
+        /// <param name="isIPBan">Indicates if this ban is an IP ban.</param>
+        /// <returns>Profile of banned user on success, otherwise exception gets thrown.</returns>
+        Account Ban(Int64 issuerId, String receiverUsername, Int32 duration, String reason, String chatLog, Boolean isIPBan);
     }
 }

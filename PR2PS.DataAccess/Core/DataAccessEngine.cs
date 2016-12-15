@@ -244,5 +244,43 @@ namespace PR2PS.DataAccess.Core
 
             this.dbContext.SaveChanges();
         }
+
+        public Account Ban(Int64 issuerId, String receiverUsername, Int32 duration, String reason, String chatLog, Boolean isIPBan)
+        {
+            Account issuer = this.GetAccountById(issuerId);
+            if (issuer == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
+            }
+            else if (issuer.Group < UserGroup.MODERATOR)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_RIGHTS);
+            }
+
+            Account receiver = this.GetAccountByUsername(receiverUsername);
+            if (receiver == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
+            }
+            else if (receiver.Group == UserGroup.ADMINISTRATOR)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_ADMINS_ARE_ABSOLUTE);
+            }
+
+            receiver.Bans.Add(new Ban
+            {
+                Issuer = issuer,
+                IPAddress = receiver.LoginIP,
+                IsIPBan = isIPBan,
+                StartDate = DateTime.UtcNow,
+                ExpirationDate = DateTime.UtcNow.AddSeconds(duration),
+                Reason = reason,
+                Extra = chatLog
+            });
+
+            this.dbContext.SaveChanges();
+
+            return receiver;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using PR2PS.Common.Constants;
+using PR2PS.Common.Exceptions;
 using PR2PS.DataAccess.Core;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
@@ -7,7 +8,6 @@ using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.Management;
 using PR2PS.Web.Core.SignalR;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 
@@ -15,11 +15,18 @@ namespace PR2PS.Web.Controllers
 {
     public class ModerationController : ApiController
     {
+        private IDataAccessEngine dataAccess;
+
+        public ModerationController(IDataAccessEngine dataAccess)
+        {
+            this.dataAccess = dataAccess;
+        }
+
         /// <summary>
         /// Bans user specified by username.
         /// </summary>
         /// <param name="banData">Ban form data (receiver, duration, reason, etc.).</param>
-        /// <returns>Success if has been banned error otherwise.</returns>
+        /// <returns>Success if has been banned or error otherwise.</returns>
         [HttpPost]
         [Route("ban_user.php")]
         public HttpResponseMessage Ban([FromBody] BanFormModel banData)
@@ -30,11 +37,10 @@ namespace PR2PS.Web.Controllers
                 {
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
                 }
-
-                // TODO - Probably some more validation like length and special characters contraints.
-                if (String.IsNullOrEmpty(banData.Banned_Name)) banData.Banned_Name = String.Empty;
-                if (String.IsNullOrEmpty(banData.Duration)) banData.Duration = String.Empty;
-                if (String.IsNullOrEmpty(banData.Token)) banData.Token = String.Empty;
+                else if (!banData.Duration.HasValue || banData.Duration < 1)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_INVALID_DURATION);
+                }
 
                 SessionInstance issuerSession = SessionManager.Instance.GetSessionByToken(banData.Token);
                 if (issuerSession == null)
@@ -42,51 +48,23 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                if (issuerSession.AccounData.Group < 2)
-                {
-                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_RIGHTS);
-                }
+                Account bannedUser = this.dataAccess.Ban(
+                    issuerSession.AccounData.UserId,
+                    banData.Banned_Name,
+                    banData.Duration.Value,
+                    banData.Reason,
+                    banData.Record,
+                    banData.IsIPBan);
 
-                Int32 duration;
-                if (!Int32.TryParse(banData.Duration, out duration) || duration < 0)
-                {
-                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_INVALID_DURATION);
-                }
+                // User has been banned, notify all registered game servers about this event.
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
+                context.Clients.All.ForceLogout(bannedUser.Id, (banData.IsIPBan) ? bannedUser.LoginIP : String.Empty);
 
-                using (DatabaseContext db = new DatabaseContext("PR2Context"))
-                {
-                    Account receiver = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == banData.Banned_Name.ToUpper());
-                    Account issuer = db.Accounts.FirstOrDefault(acc => acc.Id == issuerSession.AccounData.UserId);
-
-                    if (receiver == null)
-                    {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
-                    }
-
-                    if (receiver.Group == 3)
-                    {
-                        return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_ADMINS_ARE_ABSOLUTE);                        
-                    }
-
-                    Ban ban = new Ban
-                    {
-                        Issuer = issuer,
-                        IPAddress = receiver.LoginIP,
-                        IsIPBan = banData.IsIPBan,
-                        StartDate = DateTime.UtcNow,
-                        ExpirationDate = DateTime.UtcNow.AddSeconds(duration),
-                        Reason = banData.Reason,
-                        Extra = banData.Record
-                    };
-
-                    // User has been banned.
-                    IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-                    context.Clients.All.ForceLogout(receiver.Id, (ban.IsIPBan) ? receiver.LoginIP : String.Empty);
-                    receiver.Bans.Add(ban);
-                    db.SaveChanges();
-
-                    return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
-                }
+                return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
             catch (Exception ex)
             {

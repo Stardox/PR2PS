@@ -79,7 +79,7 @@ namespace PR2PS.GameServer
             // Checks if message is actual game command.
             if (message.StartsWith("/giveall "))
             {
-                if(sender.AccData.Group == 3)
+                if(sender.AccData.Group == UserGroup.ADMINISTRATOR)
                 {
                     String[] commandParts = message.Split(new Char[] { ' ' }, 2);
                     if(commandParts.Length > 1)

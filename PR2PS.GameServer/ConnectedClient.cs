@@ -167,7 +167,7 @@ namespace PR2PS.GameServer
                                 case "get_customize_info":
                                     this.SendMessage(String.Format("setCustomizeInfo`{0}", this.AccData.ToString()));
                                     this.SendMessage(String.Format("setRank`{0}", this.AccData.Rank));
-                                    if (this.AccData.Group > 1) this.SendMessage(String.Format("setGroup`{0}", this.AccData.Group));
+                                    if (this.AccData.Group > UserGroup.MEMBER) this.SendMessage(String.Format("setGroup`{0}", this.AccData.Group));
                                     break;
 
                                 case "get_online_list":
@@ -420,14 +420,14 @@ namespace PR2PS.GameServer
                                 case "promote_to_moderator":
                                     if (msgSegments.Length == 5)
                                     {
-                                        if (this.AccData.Group == 3)
+                                        if (this.AccData.Group == UserGroup.ADMINISTRATOR)
                                         {
                                             ConnectedClient target = this.gameServer.FindClient(msgSegments[3]);
                                             if (target != null)
                                             {
-                                                if (target.AccData.Group == 1)
+                                                if (target.AccData.Group == UserGroup.MEMBER)
                                                 {
-                                                    target.AccData.Group = 2;
+                                                    target.AccData.Group = UserGroup.MODERATOR;
                                                 }
                                             }
 
@@ -439,14 +439,14 @@ namespace PR2PS.GameServer
                                 case "demote_moderator":
                                     if (msgSegments.Length == 4)
                                     {
-                                        if (this.AccData.Group == 3)
+                                        if (this.AccData.Group == UserGroup.ADMINISTRATOR)
                                         {
                                             ConnectedClient target = this.gameServer.FindClient(msgSegments[3]);
                                             if (target != null)
                                             {
-                                                if (target.AccData.Group == 2)
+                                                if (target.AccData.Group == UserGroup.MODERATOR)
                                                 {
-                                                    target.AccData.Group = 1;
+                                                    target.AccData.Group = UserGroup.MEMBER;
                                                 }
                                             }
 

@@ -19,7 +19,7 @@ namespace PR2PS.DataAccess.Core
             {
                 Username = "Admin",
                 PasswordHash = Crypto.HashPassword(""), // TODO - Find an alternative to this to get rid of the dependency on System.Web.
-                Group = 3,
+                Group = UserGroup.ADMINISTRATOR,
                 CustomizeInfo = new CustomizeInfo()
                 {
                     HatSeq = BodyParts.PARTS_ALL_HATS,

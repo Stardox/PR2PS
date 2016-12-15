@@ -7,7 +7,7 @@ namespace PR2PS.Common.DTO
     {
         public Int64 UserId { get; set; }
         public String Username { get; set; }
-        public Int32 Group { get; set; }
+        public Byte Group { get; set; }
 
         public Int32 Hat { get; set; }
         public Int32 Head { get; set; }

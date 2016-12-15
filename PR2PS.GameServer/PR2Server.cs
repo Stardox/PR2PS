@@ -201,7 +201,7 @@ namespace PR2PS.GameServer
 
                 cli.SendMessage("loginSuccessful`1");
                 cli.SendMessage(String.Format("setRank`{0}", cli.AccData.Rank));
-                if (cli.AccData.Group > 1) cli.SendMessage(String.Format("setGroup`{0}", cli.AccData.Group));
+                if (cli.AccData.Group > UserGroup.MEMBER) cli.SendMessage(String.Format("setGroup`{0}", cli.AccData.Group));
                 //cli.SendMessage("message`Welcome to PR2 private server. :)");
             }
         }
