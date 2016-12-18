@@ -171,6 +171,7 @@
     <Compile Include="Core\Management\ServerManager.cs" />
     <Compile Include="Core\Management\SessionManager.cs" />
     <Compile Include="Core\SignalR\SignalRHub.cs" />
+    <Compile Include="Core\SignalR\HubCtxProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

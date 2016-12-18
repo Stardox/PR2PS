@@ -10,7 +10,7 @@ using System.Linq;
 namespace PR2PS.Web.Core.SignalR
 {
     /// <summary>
-    /// Class containing remote procedure called by TCP game server using SignalR.
+    /// Class containing remote procedures called by TCP game servers using SignalR.
     /// </summary>
     public class SignalRHub : Hub
     {

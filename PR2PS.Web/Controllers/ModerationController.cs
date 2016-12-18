@@ -57,8 +57,7 @@ namespace PR2PS.Web.Controllers
                     banData.IsIPBan);
 
                 // User has been banned, notify all registered game servers about this event.
-                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-                context.Clients.All.ForceLogout(bannedUser.Id, (banData.IsIPBan) ? bannedUser.LoginIP : String.Empty);
+                HubCtxProvider.Instance.ForceLogout(bannedUser.Id, (banData.IsIPBan) ? bannedUser.LoginIP : String.Empty);
 
                 return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
             }

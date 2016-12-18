@@ -78,8 +78,7 @@ namespace PR2PS.Web.Controllers
                 if (session != null)
                 {
                     // He has, lets log him out.
-                    IHubContext context2 = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-                    context2.Clients.Client(server.SignalRClientId).ForceLogout(session.AccounData.UserId, session.IP);
+                    HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, session.IP);
 
                     return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_ALREADY_IN });
                 }
@@ -97,8 +96,7 @@ namespace PR2PS.Web.Controllers
                 SessionManager.Instance.StoreSession(session);
 
                 // Notify relevant server that authentication succeeded.
-                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
-                context.Clients.Client(server.SignalRClientId).LoginSuccessful(session.LoginId, accData);
+                HubCtxProvider.Instance.LoginSuccessful(server.SignalRClientId, session.LoginId, accData);
 
                 this.dataAccess.UpdateAccountStatus(
                     acc,
