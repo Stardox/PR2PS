@@ -8,7 +8,10 @@ namespace PR2PS.DataAccess.Core
     public class DatabaseContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<CustomizeInfo> CustomizeInfos { get; set; }
+        public DbSet<Experience> Experience { get; set; }
         public DbSet<Ban> Bans { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public DatabaseContext(String connectionString) : base(connectionString) { }
 

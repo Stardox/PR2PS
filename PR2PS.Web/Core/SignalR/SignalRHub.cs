@@ -10,7 +10,7 @@ using System.Linq;
 namespace PR2PS.Web.Core.SignalR
 {
     /// <summary>
-    /// Class containing remote procedures called by TCP game servers using SignalR.
+    /// Hub containing procedures which are called remotely by game servers using SignalR.
     /// </summary>
     public class SignalRHub : Hub
     {
@@ -90,7 +90,7 @@ namespace PR2PS.Web.Core.SignalR
         }
 
         /// <summary>
-        /// Removes user session identified by his login id.
+        /// Invalidates user session identified by user's login id.
         /// </summary>
         /// <param name="serverName">Server name (Derron, etc.).</param>
         /// <param name="loginId">Login id identifying the session.</param>

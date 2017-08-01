@@ -19,6 +19,15 @@ namespace PR2PS.DataAccess.Core
             this.dbContext = dbContext;
         }
 
+        public void Dispose()
+        {
+            if (this.dbContext != null)
+            {
+                this.dbContext.Dispose();
+                this.dbContext = null;
+            }
+        }
+
         public Account GetAccountById(Int64 id)
         {
             return this.dbContext.Accounts.FirstOrDefault(a => a.Id == id);
@@ -282,5 +291,7 @@ namespace PR2PS.DataAccess.Core
 
             return receiver;
         }
+
+        
     }
 }

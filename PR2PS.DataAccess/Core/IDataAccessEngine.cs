@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PR2PS.DataAccess.Core
 {
-    public interface IDataAccessEngine
+    public interface IDataAccessEngine : IDisposable
     {
         /// <summary>
         /// Get user's account by its unique id.
