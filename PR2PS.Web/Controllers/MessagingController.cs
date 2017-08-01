@@ -106,7 +106,7 @@ namespace PR2PS.Web.Controllers
             }
             catch (Exception ex)
             {
-                return HttpResponseFactory.Response200Plain(ex.Message);
+                return HttpResponseFactory.Response500Plain(ex.Message);
             }
         }
 
