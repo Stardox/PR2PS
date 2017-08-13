@@ -26,5 +26,7 @@ namespace PR2PS.Web.Core
 
         public const Double SERVER_KEEPALIVE_INTERVAL_MILLIS = 300000;
         public const Double SERVER_KEEPALIVE_TIMER_MILLIS = 60000;
+        public const Double SESSION_EXPIRY_MINUTES = 360;
+        public const Double SESSION_CHECK_TIMER_MILLIS = 300000;
     }
 }

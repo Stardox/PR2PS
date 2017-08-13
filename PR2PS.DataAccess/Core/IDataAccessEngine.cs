@@ -30,6 +30,15 @@ namespace PR2PS.DataAccess.Core
         void RegisterUser(String username, String password, String email, String ipAddress);
 
         /// <summary>
+        /// Authenticate user according to username and performs check, whether user is banned.
+        /// Applicable when user already has a valid session.
+        /// </summary>
+        /// <param name="username">Account username.</param>
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        /// <returns>Account instance on success, exception otherwise.</returns>
+        Account AuthenticateUser(String username, String ipAddress);
+
+        /// <summary>
         /// Authenticate user according to credentials and performs check, whether user is banned.
         /// </summary>
         /// <param name="username">Account username.</param>
@@ -104,5 +113,13 @@ namespace PR2PS.DataAccess.Core
         /// <param name="isIPBan">Indicates if this ban is an IP ban.</param>
         /// <returns>Profile of banned user on success, otherwise exception gets thrown.</returns>
         Account Ban(Int64 issuerId, String receiverUsername, Int32 duration, String reason, String chatLog, Boolean isIPBan);
+
+        /// <summary>
+        /// Checks if user is banned.
+        /// </summary>
+        /// <param name="receiverId">Id of user for which the check will be performed.</param>
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        /// <returns>Instance of Ban which will be expiring last or null if user is not banned.</returns>
+        Ban IsUserBanned(Int64 receiverId, String ipAddress);
     }
 }

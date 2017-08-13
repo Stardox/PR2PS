@@ -176,7 +176,7 @@ namespace PR2PS.GameServer
                 this.clientsNotAuth.TryGetValue(loginId, out cli);
             }
 
-            if(cli == null)
+            if (cli == null)
             {
                 // Client not found.
 

@@ -100,7 +100,9 @@ namespace PR2PS.Web.Core.SignalR
 
             if (session != null)
             {
-                SessionManager.Instance.RemoveSession(session);
+                // Cannot remove the session otherwise user wont be able to rejoin after using Level Editor.
+                //SessionManager.Instance.RemoveSession(session);
+
                 using (DatabaseContext db = new DatabaseContext("PR2Context"))
                 {
                     Account accFromDb = db.Accounts.FirstOrDefault(acc => session.AccounData.UserId == acc.Id);

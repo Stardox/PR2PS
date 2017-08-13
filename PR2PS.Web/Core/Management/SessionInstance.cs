@@ -13,11 +13,14 @@ namespace PR2PS.Web.Core.Management
     public class SessionInstance
     {
         public Guid Token { get; private set; }
-        public Int32 LoginId { get; private set; }
-        public AccountDataDTO AccounData { get; private set; }
-        public String Server { get; private set; }
-        public String IP { get; private set; }
-        public Int32? Port { get; private set; }
+        public Int32 LoginId { get; set; }
+        public AccountDataDTO AccounData { get; set; }
+        public String Server { get; set; }
+        public String IP { get; set; }
+        public Int32? Port { get; set; }
+        public DateTime ValidUntil { get; private set; }
+
+        public Boolean IsExpired { get { return DateTime.Compare(DateTime.UtcNow, ValidUntil) > 0; } }
 
         public SessionInstance(Guid token, Int32 loginId, AccountDataDTO accountData, String server, String ip, Int32? port)
         {
@@ -27,6 +30,15 @@ namespace PR2PS.Web.Core.Management
             this.Server = server;
             this.IP = ip;
             this.Port = port;
+            this.ValidUntil = DateTime.UtcNow.AddMinutes(WebConstants.SESSION_EXPIRY_MINUTES);
+        }
+
+        /// <summary>
+        /// Extends the session for constant interval.
+        /// </summary>
+        public void Extend()
+        {
+            this.ValidUntil = DateTime.UtcNow.AddMinutes(WebConstants.SESSION_EXPIRY_MINUTES);
         }
     }
 }

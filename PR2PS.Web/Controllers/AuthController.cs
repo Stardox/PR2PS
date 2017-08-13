@@ -53,7 +53,7 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
-                // TODO - Token processing, version check and more checks based on received data.
+                // TODO - Cookie token processing, version check and more checks based on received data.
 
                 if (loginData == null || String.IsNullOrEmpty(loginData.I))
                 {
@@ -63,9 +63,6 @@ namespace PR2PS.Web.Controllers
                 String rawloginDataJSON = loginData.I.FromBase64ToString();
                 LoginDataJson loginDataJSON = JsonConvert.DeserializeObject<LoginDataJson>(rawloginDataJSON);
 
-                // Authenticate user.
-                Account acc = this.dataAccess.AuthenticateUser(loginDataJSON.UserName, loginDataJSON.UserPass, this.Request.GetRemoteIPAddress());
-
                 // Check if such server even exists.
                 ServerInstance server = ServerManager.Instance.GetServer(loginDataJSON.Server.Server_name);
                 if (server == null)
@@ -73,29 +70,51 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_NO_SUCH_SERVER });
                 }
 
-                // Check whether this user already has session.
-                SessionInstance session = SessionManager.Instance.GetSessionByUsername(acc.Username);
-                if (session != null)
+                Account acc = null;
+                AccountDataDTO accData = null;
+
+                // First of all, lets try to authenticate him using session token. Example use case - Level Editor relog.
+                SessionInstance session = SessionManager.Instance.GetSessionByToken(loginData.Token);
+                if (session == null)
                 {
-                    // He has, lets log him out.
+                    // Did not work. Lets try to authenticate him using credentials instead.
+                    acc = this.dataAccess.AuthenticateUser(loginDataJSON.UserName, loginDataJSON.UserPass, this.Request.GetRemoteIPAddress());
+                    accData = acc.ToAccountDataDTO();
+
+                    session = SessionManager.Instance.GetSessionByUsername(acc.Username);
+
+                    if (session != null)
+                    {
+                        // He already has session. Lets remove it.
+                        HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, session.IP);
+                        SessionManager.Instance.RemoveSession(session);
+                    }
+
+                    session = new SessionInstance(
+                            session != null ? session.Token : Guid.NewGuid(),
+                            loginDataJSON.LoginId,
+                            accData,
+                            loginDataJSON.Server.Server_name,
+                            this.Request.GetRemoteIPAddress(),
+                            this.Request.GetRemotePort());
+                    SessionManager.Instance.StoreSession(session);
+                }
+                else
+                {
+                    // He has session, lets try to log him out of GameServer and update his session.
                     HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, session.IP);
 
-                    return HttpResponseFactory.Response200Json(new ErrorJson { Error = ErrorMessages.ERR_ALREADY_IN });
+                    acc = this.dataAccess.AuthenticateUser(session.AccounData.Username, this.Request.GetRemoteIPAddress());
+                    accData = acc.ToAccountDataDTO();
+
+                    session.LoginId = loginDataJSON.LoginId;
+                    session.AccounData = accData;
+                    session.Server = loginDataJSON.Server.Server_name;
+                    session.IP = this.Request.GetRemoteIPAddress();
+                    session.Port = this.Request.GetRemotePort();
+                    session.Extend();
                 }
 
-                // No, he has no session. Lets make him one.
-                AccountDataDTO accData = acc.ToAccountDataDTO();
-                session = new SessionInstance(
-                    Guid.NewGuid(),
-                    loginDataJSON.LoginId,
-                    accData,
-                    loginDataJSON.Server.Server_name,
-                    this.Request.GetRemoteIPAddress(),
-                    this.Request.GetRemotePort());
-
-                SessionManager.Instance.StoreSession(session);
-
-                // Notify relevant server that authentication succeeded.
                 HubCtxProvider.Instance.LoginSuccessful(server.SignalRClientId, session.LoginId, accData);
 
                 this.dataAccess.UpdateAccountStatus(

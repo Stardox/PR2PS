@@ -15,7 +15,12 @@ namespace PR2PS.Web
         /// <summary>
         /// Timer responsible for removing dead servers from the list of active servers.
         /// </summary>
-        public static Timer serverCheckTimer;
+        private static Timer serverCheckTimer;
+
+        /// <summary>
+        /// Timer responsible for removing invalid sessions.
+        /// </summary>
+        private static Timer sessionCheckTimer;
 
         /// <summary>
         /// Entry point method. Responsible for the initialization.
@@ -44,9 +49,14 @@ namespace PR2PS.Web
             try
             {
                 Console.WriteLine("Attempting to start web server...");
+
                 serverCheckTimer = new Timer(WebConstants.SERVER_KEEPALIVE_TIMER_MILLIS);
-                serverCheckTimer.Elapsed += serverCheckTimer_Elapsed;
+                serverCheckTimer.Elapsed += ServerCheckTimer_Elapsed;
                 serverCheckTimer.Start();
+
+                sessionCheckTimer = new Timer(WebConstants.SESSION_CHECK_TIMER_MILLIS);
+                sessionCheckTimer.Elapsed += SessionCheckTimer_Elapsed;
+                sessionCheckTimer.Start();
 
                 using (WebApp.Start<Startup>(hostURL))
                 {
@@ -67,11 +77,23 @@ namespace PR2PS.Web
         }
 
         /// <summary>
+        /// Event handler for the timer responsible for removal of expired sessions.
+        /// </summary>
+        /// <param name="sender">Event initiator (Timer in this case).</param>
+        /// <param name="e">Event details.</param>
+        private static void SessionCheckTimer_Elapsed(Object sender, ElapsedEventArgs e)
+        {
+            Int32 count = SessionManager.Instance.RemoveExpiredSessions();
+
+            Console.WriteLine("{0} session(s) removed.", count);
+        }
+
+        /// <summary>
         /// Event handler for the timer responsible for removal of dead servers.
         /// </summary>
         /// <param name="sender">Event initiator (Timer in this case).</param>
         /// <param name="e">Event details.</param>
-        static void serverCheckTimer_Elapsed(Object sender, ElapsedEventArgs e)
+        static void ServerCheckTimer_Elapsed(Object sender, ElapsedEventArgs e)
         {
             List<String> removedServers = ServerManager.Instance.RemoveDeadServers();
             if (removedServers.Count > 0)

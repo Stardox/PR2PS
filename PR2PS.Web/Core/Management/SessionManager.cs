@@ -72,5 +72,13 @@ namespace PR2PS.Web.Core.Management
                 this.sessions.Remove(session);
             }
         }
+
+        public Int32 RemoveExpiredSessions()
+        {
+            lock (this.sessionsLock)
+            {
+                return this.sessions.RemoveAll(s => s.IsExpired);
+            }
+        }
     }
 }

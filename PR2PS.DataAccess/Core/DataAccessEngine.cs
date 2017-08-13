@@ -89,6 +89,30 @@ namespace PR2PS.DataAccess.Core
             this.dbContext.SaveChanges();
         }
 
+        public Account AuthenticateUser(String username, String ipAddress)
+        {
+            username = username ?? String.Empty;
+
+            Account acc = this.GetAccountByUsername(username);
+            if (acc == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
+            }
+
+            Ban ban = this.IsUserBanned(acc.Id, ipAddress);
+            if (ban != null)
+            {
+                throw new PR2Exception(String.Format(
+                    ErrorMessages.ERR_BANNED,
+                    ban.Issuer.Username,
+                    String.IsNullOrWhiteSpace(ban.Reason) ? StatusMessages.STR_NO_REASON : ban.Reason,
+                    ban.Id,
+                    ban.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString()));
+            }
+
+            return acc;
+        }
+
         public Account AuthenticateUser(String username, String password, String ipAddress)
         {
             username = username ?? String.Empty;
@@ -104,13 +128,7 @@ namespace PR2PS.DataAccess.Core
                 throw new PR2Exception(ErrorMessages.ERR_WRONG_PASS);
             }
 
-            DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQL functions.
-            Ban ban = this.dbContext
-                          .Bans
-                          .Where(b => (b.Receiver.Id == acc.Id || (b.IsIPBan && b.IPAddress == ipAddress))
-                                       && DateTime.Compare(b.ExpirationDate, utcDateTime) > 0)
-                          .OrderByDescending(b => b.ExpirationDate)
-                          .FirstOrDefault();
+            Ban ban = this.IsUserBanned(acc.Id, ipAddress);
             if (ban != null)
             {
                 throw new PR2Exception(String.Format(
@@ -292,6 +310,15 @@ namespace PR2PS.DataAccess.Core
             return receiver;
         }
 
-        
+        public Ban IsUserBanned(Int64 receiverId, String ipAddress)
+        {
+            DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQL functions.
+            return this.dbContext
+                       .Bans
+                       .Where(b => (b.Receiver.Id == receiverId || (b.IsIPBan && b.IPAddress == ipAddress))
+                                   && DateTime.Compare(b.ExpirationDate, utcDateTime) > 0)
+                       .OrderByDescending(b => b.ExpirationDate)
+                       .FirstOrDefault();
+        }
     }
 }
