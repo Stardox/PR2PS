@@ -1,7 +1,7 @@
 ﻿using PR2PS.Common.Constants;
 using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
-using PR2PS.DataAccess.Core;
+using PR2PS.DataAccess.MainDataAccess;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
@@ -17,9 +17,9 @@ namespace PR2PS.Web.Controllers
 {
     public class MessagingController : ApiController
     {
-        private IDataAccessEngine dataAccess;
+        private IMainDataAccessEngine dataAccess;
 
-        public MessagingController(IDataAccessEngine dataAccess)
+        public MessagingController(IMainDataAccessEngine dataAccess)
         {
             this.dataAccess = dataAccess;
         }

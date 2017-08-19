@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace PR2PS.DataAccess.Core
+namespace PR2PS.DataAccess.MainDataAccess
 {
-    public interface IDataAccessEngine : IDisposable
+    public interface IMainDataAccessEngine : IDisposable
     {
         /// <summary>
         /// Get user's account by its unique id.

@@ -131,4 +131,10 @@ namespace PR2PS.Common.Constants
         public static readonly DateTime UNIX_TIME = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         public const String DATE_FORMAT = "dd/MMM/yyyy";
     }
+
+    public static class ConnectionStringKeys
+    {
+        public const String PR2DB = "PR2MainDB";
+        public const String PR2LEVELS = "PR2LevelsDB";
+    }
 }

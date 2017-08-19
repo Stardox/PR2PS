@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 
-namespace PR2PS.DataAccess.Core
+namespace PR2PS.DataAccess.MainDataAccess
 {
-    public class DataAccessEngine : IDataAccessEngine
+    public class MainDataAccessEngine : IMainDataAccessEngine
     {
-        private DatabaseContext dbContext;
+        private MainContext dbContext;
 
-        public DataAccessEngine(DatabaseContext dbContext)
+        public MainDataAccessEngine(MainContext dbContext)
         {
             this.dbContext = dbContext;
         }

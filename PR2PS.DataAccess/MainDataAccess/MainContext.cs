@@ -3,9 +3,9 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace PR2PS.DataAccess.Core
+namespace PR2PS.DataAccess.MainDataAccess
 {
-    public class DatabaseContext : DbContext
+    public class MainContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
         public DbSet<CustomizeInfo> CustomizeInfos { get; set; }
@@ -13,13 +13,13 @@ namespace PR2PS.DataAccess.Core
         public DbSet<Ban> Bans { get; set; }
         public DbSet<Message> Messages { get; set; }
 
-        public DatabaseContext(String connectionString) : base(connectionString) { }
+        public MainContext(String connectionString) : base(connectionString) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-            Database.SetInitializer<DatabaseContext>(new DatabaseInitializer(modelBuilder));
+            Database.SetInitializer(new MainDatabaseInitializer(modelBuilder));
         }
     }
 }

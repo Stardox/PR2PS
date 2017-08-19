@@ -5,15 +5,15 @@ using System;
 using System.Data.Entity;
 using System.Web.Helpers;
 
-namespace PR2PS.DataAccess.Core
+namespace PR2PS.DataAccess.MainDataAccess
 {
-    public class DatabaseInitializer : SqliteCreateDatabaseIfNotExists<DatabaseContext>
+    public class MainDatabaseInitializer : SqliteCreateDatabaseIfNotExists<MainContext>
     {
-        public DatabaseInitializer(DbModelBuilder modelBuilder) : base(modelBuilder) { }
+        public MainDatabaseInitializer(DbModelBuilder modelBuilder) : base(modelBuilder) { }
 
-        protected override void Seed(DatabaseContext context)
+        protected override void Seed(MainContext context)
         {
-            Console.WriteLine("Attempting to create and seed the database...");
+            Console.WriteLine("Attempting to create and seed the main database...");
 
             Account adminAcc = new Account()
             {

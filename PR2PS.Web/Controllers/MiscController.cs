@@ -1,5 +1,5 @@
 ﻿using PR2PS.Common.Constants;
-using PR2PS.DataAccess.Core;
+using PR2PS.DataAccess.MainDataAccess;
 using PR2PS.DataAccess.Entities;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.JsonModels;
@@ -14,9 +14,9 @@ namespace PR2PS.Web.Controllers
 {
     public class MiscController : ApiController
     {
-        private IDataAccessEngine dataAccess;
+        private IMainDataAccessEngine dataAccess;
 
-        public MiscController(IDataAccessEngine dataAccess)
+        public MiscController(IMainDataAccessEngine dataAccess)
         {
             this.dataAccess = dataAccess;
         }
