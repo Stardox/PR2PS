@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Text;
 
 namespace PR2PS.Common.Extensions
@@ -77,6 +79,16 @@ namespace PR2PS.Common.Extensions
         public static Int64 GetSecondsSinceUnixTime(this DateTime dateTime)
         {
             return Convert.ToInt64(dateTime.Subtract(Constants.Other.UNIX_TIME).TotalSeconds);
+        }
+
+        /// <summary>
+        /// Returns the value of Description annotation attribute applied to enumeration value.
+        /// </summary>
+        /// <param name="enumVal">Enumeration value (ideally annotated with Description attribute).</param>
+        /// <returns>Value of Description attribute or null.</returns>
+        public static String GetEnumDescription(this Enum enumVal)
+        {
+            return (enumVal?.GetType().GetField(enumVal.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), true)?.FirstOrDefault() as DescriptionAttribute)?.Description;
         }
     }
 }

@@ -106,6 +106,15 @@ namespace PR2PS.Common.Constants
         public const String ROOM_SEARCH = "search";
     }
 
+    public static class GameModes
+    {
+        public const String UNKNOWN = "unknown";
+        public const String RACE = "race";
+        public const String DEATHMATCH = "deathmatch";
+        public const String EGG = "egg";
+        public const String OBJECTIVE = "objective";
+    }
+
     public static class ValidationConstraints
     {
         public const Byte USERNAME_LENGTH = 20;
