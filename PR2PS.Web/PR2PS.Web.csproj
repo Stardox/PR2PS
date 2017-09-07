@@ -150,6 +150,7 @@
     <Compile Include="Core\FormModels\BanFormModel.cs" />
     <Compile Include="Core\FormModels\DeleteOrReportMessageFormModel.cs" />
     <Compile Include="Core\FormModels\ChangePassFormModel.cs" />
+    <Compile Include="Core\FormModels\UploadLevelFormModel.cs" />
     <Compile Include="Core\FormModels\SendMessageFormModel.cs" />
     <Compile Include="Core\FormModels\GetMessagesFormModel.cs" />
     <Compile Include="Core\FormModels\RegisterFormModel.cs" />

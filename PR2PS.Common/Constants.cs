@@ -70,6 +70,7 @@ namespace PR2PS.Common.Constants
         public const String TRUE = "true";
         public const String PASSWORD_CHANGED = "The password has been changed succesfully!";
         public const String MESSAGE_SENT = "Your message was sent succesfully!";
+        public const String SAVE_SUCCESSFUL = "The save was successful.";
     }
 
     public static class MimeTypes

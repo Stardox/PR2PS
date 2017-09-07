@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using PR2PS.Common.Constants;
+﻿using PR2PS.Common.Constants;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JsonModels;
+using PR2PS.Web.Core.Management;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -80,6 +80,38 @@ namespace PR2PS.Web.Controllers
                 }
             }
             catch(Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Handles request for uploading level from the Level Editor and stores it into database.
+        /// </summary>
+        /// <param name="levelData">Uploaded level data.</param>
+        /// <returns>Status indicating whether level has been correctly saved.</returns>
+        [HttpPost]
+        [Route("upload_level.php")]
+        public HttpResponseMessage UploadLevel([FromBody] UploadLevelFormModel levelData)
+        {
+            try
+            {
+                if (levelData == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
+                }
+
+                SessionInstance mySession = SessionManager.Instance.GetSessionByToken(levelData.Token);
+                if (mySession == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
+                }
+
+                // TODO - Logic goes here.
+
+                return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.SAVE_SUCCESSFUL);
+            }
+            catch (Exception ex)
             {
                 return HttpResponseFactory.Response500Plain(ex.Message);
             }
