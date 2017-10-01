@@ -144,7 +144,7 @@ namespace PR2PS.Common.Constants
 
     public static class ConnectionStringKeys
     {
-        public const String PR2DB = "PR2MainDB";
-        public const String PR2LEVELS = "PR2LevelsDB";
+        public const String PR2_MAIN_DB = "PR2MainDB";
+        public const String PR2_LEVELS_DB = "PR2LevelsDB";
     }
 }

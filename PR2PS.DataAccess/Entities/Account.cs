@@ -19,16 +19,22 @@ namespace PR2PS.DataAccess.Entities
         public String LoginIP { get; set; }
         public String Status { get; set; }
 
-        [Required, Index(IsUnique = true), ForeignKey("CustomizeInfo")]
+        [Required]
+        [Index(IsUnique = true)]
+        [ForeignKey("CustomizeInfo")]
         public Int64 CustomizeInfoId { get; set; }
         public virtual CustomizeInfo CustomizeInfo { get; set; }
 
-        [Required, Index(IsUnique = true), ForeignKey("Experience")]
+        [Required]
+        [Index(IsUnique = true)]
+        [ForeignKey("Experience")]
         public Int64 ExperienceId { get; set; }
         public virtual Experience Experience { get; set; }
 
         public virtual ICollection<Ban> Bans { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<LevelVote> LevelVotes { get; set; }
+        public virtual ICollection<LevelPlay> LevelPlays { get; set; }
 
         public Account()
         {

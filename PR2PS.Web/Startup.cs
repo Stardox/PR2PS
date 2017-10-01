@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Owin;
 using PR2PS.Common.Constants;
+using PR2PS.DataAccess.LevelsDataAccess;
 using PR2PS.DataAccess.MainDataAccess;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
@@ -15,16 +16,21 @@ namespace PR2PS.Web
     {
         public void Configuration(IAppBuilder app)
         {
-            using (MainContext db = new MainContext(ConnectionStringKeys.PR2DB))
+            using (MainContext mainDb = new MainContext(ConnectionStringKeys.PR2_MAIN_DB))
             {
-                db.Database.Initialize(false);
+                mainDb.Database.Initialize(false);
+            }
+
+            using (LevelsContext levelsDb = new LevelsContext(ConnectionStringKeys.PR2_LEVELS_DB))
+            {
+                levelsDb.Database.Initialize(false);
             }
 
             HttpConfiguration webApiConfiguration = ConfigureWebApi();
 
             Container container = new Container();
             container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
-            container.RegisterWebApiRequest(() => new MainContext(ConnectionStringKeys.PR2DB), true);
+            container.RegisterWebApiRequest(() => new MainContext(ConnectionStringKeys.PR2_MAIN_DB), true);
             container.RegisterWebApiRequest<IMainDataAccessEngine, MainDataAccessEngine>();
             container.RegisterWebApiControllers(webApiConfiguration);
             container.Verify();

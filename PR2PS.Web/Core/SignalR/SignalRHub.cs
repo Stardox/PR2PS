@@ -49,7 +49,7 @@ namespace PR2PS.Web.Core.SignalR
         {
             if (accData == null) return;
 
-            using (MainContext db = new MainContext(ConnectionStringKeys.PR2DB))
+            using (MainContext db = new MainContext(ConnectionStringKeys.PR2_MAIN_DB))
             {
                 Account accFromDb = db.Accounts.FirstOrDefault(acc => acc.Id == accData.UserId);
 
@@ -103,7 +103,7 @@ namespace PR2PS.Web.Core.SignalR
                 // Cannot remove the session otherwise user wont be able to rejoin after using Level Editor.
                 //SessionManager.Instance.RemoveSession(session);
 
-                using (MainContext db = new MainContext(ConnectionStringKeys.PR2DB))
+                using (MainContext db = new MainContext(ConnectionStringKeys.PR2_MAIN_DB))
                 {
                     Account accFromDb = db.Accounts.FirstOrDefault(acc => session.AccounData.UserId == acc.Id);
 
@@ -152,7 +152,7 @@ namespace PR2PS.Web.Core.SignalR
                         break;
                 }
 
-                using (MainContext db = new MainContext(ConnectionStringKeys.PR2DB))
+                using (MainContext db = new MainContext(ConnectionStringKeys.PR2_MAIN_DB))
                 {
                     Account accFromDb = db.Accounts.FirstOrDefault(acc => acc.Username.ToUpper() == receiver.ToUpper());
 
