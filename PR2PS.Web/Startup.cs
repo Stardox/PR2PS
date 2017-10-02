@@ -26,7 +26,8 @@ namespace PR2PS.Web
                 levelsDb.Database.Initialize(false);
             }
 
-            HttpConfiguration webApiConfiguration = ConfigureWebApi();
+            HttpConfiguration webApiConfiguration = new HttpConfiguration();
+            webApiConfiguration.MapHttpAttributeRoutes();
 
             Container container = new Container();
             container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
@@ -39,14 +40,6 @@ namespace PR2PS.Web
             app.UseWebApi(webApiConfiguration);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.MapSignalR(new HubConfiguration() { EnableDetailedErrors = false });
-        }
-
-        private HttpConfiguration ConfigureWebApi()
-        {
-            HttpConfiguration config = new HttpConfiguration();
-            config.MapHttpAttributeRoutes();
-
-            return config;
         }
     }
 }
