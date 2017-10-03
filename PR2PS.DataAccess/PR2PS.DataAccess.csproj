@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\LevelVersion.cs" />
     <Compile Include="Entities\Level.cs" />
     <Compile Include="Entities\LevelPlay.cs" />
     <Compile Include="Entities\LevelVote.cs" />
