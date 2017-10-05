@@ -73,8 +73,10 @@
     <Compile Include="Entities\Level.cs" />
     <Compile Include="Entities\LevelPlay.cs" />
     <Compile Include="Entities\LevelVote.cs" />
+    <Compile Include="LevelsDataAccess\ILevelsDataAccessEngine.cs" />
     <Compile Include="LevelsDataAccess\LevelsContext.cs" />
     <Compile Include="LevelsDataAccess\LevelsDatabaseInitializer.cs" />
+    <Compile Include="LevelsDataAccess\LevelsDataAccessEngine.cs" />
     <Compile Include="MainDataAccess\MainDataAccessEngine.cs" />
     <Compile Include="MainDataAccess\MainContext.cs" />
     <Compile Include="MainDataAccess\MainDatabaseInitializer.cs" />
