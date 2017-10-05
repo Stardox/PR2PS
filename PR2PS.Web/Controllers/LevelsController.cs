@@ -1,4 +1,6 @@
 ﻿using PR2PS.Common.Constants;
+using PR2PS.Common.Exceptions;
+using PR2PS.DataAccess.LevelsDataAccess;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JsonModels;
@@ -15,6 +17,13 @@ namespace PR2PS.Web.Controllers
     /// </summary>
     public class LevelsController : ApiController
     {
+        private ILevelsDataAccessEngine levelsDAL;
+
+        public LevelsController(ILevelsDataAccessEngine levelsDAL)
+        {
+            this.levelsDAL = levelsDAL;
+        }
+
         /// <summary>
         /// Gets file containing campaign maps.
         /// </summary>
@@ -110,6 +119,10 @@ namespace PR2PS.Web.Controllers
                 // TODO - Logic goes here.
 
                 return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.SAVE_SUCCESSFUL);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
             catch (Exception ex)
             {

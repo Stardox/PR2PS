@@ -33,6 +33,8 @@ namespace PR2PS.Web
             container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
             container.RegisterWebApiRequest(() => new MainContext(ConnectionStringKeys.PR2_MAIN_DB), true);
             container.RegisterWebApiRequest<IMainDataAccessEngine, MainDataAccessEngine>();
+            container.RegisterWebApiRequest(() => new LevelsContext(ConnectionStringKeys.PR2_LEVELS_DB), true);
+            container.RegisterWebApiRequest<ILevelsDataAccessEngine, LevelsDataAccessEngine>();
             container.RegisterWebApiControllers(webApiConfiguration);
             container.Verify();
             webApiConfiguration.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);
