@@ -7,6 +7,8 @@ namespace PR2PS.DataAccess.Entities
     {
         public Int64 AuthorId { get; set; }
 
+        public String Title { get; set; }
+
         public Boolean IsDeleted { get; set; }
 
         public Boolean IsPublished { get; set; }

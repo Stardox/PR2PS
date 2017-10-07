@@ -11,8 +11,6 @@ namespace PR2PS.DataAccess.Entities
 
         public String SubmittedIP { get; set; }
 
-        public String Title { get; set; }
-
         public String Note { get; set; }
 
         public GameMode GameMode { get; set; }
