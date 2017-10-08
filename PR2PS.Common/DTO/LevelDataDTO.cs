@@ -11,9 +11,9 @@ namespace PR2PS.Common.DTO
         public GameMode GameMode { get; set; }
         public Byte MinLevel { get; set; }
         public Single Gravity { get; set; }
-        public UInt16 Song { get; set; }
+        public Int16 Song { get; set; }
         public String Items { get; set; }
-        public UInt16 MaxTime { get; set; }
+        public Int16 MaxTime { get; set; }
         public String Hash { get; set; }
         public String PassHash { get; set; }
         public String Data { get; set; }

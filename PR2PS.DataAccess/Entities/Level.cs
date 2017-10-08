@@ -14,5 +14,10 @@ namespace PR2PS.DataAccess.Entities
         public Boolean IsPublished { get; set; }
 
         public virtual ICollection<LevelVersion> Versions { get; set; }
+
+        public Level()
+        {
+            Versions = new List<LevelVersion>();
+        }
     }
 }

@@ -13,9 +13,9 @@ namespace PR2PS.Web.Core.FormModels
         public GameMode GameMode { get; set; }
         public Byte Min_Level { get; set; }
         public Single Gravity { get; set; }
-        public UInt16 Song { get; set; }
+        public Int16 Song { get; set; }
         public String Items { get; set; }
-        public UInt16 Max_Time { get; set; }
+        public Int16 Max_Time { get; set; }
         public String Hash { get; set; }
         public String PassHash { get; set; }
         public String Data { get; set; }

@@ -21,9 +21,9 @@ namespace PR2PS.DataAccess.Entities
 
         public Single Gravity { get; set; }
 
-        public UInt16 Song { get; set; }
+        public Int16 Song { get; set; }
 
-        public UInt16 MaxTime { get; set; }
+        public Int16 MaxTime { get; set; }
 
         public String Items { get; set; }
 
