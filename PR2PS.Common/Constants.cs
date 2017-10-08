@@ -40,6 +40,9 @@ namespace PR2PS.Common.Constants
         public const String ERR_MESSAGE_NOT_FOUND = "Could not find such message.";
         public const String ERR_NO_MESSAGES = "You have no messages to delete.";
         public const String ERR_ADMINS_ARE_ABSOLUTE = "Administrators are absolute!";
+        public const String ERR_NO_LEVEL_DATA = "No level data received to process.";
+        public const String ERR_NO_LEVEL_TITLE = "Your level needs to have title.";
+        public const String ERR_INVALID_GAME_MODE = "The game mode of your level is not valid.";
     }
 
     public static class StatusKeys

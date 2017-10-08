@@ -10,6 +10,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// </summary>
         /// <param name="userId">Id of user who submitted the level.</param>
         /// <param name="levelData">Level data to be saved.</param>
-        void SaveLevel(Int64 userId, LevelDataDTO levelData);
+        /// <param name="ipAddress">IPv4 address from which the request originates.</param>
+        void SaveLevel(Int64 userId, LevelDataDTO levelData, String ipAddress);
     }
 }
