@@ -13,7 +13,7 @@ using System.Web.Http;
 namespace PR2PS.Web.Controllers
 {
     /// <summary>
-    /// Controller responsible for serving map lists and maps themself.
+    /// Controller responsible for serving level lists, levels themself and also for handling level editor.
     /// </summary>
     public class LevelsController : ApiController
     {
@@ -119,6 +119,36 @@ namespace PR2PS.Web.Controllers
                 this.levelsDAL.SaveLevel(mySession.AccounData.UserId, levelData.ToDTO(), this.Request.GetRemoteIPAddress());
 
                 return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.SAVE_SUCCESSFUL);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Requests list of levels for the level editor for specific user.
+        /// </summary>
+        /// <param name="token">Unique session token.</param>
+        /// <param name="rand">Random string.</param>
+        /// <returns>String containing all levels created by current user.</returns>
+        [HttpGet]
+        [Route("get_levels.php")]
+        public HttpResponseMessage GetLevels(String token = "", String rand = "")
+        {
+            try
+            {
+                SessionInstance mySession = SessionManager.Instance.GetSessionByToken(token);
+                if (mySession == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
+                }
+
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "This functionality is currently under development.");
             }
             catch (PR2Exception ex)
             {
