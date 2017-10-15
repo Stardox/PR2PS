@@ -98,6 +98,7 @@ namespace PR2PS.Common.Constants
         public static Char[] EOT_SEPARATOR = new Char[] { EOT_CHAR };
         public const String ARG_STR = "`";
         public const Char EQ_CHAR = '=';
+        public const String AMPERSAND = "&";
     }
 
     public static class GameRooms
@@ -149,5 +150,16 @@ namespace PR2PS.Common.Constants
     {
         public const String PR2_MAIN_DB = "PR2MainDB";
         public const String PR2_LEVELS_DB = "PR2LevelsDB";
+    }
+
+    public static class Pepper
+    {
+        public const String LIST_OF_LEVELS = "984cn98c54$";
+    }
+
+    public static class StringFormat
+    {
+        public const String HEX_LOWERCASE = "x2";
+        public const String DECIMAL_TWO = "0.##";
     }
 }
