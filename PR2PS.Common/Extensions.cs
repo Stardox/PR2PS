@@ -1,5 +1,10 @@
-﻿using System;
+﻿using PR2PS.Common.Constants;
+using PR2PS.Common.Cryptography;
+using PR2PS.Common.DTO;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -43,30 +48,30 @@ namespace PR2PS.Common.Extensions
             Int32 years = (Int32)(delta.TotalDays / 365);
             if (Math.Abs(years) > 1)
             {
-                return String.Concat(years, Constants.StatusMessages.STR_YEARS);
+                return String.Concat(years, StatusMessages.STR_YEARS);
             }
             else
             {
                 Int32 months = (Int32)(delta.TotalDays / 30);
                 if (Math.Abs(months) > 1)
                 {
-                    return String.Concat(months, Constants.StatusMessages.STR_MONTHS);
+                    return String.Concat(months, StatusMessages.STR_MONTHS);
                 }
                 else if (Math.Abs((Int32)delta.TotalDays) > 1)
                 {
-                    return String.Concat((Int32)delta.TotalDays, Constants.StatusMessages.STR_DAYS);
+                    return String.Concat((Int32)delta.TotalDays, StatusMessages.STR_DAYS);
                 }
                 else if (Math.Abs((Int32)delta.TotalHours) > 1)
                 {
-                    return String.Concat((Int32)delta.TotalHours, Constants.StatusMessages.STR_HOURS);
+                    return String.Concat((Int32)delta.TotalHours, StatusMessages.STR_HOURS);
                 }
                 else if (Math.Abs((Int32)delta.TotalMinutes) > 1)
                 {
-                    return String.Concat((Int32)delta.TotalMinutes, Constants.StatusMessages.STR_MINUTES);
+                    return String.Concat((Int32)delta.TotalMinutes, StatusMessages.STR_MINUTES);
                 }
                 else
                 {
-                    return Constants.StatusMessages.STR_SHORT_MOMENT;
+                    return StatusMessages.STR_SHORT_MOMENT;
                 }
             }
         }
@@ -89,6 +94,48 @@ namespace PR2PS.Common.Extensions
         public static String GetEnumDescription(this Enum enumVal)
         {
             return (enumVal?.GetType().GetField(enumVal.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), true)?.FirstOrDefault() as DescriptionAttribute)?.Description;
+        }
+
+        /// <summary>
+        /// Processes list of levels and returns its string representation ready to be sent to client.
+        /// </summary>
+        /// <param name="levels">List of LevelRowDTO.</param>
+        /// <returns></returns>
+        public static String GetLevelListString(this IList<LevelRowDTO> levels)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (Int32 i = 0; i < levels.Count; i++)
+            {
+                LevelRowDTO current = levels[i];
+
+                // TODO - Rewrite this shit. Use dictionary or something.
+                // Yes, I know that string interpolation exists, but I dont like it.
+                sb.AppendFormat(
+                    "levelID{0}={1}&version{0}={2}&title{0}={3}&rating{0}={4}&playCount{0}={5}&minLevel{0}={6}&note{0}={7}&userName{0}={8}&group{0}={9}&live{0}={10}&pass{0}={11}&type{0}={12}{13}",
+                    i,
+                    current.LevelId,
+                    current.Version,
+                    current.Title,
+                    current.Rating.ToString(StringFormat.DECIMAL_TWO, CultureInfo.InvariantCulture) ?? String.Empty,
+                    current.PlayCount,
+                    current.MinRank,
+                    current.Note,
+                    current.Username,
+                    current.Group,
+                    Convert.ToInt32(current.IsPublished),
+                    current.HasPass ? StatusMessages.ONE : String.Empty,
+                    current.GameMode.GetEnumDescription().FirstOrDefault() + String.Empty,
+                    (i < levels.Count - 1) ? Separators.AMPERSAND : String.Empty);
+            }
+
+            using (MD5Wrapper md5 = new MD5Wrapper())
+            {
+                String hash = md5.GetHashedString(String.Concat(sb.ToString(), Pepper.LIST_OF_LEVELS));
+                sb.Append(String.Concat("&hash=", hash));
+            }
+
+            return sb.ToString();
         }
     }
 }

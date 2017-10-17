@@ -44,7 +44,6 @@
     <Compile Include="Cryptography\MD5Wrapper.cs" />
     <Compile Include="DTO\AccountDataDTO.cs" />
     <Compile Include="DTO\LevelDataDTO.cs" />
-    <Compile Include="DTO\LevelListDTO.cs" />
     <Compile Include="DTO\LevelRowDTO.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Exceptions.cs" />
