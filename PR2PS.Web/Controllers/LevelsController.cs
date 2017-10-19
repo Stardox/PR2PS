@@ -1,11 +1,15 @@
 ﻿using PR2PS.Common.Constants;
+using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
+using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.LevelsDataAccess;
+using PR2PS.DataAccess.MainDataAccess;
 using PR2PS.Web.Core;
 using PR2PS.Web.Core.FormModels;
 using PR2PS.Web.Core.JsonModels;
 using PR2PS.Web.Core.Management;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -18,10 +22,12 @@ namespace PR2PS.Web.Controllers
     public class LevelsController : ApiController
     {
         private ILevelsDataAccessEngine levelsDAL;
+        private IMainDataAccessEngine mainDAL;
 
-        public LevelsController(ILevelsDataAccessEngine levelsDAL)
+        public LevelsController(IMainDataAccessEngine mainDAL, ILevelsDataAccessEngine levelsDAL)
         {
             this.levelsDAL = levelsDAL;
+            this.mainDAL = mainDAL;
         }
 
         /// <summary>
@@ -148,7 +154,10 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "This functionality is currently under development.");
+                List<LevelRowDTO> levels = this.levelsDAL.GetUserLevels(mySession.AccounData.UserId);
+                this.mainDAL.FillLevelListMetadata(levels);
+
+                return HttpResponseFactory.Response200Plain(levels.GetLevelListString());
             }
             catch (PR2Exception ex)
             {

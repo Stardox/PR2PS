@@ -1,4 +1,5 @@
-﻿using PR2PS.DataAccess.Entities;
+﻿using PR2PS.Common.DTO;
+using PR2PS.DataAccess.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -121,5 +122,11 @@ namespace PR2PS.DataAccess.MainDataAccess
         /// <param name="ipAddress">IPv4 address from which the request originates.</param>
         /// <returns>Instance of Ban which will be expiring last or null if user is not banned.</returns>
         Ban IsUserBanned(Int64 receiverId, String ipAddress);
+
+        /// <summary>
+        /// Fills missing level metadata like username, play count, etc.
+        /// </summary>
+        /// <param name="levels">List of levels with partially filled in metadata.</param>
+        void FillLevelListMetadata(List<LevelRowDTO> levels);
     }
 }

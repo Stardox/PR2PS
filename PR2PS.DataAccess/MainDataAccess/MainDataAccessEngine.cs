@@ -1,4 +1,5 @@
 ﻿using PR2PS.Common.Constants;
+using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
 using PR2PS.DataAccess.Entities;
@@ -319,6 +320,31 @@ namespace PR2PS.DataAccess.MainDataAccess
                                    && DateTime.Compare(b.ExpirationDate, utcDateTime) > 0)
                        .OrderByDescending(b => b.ExpirationDate)
                        .FirstOrDefault();
+        }
+
+        public void FillLevelListMetadata(List<LevelRowDTO> levels)
+        {
+            if (levels == null)
+            {
+                return;
+            }
+
+            foreach (LevelRowDTO level in levels)
+            {
+                Account author = this.dbContext.Accounts.FirstOrDefault(a => a.Id == level.UserlId);
+                // LongCount is not supported at db level.
+                Int32 playCount = this.dbContext.LevelPlays.Count(l => l.LevelId == level.LevelId);
+                Double rating = this.dbContext.LevelVotes
+                    .Where(l => l.LevelId == level.LevelId)
+                    .Select(l => l.Vote)
+                    .DefaultIfEmpty()
+                    .Average(l => l);
+
+                level.Username = author?.Username ?? String.Empty;
+                level.Group = author?.Group ?? UserGroup.MEMBER;
+                level.PlayCount = playCount;
+                level.Rating = rating;
+            }
         }
     }
 }

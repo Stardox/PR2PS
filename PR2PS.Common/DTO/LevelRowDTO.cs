@@ -18,6 +18,6 @@ namespace PR2PS.Common.DTO
         public String Username { get; set; }
         public Byte Group { get; set; }
         public Double Rating { get; set; }
-        public Int64 PlayCount { get; set; }
+        public Int32 PlayCount { get; set; }
     }
 }

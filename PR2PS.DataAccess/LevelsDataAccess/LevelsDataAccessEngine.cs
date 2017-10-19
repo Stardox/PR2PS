@@ -3,6 +3,7 @@ using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
 using PR2PS.DataAccess.Entities;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using static PR2PS.Common.Enums;
@@ -84,6 +85,38 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             });
 
             this.dbContext.SaveChanges();
+        }
+
+        public List<LevelRowDTO> GetUserLevels(Int64 userId)
+        {
+            // If only LINQ2SQL for SQLite supported advanced joins. This couldve been one liner.
+            // Performance is also questionable.
+
+            List<LevelRowDTO> levelRows = this.dbContext.Levels
+                .Where(l => !l.IsDeleted && l.AuthorId == userId && l.Versions.Count > 0)
+                .Select(l => new LevelRowDTO
+                {
+                    LevelId = l.Id,
+                    Version = l.Versions.Count,
+                    Title = l.Title,
+                    IsPublished = l.IsPublished,
+                    UserlId = l.AuthorId
+                })
+                .ToList();
+
+            foreach (LevelRowDTO levelRow in levelRows)
+            {
+                LevelVersion latest = this.dbContext.LevelVersions
+                    .OrderByDescending(v => v.Id)
+                    .FirstOrDefault(v => v.Level.Id == levelRow.LevelId);
+
+                levelRow.Note = latest?.Note;
+                levelRow.MinRank = latest?.MinRank ?? 0;
+                levelRow.HasPass = !string.IsNullOrEmpty(latest?.PassHash);
+                levelRow.GameMode = latest?.GameMode ?? GameMode.Unknown;
+            }
+
+            return levelRows;
         }
     }
 }
