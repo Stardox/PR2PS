@@ -112,7 +112,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
 
                 levelRow.Note = latest?.Note;
                 levelRow.MinRank = latest?.MinRank ?? 0;
-                levelRow.HasPass = !string.IsNullOrEmpty(latest?.PassHash);
+                levelRow.HasPass = !String.IsNullOrEmpty(latest?.PassHash);
                 levelRow.GameMode = latest?.GameMode ?? GameMode.Unknown;
             }
 
