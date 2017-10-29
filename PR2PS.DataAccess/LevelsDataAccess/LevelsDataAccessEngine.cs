@@ -118,5 +118,32 @@ namespace PR2PS.DataAccess.LevelsDataAccess
 
             return levelRows;
         }
+
+        public LevelDataDTO GetLevel(Int64 levelId, Int32 versionNum)
+        {
+            Level level = this.dbContext.Levels.FirstOrDefault(l => l.Id == levelId && !l.IsDeleted);
+            if (level == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_LEVEL);
+            }
+
+            LevelVersion version = null;
+            IQueryable<LevelVersion> vQuery = this.dbContext.LevelVersions.Where(v => v.Level.Id == levelId);
+            if (versionNum < 1 || versionNum > vQuery.Count())
+            {
+                version = vQuery.OrderByDescending(v => v.Id).FirstOrDefault();
+            }
+            else
+            {
+                version = vQuery.OrderBy(v => v.Id).Skip(versionNum - 1).Take(1).FirstOrDefault();
+            }
+
+            if (version == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_VERSION);
+            }
+
+            return level.ToDTO(version);
+        }
     }
 }

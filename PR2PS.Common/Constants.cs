@@ -43,6 +43,8 @@ namespace PR2PS.Common.Constants
         public const String ERR_NO_LEVEL_DATA = "No level data received to process.";
         public const String ERR_NO_LEVEL_TITLE = "Your level needs to have title.";
         public const String ERR_INVALID_GAME_MODE = "The game mode of your level is not valid.";
+        public const String ERR_NO_SUCH_LEVEL = "Specified level can not be found or is deleted.";
+        public const String ERR_NO_VERSION = "Failed to load version of the given level.";
     }
 
     public static class StatusKeys

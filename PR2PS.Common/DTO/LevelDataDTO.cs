@@ -5,6 +5,8 @@ namespace PR2PS.Common.DTO
 {
     public class LevelDataDTO
     {
+        public Int64 Id { get; set; }
+        public Int64 UserId { get; set; }
         public String Title { get; set; }
         public String Note { get; set; }
         public Boolean Live { get; set; }
