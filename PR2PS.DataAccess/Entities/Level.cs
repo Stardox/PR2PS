@@ -21,11 +21,12 @@ namespace PR2PS.DataAccess.Entities
             Versions = new List<LevelVersion>();
         }
         
-        public LevelDataDTO ToDTO(LevelVersion version)
+        public LevelDataDTO ToDTO(LevelVersion version, Int32 versionNumber)
         {
             return new LevelDataDTO
             {
                 Id = this.Id,
+                Version = versionNumber,
                 UserId = this.AuthorId,
                 Title = this.Title,
                 Note = version.Note,
@@ -39,7 +40,8 @@ namespace PR2PS.DataAccess.Entities
                 Hash = version.Hash,
                 PassHash = version.PassHash,
                 Data = version.Data,
-                CowboyChance = version.CowboyChance
+                CowboyChance = version.CowboyChance,
+                SubmittedDate = version.SubmittedDate
             };
         }
     }

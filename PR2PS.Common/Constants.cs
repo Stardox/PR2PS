@@ -157,6 +157,7 @@ namespace PR2PS.Common.Constants
     public static class Pepper
     {
         public const String LIST_OF_LEVELS = "984cn98c54$";
+        public const String LEVEL_DATA = "0kg4%dsw";
     }
 
     public static class StringFormat

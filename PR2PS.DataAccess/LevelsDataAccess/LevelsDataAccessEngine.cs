@@ -131,6 +131,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             IQueryable<LevelVersion> vQuery = this.dbContext.LevelVersions.Where(v => v.Level.Id == levelId);
             if (versionNum < 1 || versionNum > vQuery.Count())
             {
+                versionNum = vQuery.Count();
                 version = vQuery.OrderByDescending(v => v.Id).FirstOrDefault();
             }
             else
@@ -143,7 +144,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                 throw new PR2Exception(ErrorMessages.ERR_NO_VERSION);
             }
 
-            return level.ToDTO(version);
+            return level.ToDTO(version, versionNum);
         }
     }
 }

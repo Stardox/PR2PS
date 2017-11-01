@@ -137,12 +137,38 @@ namespace PR2PS.Web.Controllers
         }
 
         /// <summary>
-        /// Requests list of levels for the level editor for specific user.
+        /// Downloads level specified by id and version number.
         /// </summary>
-        /// <param name="token">Unique session token.</param>
-        /// <param name="rand">Random string.</param>
+        /// <param name="id">Unique session token.</param>
+        /// <param name="version">Random string.</param>
         /// <returns>String containing all levels created by current user.</returns>
         [HttpGet]
+        [Route("levels/{id}.txt")]
+        public HttpResponseMessage Levels(Int64? id, Int32? version = -1)
+        {
+            try
+            {
+                LevelDataDTO level = this.levelsDAL.GetLevel(id ?? -1, version ?? -1);
+
+                return HttpResponseFactory.Response200Plain(level.ToString());
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+    /// <summary>
+    /// Requests list of levels for the level editor for specific user.
+    /// </summary>
+    /// <param name="token">Unique session token.</param>
+    /// <param name="rand">Random string.</param>
+    /// <returns>String containing all levels created by current user.</returns>
+    [HttpGet]
         [Route("get_levels.php")]
         public HttpResponseMessage GetLevels(String token = "", String rand = "")
         {
