@@ -130,7 +130,7 @@ namespace PR2PS.Common.Extensions
                     current.PlayCount,
                     current.MinRank,
                     current.Note.ToUrlEncodedString(),
-                    current.Username,
+                    current.Username.ToUrlEncodedString(),
                     current.Group,
                     Convert.ToInt32(current.IsPublished),
                     current.HasPass ? StatusMessages.ONE : String.Empty,
