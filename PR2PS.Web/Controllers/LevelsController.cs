@@ -162,13 +162,13 @@ namespace PR2PS.Web.Controllers
             }
         }
 
-    /// <summary>
-    /// Requests list of levels for the level editor for specific user.
-    /// </summary>
-    /// <param name="token">Unique session token.</param>
-    /// <param name="rand">Random string.</param>
-    /// <returns>String containing all levels created by current user.</returns>
-    [HttpGet]
+        /// <summary>
+        /// Requests list of levels for the level editor for specific user.
+        /// </summary>
+        /// <param name="token">Unique session token.</param>
+        /// <param name="rand">Random string.</param>
+        /// <returns>String containing all levels created by current user.</returns>
+        [HttpGet]
         [Route("get_levels.php")]
         public HttpResponseMessage GetLevels(String token = "", String rand = "")
         {
