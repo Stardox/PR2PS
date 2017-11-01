@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace PR2PS.Common.Extensions
@@ -30,6 +31,14 @@ namespace PR2PS.Common.Extensions
         public static Byte[] FromBase64ToArray(this String data)
         {
             return Convert.FromBase64String(data);
+        }
+    }
+
+    public static class UrlExtensions
+    {
+        public static String ToUrlEncodedString(this String data)
+        {
+            return WebUtility.UrlEncode(data);
         }
     }
 
@@ -116,11 +125,11 @@ namespace PR2PS.Common.Extensions
                     i,
                     current.LevelId,
                     current.Version,
-                    current.Title,
+                    current.Title.ToUrlEncodedString(),
                     current.Rating.ToString(StringFormat.DECIMAL_TWO, CultureInfo.InvariantCulture) ?? String.Empty,
                     current.PlayCount,
                     current.MinRank,
-                    current.Note,
+                    current.Note.ToUrlEncodedString(),
                     current.Username,
                     current.Group,
                     Convert.ToInt32(current.IsPublished),

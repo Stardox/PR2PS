@@ -94,6 +94,8 @@ namespace PR2PS.Common.Constants
         public const Char EOT_CHAR = '\x04';
         public const Char COMMA_CHAR = ',';
         public const Char PERIOD_CHAR = '.';
+        public const Char SPACE_CHAR = ' ';
+        public const Char PLUS_CHAR = '+';
         public static Char[] UNDERSCORE_SEPARATOR = new Char[] { '_' };
         public static Char[] COMMA_SEPARATOR = new Char[] { ',' };
         public static Char[] ARG_SEPARATOR = new Char[] { '`' };
