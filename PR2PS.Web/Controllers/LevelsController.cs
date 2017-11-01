@@ -144,7 +144,7 @@ namespace PR2PS.Web.Controllers
         /// <returns>String containing all levels created by current user.</returns>
         [HttpGet]
         [Route("levels/{id}.txt")]
-        public HttpResponseMessage Levels(Int64? id, Int32? version = -1)
+        public HttpResponseMessage DownloadLevel(Int64? id, Int32? version = -1)
         {
             try
             {
@@ -184,6 +184,42 @@ namespace PR2PS.Web.Controllers
                 this.mainDAL.FillLevelListMetadata(levels);
 
                 return HttpResponseFactory.Response200Plain(levels.GetLevelListString());
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Handles request for soft deleting level.
+        /// </summary>
+        /// <param name="levelData">Data about level which is getting deleted.</param>
+        /// <returns>Status indicating whether level has been deleted.</returns>
+        [HttpPost]
+        [Route("delete_level.php")]
+        public HttpResponseMessage DeleteLevel([FromBody] DeleteLevelFormModel levelData)
+        {
+            try
+            {
+                if (levelData == null || !levelData.Level_Id.HasValue)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
+                }
+
+                SessionInstance mySession = SessionManager.Instance.GetSessionByToken(levelData.Token);
+                if (mySession == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
+                }
+
+                this.levelsDAL.SoftDeleteLevel(mySession.AccounData.UserId, levelData.Level_Id.Value);
+
+                return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
             }
             catch (PR2Exception ex)
             {

@@ -146,5 +146,18 @@ namespace PR2PS.DataAccess.LevelsDataAccess
 
             return level.ToDTO(version, versionNum);
         }
+
+        public void SoftDeleteLevel(Int64 userId, Int64 levelId)
+        {
+            Level level = this.dbContext.Levels.FirstOrDefault(l => l.AuthorId == userId && l.Id == levelId && !l.IsDeleted);
+            if (level == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_LEVEL);
+            }
+
+            level.IsDeleted = true;
+
+            this.dbContext.SaveChanges();
+        }
     }
 }

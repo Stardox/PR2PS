@@ -29,5 +29,12 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// <param name="versionNum">Version of the level. If not provided then latest version will be loaded.</param>
         /// <returns>Actual level data or exception if level with specified id can not be found.</returns>
         LevelDataDTO GetLevel(Int64 levelId, Int32 versionNum);
+
+        /// <summary>
+        /// Marks level as deleted.
+        /// </summary>
+        /// <param name="userId">Id of level author.</param>
+        /// <param name="levelId">Id of the level.</param>
+        void SoftDeleteLevel(Int64 userId, Int64 levelId);
     }
 }
