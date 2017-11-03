@@ -34,16 +34,26 @@ namespace PR2PS.Web
             {
                 Console.WriteLine("Host URL not specified, will use '{0}'...", hostURL);
             }
+            else if (!Uri.IsWellFormedUriString(args[0], UriKind.Absolute))
+            {
+                Console.WriteLine("Host URL '{0}' is not valid, will use '{1}'...", args[0], hostURL);                    
+            }
             else
             {
-                if (Uri.IsWellFormedUriString(args[0], UriKind.Absolute))
-                {
-                    hostURL = args[0];
-                }
-                else
-                {
-                    Console.WriteLine("Host URL '{0}' is not valid, will use '{1}'...", args[0], hostURL);                    
-                }
+                hostURL = args[0];
+            }
+
+            if (args.Length < 2 || String.IsNullOrEmpty(args[1]))
+            {
+                Console.WriteLine("Search levels URL is not specified, will handle searching internally...");
+            }
+            else if (!Uri.IsWellFormedUriString(args[1], UriKind.Absolute))
+            {
+                Console.WriteLine("Search levels URL '{0}' is not valid, will handle searching internally...", args[1]);
+            }
+            else
+            {
+                ConfigurationManager.Instance.SearchUrl = args[1];
             }
 
             try
@@ -93,7 +103,7 @@ namespace PR2PS.Web
         /// </summary>
         /// <param name="sender">Event initiator (Timer in this case).</param>
         /// <param name="e">Event details.</param>
-        static void ServerCheckTimer_Elapsed(Object sender, ElapsedEventArgs e)
+        private static void ServerCheckTimer_Elapsed(Object sender, ElapsedEventArgs e)
         {
             List<String> removedServers = ServerManager.Instance.RemoveDeadServers();
             if (removedServers.Count > 0)

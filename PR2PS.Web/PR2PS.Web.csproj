@@ -168,6 +168,7 @@
     <Compile Include="Core\JsonModels\ServerListJson.cs" />
     <Compile Include="Core\JsonModels\UserInfoJson.cs" />
     <Compile Include="Core\JsonModels\ServerJson.cs" />
+    <Compile Include="Core\Management\ConfigurationManager.cs" />
     <Compile Include="Core\Management\SessionInstance.cs" />
     <Compile Include="Core\Management\ServerInstance.cs" />
     <Compile Include="Core\Management\ServerManager.cs" />

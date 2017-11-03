@@ -59,44 +59,88 @@ namespace PR2PS.Web.Controllers
         }
 
         /// <summary>
-        /// Performs search according to specified search query.
+        /// Performs search according to search query specified in query string.
+        /// </summary>
+        /// <param name="searchData">Search query.</param>
+        /// <returns>List of found maps.</returns>
+        [HttpGet]
+        [Route("search_levels.php")]
+        public HttpResponseMessage SearchLevelsGet([FromUri] SearchLevelsFormModel searchData)
+        {
+            try
+            {
+                return GetSearchResults(searchData);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Performs search according to search query specified in form data.
         /// </summary>
         /// <param name="searchData">Search query.</param>
         /// <returns>List of found maps.</returns>
         [HttpPost]
         [Route("search_levels.php")]
-        public HttpResponseMessage SearchLevels([FromBody] SearchLevelsFormModel searchData)
+        public HttpResponseMessage SearchLevelsPost([FromBody] SearchLevelsFormModel searchData)
         {
-            // TODO - This is temporary solution, will perform request to Jiggy.
+            try
+            {
+                return GetSearchResults(searchData);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
 
+        /// <summary>
+        /// Performs search according to specified search query.
+        /// </summary>
+        /// <param name="searchData">Search query.</param>
+        /// <returns>List of found maps.</returns>
+        private HttpResponseMessage GetSearchResults(SearchLevelsFormModel searchData)
+        {
             try
             {
                 if (searchData == null)
                 {
                     return HttpResponseFactory.Response200Json(new ErrorJson
                     {
-                        Error = ErrorMessages.ERR_SEARCH_FAILED
+                        Error = ErrorMessages.ERR_NO_FORM_DATA
                     });
                 }
 
-                using (WebClient webClient = new WebClient())
+                if (String.IsNullOrEmpty(ConfigurationManager.Instance.SearchUrl))
                 {
-                    webClient.QueryString.Add("search_str", searchData.Search_Str);
-                    webClient.QueryString.Add("order", searchData.Order);
-                    webClient.QueryString.Add("mode", searchData.Mode);
-                    webClient.QueryString.Add("dir", searchData.Dir);
-                    webClient.QueryString.Add("page", searchData.Page);
-                    webClient.QueryString.Add("token", searchData.Token);
-                    webClient.QueryString.Add("rand", searchData.Rand);
+                    // External level search web API is not specified, handle the request internally.
 
-                    String result = webClient.DownloadString("https://pr2hub.com/search_levels.php");
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "Coming soon...");
+                }
+                else
+                {
+                    // Let the external API handle the level search.
 
-                    return HttpResponseFactory.Response200Plain(result);
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.QueryString.Add("search_str", searchData.Search_Str);
+                        webClient.QueryString.Add("order", searchData.Order.ToString().ToLower());
+                        webClient.QueryString.Add("mode", searchData.Mode.ToString().ToLower());
+                        webClient.QueryString.Add("dir", searchData.Dir.ToString().ToLower());
+                        webClient.QueryString.Add("page", (searchData.Page ?? 1).ToString());
+                        webClient.QueryString.Add("rand", searchData.Rand);
+
+                        String result = webClient.DownloadString(ConfigurationManager.Instance.SearchUrl);
+
+                        return HttpResponseFactory.Response200Plain(result);
+                    }
                 }
             }
-            catch(Exception ex)
+            catch (PR2Exception ex)
             {
-                return HttpResponseFactory.Response500Plain(ex.Message);
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
         }
 

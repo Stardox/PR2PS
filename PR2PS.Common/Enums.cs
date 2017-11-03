@@ -22,5 +22,25 @@ namespace PR2PS.Common
             [Description(GameModes.OBJECTIVE)]
             Objective = 4
         }
+
+        public enum SearchMode
+        {
+            Title = 0,
+            User = 1
+        }
+
+        public enum SearchOrder
+        {
+            Date = 0,
+            Alphabetical = 1,
+            Rating = 2,
+            Popularity = 3
+        }
+
+        public enum SearchDirection
+        {
+            Desc = 0,
+            Asc = 1
+        }
     }
 }
