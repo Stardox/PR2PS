@@ -12,8 +12,6 @@ namespace PR2PS.DataAccess.MainDataAccess
         public DbSet<Experience> Experience { get; set; }
         public DbSet<Ban> Bans { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<LevelPlay> LevelPlays { get; set; }
-        public DbSet<LevelVote> LevelVotes { get; set; }
 
         public MainContext(String connectionString) : base(connectionString) { }
 

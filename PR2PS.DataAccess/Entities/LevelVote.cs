@@ -5,12 +5,12 @@ namespace PR2PS.DataAccess.Entities
 {
     public class LevelVote : BaseEntity
     {
-        [InverseProperty("LevelVotes")]
-        public virtual Account Voter { get; set; }
+        [InverseProperty("Votes")]
+        public virtual Level Level { get; set; }
+
+        public Int64 UserId { get; set; }
 
         public String VoterIP { get; set; }
-
-        public Int64 LevelId { get; set; }
 
         public Byte Vote { get; set; }
 

@@ -9,6 +9,8 @@ namespace PR2PS.DataAccess.LevelsDataAccess
     {
         public DbSet<Level> Levels { get; set; }
         public DbSet<LevelVersion> LevelVersions { get; set; }
+        public DbSet<LevelPlay> LevelPlays { get; set; }
+        public DbSet<LevelVote> LevelVotes { get; set; }
 
         public LevelsContext(String connectionString) : base(connectionString) { }
 

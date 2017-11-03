@@ -15,10 +15,14 @@ namespace PR2PS.DataAccess.Entities
         public Boolean IsPublished { get; set; }
 
         public virtual ICollection<LevelVersion> Versions { get; set; }
+        public virtual ICollection<LevelVote> Votes { get; set; }
+        public virtual ICollection<LevelPlay> Plays { get; set; }
 
         public Level()
         {
-            Versions = new List<LevelVersion>();
+            this.Versions = new List<LevelVersion>();
+            this.Votes = new List<LevelVote>();
+            this.Plays = new List<LevelPlay>();
         }
         
         public LevelDataDTO ToDTO(LevelVersion version, Int32 versionNumber)

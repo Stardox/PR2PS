@@ -33,8 +33,6 @@ namespace PR2PS.DataAccess.Entities
 
         public virtual ICollection<Ban> Bans { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
-        public virtual ICollection<LevelVote> LevelVotes { get; set; }
-        public virtual ICollection<LevelPlay> LevelPlays { get; set; }
 
         public Account()
         {

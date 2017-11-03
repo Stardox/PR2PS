@@ -5,10 +5,10 @@ namespace PR2PS.DataAccess.Entities
 {
     public class LevelPlay : BaseEntity
     {
-        [InverseProperty("LevelPlays")]
-        public virtual Account User { get; set; }
+        [InverseProperty("Plays")]
+        public virtual Level Level { get; set; }
 
-        public Int64 LevelId { get; set; }
+        public Int64 UserId { get; set; }
 
         public DateTime PlayDate { get; set; }
     }

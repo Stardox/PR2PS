@@ -109,11 +109,20 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                 LevelVersion latest = this.dbContext.LevelVersions
                     .OrderByDescending(v => v.Id)
                     .FirstOrDefault(v => v.Level.Id == levelRow.LevelId);
+                // LongCount is not supported at db level for SQLite.
+                Int32 playCount = this.dbContext.LevelPlays.Count(l => l.Level.Id == levelRow.LevelId);
+                Double rating = this.dbContext.LevelVotes
+                    .Where(l => l.Level.Id == levelRow.LevelId)
+                    .Select(l => l.Vote)
+                    .DefaultIfEmpty()
+                    .Average(l => l);
 
                 levelRow.Note = latest?.Note;
                 levelRow.MinRank = latest?.MinRank ?? 0;
                 levelRow.HasPass = !String.IsNullOrEmpty(latest?.PassHash);
                 levelRow.GameMode = latest?.GameMode ?? GameMode.Unknown;
+                levelRow.PlayCount = playCount;
+                levelRow.Rating = rating;
             }
 
             return levelRows;
