@@ -2,6 +2,7 @@
 using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
+using PR2PS.DataAccess.Entities;
 using PR2PS.DataAccess.LevelsDataAccess;
 using PR2PS.DataAccess.MainDataAccess;
 using PR2PS.Web.Core;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using static PR2PS.Common.Enums;
 
 namespace PR2PS.Web.Controllers
 {
@@ -93,54 +95,6 @@ namespace PR2PS.Web.Controllers
             catch (Exception ex)
             {
                 return HttpResponseFactory.Response500Plain(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Performs search according to specified search query.
-        /// </summary>
-        /// <param name="searchData">Search query.</param>
-        /// <returns>List of found maps.</returns>
-        private HttpResponseMessage GetSearchResults(SearchLevelsFormModel searchData)
-        {
-            try
-            {
-                if (searchData == null)
-                {
-                    return HttpResponseFactory.Response200Json(new ErrorJson
-                    {
-                        Error = ErrorMessages.ERR_NO_FORM_DATA
-                    });
-                }
-
-                if (String.IsNullOrEmpty(ConfigurationManager.Instance.SearchUrl))
-                {
-                    // External level search web API is not specified, handle the request internally.
-
-                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, "Coming soon...");
-                }
-                else
-                {
-                    // Let the external API handle the level search.
-
-                    using (WebClient webClient = new WebClient())
-                    {
-                        webClient.QueryString.Add("search_str", searchData.Search_Str);
-                        webClient.QueryString.Add("order", searchData.Order.ToString().ToLower());
-                        webClient.QueryString.Add("mode", searchData.Mode.ToString().ToLower());
-                        webClient.QueryString.Add("dir", searchData.Dir.ToString().ToLower());
-                        webClient.QueryString.Add("page", (searchData.Page ?? 1).ToString());
-                        webClient.QueryString.Add("rand", searchData.Rand);
-
-                        String result = webClient.DownloadString(ConfigurationManager.Instance.SearchUrl);
-
-                        return HttpResponseFactory.Response200Plain(result);
-                    }
-                }
-            }
-            catch (PR2Exception ex)
-            {
-                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
         }
 
@@ -272,6 +226,73 @@ namespace PR2PS.Web.Controllers
             catch (Exception ex)
             {
                 return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Performs search according to specified search query.
+        /// </summary>
+        /// <param name="searchData">Search query.</param>
+        /// <returns>List of found maps.</returns>
+        private HttpResponseMessage GetSearchResults(SearchLevelsFormModel searchData)
+        {
+            try
+            {
+                if (searchData == null)
+                {
+                    return HttpResponseFactory.Response200Json(new ErrorJson
+                    {
+                        Error = ErrorMessages.ERR_NO_FORM_DATA
+                    });
+                }
+
+                if (String.IsNullOrEmpty(ConfigurationManager.Instance.SearchUrl))
+                {
+                    // External level search web API is not specified, handle the request internally.
+
+                    List<LevelRowDTO> levels = null;
+
+                    if (searchData.Mode == SearchMode.User)
+                    {
+                        Account acc = this.mainDAL.GetAccountByUsername(searchData.Search_Str);
+                        if (acc == null)
+                        {
+                            return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_USER_WITH_SUCH_NAME);
+                        }
+
+                        levels = this.levelsDAL.SearchLevelsByUserId(acc.Id, searchData.Order, searchData.Dir, searchData.Page);
+                    }
+                    else
+                    {
+                        levels = this.levelsDAL.SearchLevelsByTerm(searchData.Search_Str, searchData.Order, searchData.Dir, searchData.Page);
+                    }
+
+                    this.mainDAL.FillLevelListMetadata(levels);
+
+                    return HttpResponseFactory.Response200Plain(levels.GetLevelListString());
+                }
+                else
+                {
+                    // Let the external API handle the level search.
+
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.QueryString.Add("search_str", searchData.Search_Str);
+                        webClient.QueryString.Add("order", searchData.Order.ToString().ToLower());
+                        webClient.QueryString.Add("mode", searchData.Mode.ToString().ToLower());
+                        webClient.QueryString.Add("dir", searchData.Dir.ToString().ToLower());
+                        webClient.QueryString.Add("page", (searchData.Page ?? 1).ToString());
+                        webClient.QueryString.Add("rand", searchData.Rand);
+
+                        String result = webClient.DownloadString(ConfigurationManager.Instance.SearchUrl);
+
+                        return HttpResponseFactory.Response200Plain(result);
+                    }
+                }
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
             }
         }
     }

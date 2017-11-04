@@ -1,6 +1,7 @@
 ﻿using PR2PS.Common.DTO;
 using System;
 using System.Collections.Generic;
+using static PR2PS.Common.Enums;
 
 namespace PR2PS.DataAccess.LevelsDataAccess
 {
@@ -36,5 +37,28 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// <param name="userId">Id of level author.</param>
         /// <param name="levelId">Id of the level.</param>
         void SoftDeleteLevel(Int64 userId, Int64 levelId);
+
+
+        /// <summary>
+        /// Seaches through levels belonging to specified user based on search criteria.
+        /// </summary>
+        /// <param name="userId">Id of user who submitted the levels.</param>
+        /// <param name="order">Search order (date, alphabet, etc).</param>
+        /// <param name="dir">Search direction.</param>
+        /// <param name="page">Specifies desired page of levels to return. There are six levels per page.</param>
+        /// <returns>Levels created by specified user.
+        /// Note, that not all meta data are filled in as they are not available in this database context.</returns>
+        List<LevelRowDTO> SearchLevelsByUserId(Int64 userId, SearchOrder order, SearchDirection dir, Int16? page);
+
+        /// <summary>
+        /// Seaches through levels based on search term and criteria.
+        /// </summary>
+        /// <param name="userId">Id of user who submitted the levels.</param>
+        /// <param name="order">Search order (date, alphabet, etc).</param>
+        /// <param name="dir">Search direction.</param>
+        /// <param name="page">Specifies desired page of levels to return. There are six levels per page.</param>
+        /// <returns>Levels satisfying search term.
+        /// Note, that not all meta data are filled in as they are not available in this database context.</returns>
+        List<LevelRowDTO> SearchLevelsByTerm(String term, SearchOrder order, SearchDirection dir, Int16? page);
     }
 }

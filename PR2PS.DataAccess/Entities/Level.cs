@@ -1,6 +1,7 @@
 ﻿using PR2PS.Common.DTO;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace PR2PS.DataAccess.Entities
 {
@@ -25,7 +26,7 @@ namespace PR2PS.DataAccess.Entities
             this.Plays = new List<LevelPlay>();
         }
         
-        public LevelDataDTO ToDTO(LevelVersion version, Int32 versionNumber)
+        public LevelDataDTO ToLevelDataDTO(LevelVersion version, Int32 versionNumber)
         {
             return new LevelDataDTO
             {
@@ -48,5 +49,14 @@ namespace PR2PS.DataAccess.Entities
                 SubmittedDate = version.SubmittedDate
             };
         }
+
+        public static Expression<Func<Level, LevelRowDTO>> ToLevelRowDTO = (level) => new LevelRowDTO
+        {
+            LevelId = level.Id,
+            Version = level.Versions.Count,
+            Title = level.Title,
+            IsPublished = level.IsPublished,
+            UserlId = level.AuthorId
+        };
     }
 }

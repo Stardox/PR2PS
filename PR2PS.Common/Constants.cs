@@ -45,6 +45,8 @@ namespace PR2PS.Common.Constants
         public const String ERR_INVALID_GAME_MODE = "The game mode of your level is not valid.";
         public const String ERR_NO_SUCH_LEVEL = "Specified level can not be found or is deleted.";
         public const String ERR_NO_VERSION = "Failed to load version of the given level.";
+        public const String ERR_UNSUPPORTED_SEARCH_ORDER = "Selected search order is not supported.";
+        public const String ERR_SEARCH_TERM_TOO_SHORT = "Search term has to be at least 3 characters long.";
     }
 
     public static class StatusKeys

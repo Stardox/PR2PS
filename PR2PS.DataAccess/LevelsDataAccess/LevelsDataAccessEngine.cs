@@ -48,6 +48,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             // TODO - Validation of hash.
             // TODO - Validation of password hash.
             // TODO - Consider the difference based approach when saving levels.
+            // TODO - Check interval between consequent saves.
 
             Level level = this.dbContext.Levels
                                         .Include(l => l.Versions)
@@ -94,36 +95,9 @@ namespace PR2PS.DataAccess.LevelsDataAccess
 
             List<LevelRowDTO> levelRows = this.dbContext.Levels
                 .Where(l => !l.IsDeleted && l.AuthorId == userId && l.Versions.Count > 0)
-                .Select(l => new LevelRowDTO
-                {
-                    LevelId = l.Id,
-                    Version = l.Versions.Count,
-                    Title = l.Title,
-                    IsPublished = l.IsPublished,
-                    UserlId = l.AuthorId
-                })
+                .Select(Level.ToLevelRowDTO)
                 .ToList();
-
-            foreach (LevelRowDTO levelRow in levelRows)
-            {
-                LevelVersion latest = this.dbContext.LevelVersions
-                    .OrderByDescending(v => v.Id)
-                    .FirstOrDefault(v => v.Level.Id == levelRow.LevelId);
-                // LongCount is not supported at db level for SQLite.
-                Int32 playCount = this.dbContext.LevelPlays.Count(l => l.Level.Id == levelRow.LevelId);
-                Double rating = this.dbContext.LevelVotes
-                    .Where(l => l.Level.Id == levelRow.LevelId)
-                    .Select(l => l.Vote)
-                    .DefaultIfEmpty()
-                    .Average(l => l);
-
-                levelRow.Note = latest?.Note;
-                levelRow.MinRank = latest?.MinRank ?? 0;
-                levelRow.HasPass = !String.IsNullOrEmpty(latest?.PassHash);
-                levelRow.GameMode = latest?.GameMode ?? GameMode.Unknown;
-                levelRow.PlayCount = playCount;
-                levelRow.Rating = rating;
-            }
+            FillLevelVersionData(levelRows);
 
             return levelRows;
         }
@@ -153,7 +127,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                 throw new PR2Exception(ErrorMessages.ERR_NO_VERSION);
             }
 
-            return level.ToDTO(version, versionNum);
+            return level.ToLevelDataDTO(version, versionNum);
         }
 
         public void SoftDeleteLevel(Int64 userId, Int64 levelId)
@@ -167,6 +141,114 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             level.IsDeleted = true;
 
             this.dbContext.SaveChanges();
+        }
+
+        public List<LevelRowDTO> SearchLevelsByUserId(Int64 userId, SearchOrder order, SearchDirection dir, Int16? page)
+        {
+            IQueryable<Level> levels = this.dbContext.Levels
+                .Where(l => l.AuthorId == userId && !l.IsDeleted && l.IsPublished && l.Versions.Count > 0);
+            FilterAndSortLevels(ref levels, order, dir, page);
+
+            List<LevelRowDTO> levelRows = levels.Select(Level.ToLevelRowDTO).ToList();
+            FillLevelVersionData(levelRows);
+
+            return levelRows;
+        }
+
+        public List<LevelRowDTO> SearchLevelsByTerm(String term, SearchOrder order, SearchDirection dir, Int16? page)
+        {
+            term = term ?? String.Empty;
+            if (term.Length < 3)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_SEARCH_TERM_TOO_SHORT);
+            }
+
+            IQueryable<Level> levels = this.dbContext.Levels
+                .Where(l => l.Title != null && l.Title.ToUpper().Contains(term.ToUpper()) && !l.IsDeleted && l.IsPublished && l.Versions.Count > 0);
+            FilterAndSortLevels(ref levels, order, dir, page);
+
+            List<LevelRowDTO> levelRows = levels.Select(Level.ToLevelRowDTO).ToList();
+            FillLevelVersionData(levelRows);
+
+            return levelRows;
+        }
+
+        /// <summary>
+        /// Fills in missing meta data about latest version of levels.
+        /// </summary>
+        /// <param name="levelRows">Enumeration of levels for which should be data about versions loaded.</param>
+        private void FillLevelVersionData(IEnumerable<LevelRowDTO> levelRows)
+        {
+            foreach (LevelRowDTO levelRow in levelRows)
+            {
+                LevelVersion latest = this.dbContext.LevelVersions
+                    .OrderByDescending(v => v.Id)
+                    .FirstOrDefault(v => v.Level.Id == levelRow.LevelId);
+                // LongCount is not supported at db level for SQLite.
+                Int32 playCount = this.dbContext.LevelPlays.Count(l => l.Level.Id == levelRow.LevelId);
+                Double rating = this.dbContext.LevelVotes
+                    .Where(l => l.Level.Id == levelRow.LevelId)
+                    .Select(l => l.Vote)
+                    .DefaultIfEmpty()
+                    .Average(l => l);
+
+                levelRow.Note = latest?.Note;
+                levelRow.MinRank = latest?.MinRank ?? 0;
+                levelRow.HasPass = !String.IsNullOrEmpty(latest?.PassHash);
+                levelRow.GameMode = latest?.GameMode ?? GameMode.Unknown;
+                levelRow.PlayCount = playCount;
+                levelRow.Rating = rating;
+            }
+        }
+
+        /// <summary>
+        /// Applies filtering, sorting and pagination according to search criteria.
+        /// </summary>
+        /// <param name="levels">Levels query on which the filtering, sorting and pagination will be applied.</param>
+        /// <param name="order">Search order (date, alphabet, etc).</param>
+        /// <param name="dir">Search direction.</param>
+        /// <param name="page">Specifies desired page of levels to return. There are six levels per page.</param>
+        private void FilterAndSortLevels(ref IQueryable<Level> levels, SearchOrder order, SearchDirection dir, Int16? page)
+        {
+            // Rant: SQLite in conjunction with EF is very limited when it comes to joins, thats why some parts of the search
+            // functionality are not supported. Another option would be executing raw SQL instead of using LINQ,
+            // but it would make some things more complicated (like Skip and Take for example).
+            // Search order is therefore implemented as follows:
+            // Date - Ordered by level id rather than date of submission of latest version.
+            // Alphabetical - Supported.
+            // Rating - Unsupported.
+            // Popularity - Unsupported.
+
+            page = page ?? 1;
+
+            if (order == SearchOrder.Date)
+            {
+                if (dir == SearchDirection.Asc)
+                {
+                    levels = levels.OrderBy(l => l.Id);
+                }
+                else if (dir == SearchDirection.Desc)
+                {
+                    levels = levels.OrderByDescending(l => l.Id);
+                }
+            }
+            else if (order == SearchOrder.Alphabetical)
+            {
+                if (dir == SearchDirection.Asc)
+                {
+                    levels = levels.OrderBy(l => l.Title);
+                }
+                else if (dir == SearchDirection.Desc)
+                {
+                    levels = levels.OrderByDescending(l => l.Title);
+                }
+            }
+            else if (order == SearchOrder.Rating || order == SearchOrder.Popularity)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_UNSUPPORTED_SEARCH_ORDER);
+            }
+
+            levels = levels.Skip((page.Value - 1) * 6).Take(6);
         }
     }
 }
