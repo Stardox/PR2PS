@@ -112,6 +112,11 @@ namespace PR2PS.Common.Extensions
         /// <returns></returns>
         public static String GetLevelListString(this IList<LevelRowDTO> levels)
         {
+            if (!levels.Any())
+            {
+                return String.Empty;
+            }
+
             StringBuilder sb = new StringBuilder();
 
             for (Int32 i = 0; i < levels.Count; i++)
