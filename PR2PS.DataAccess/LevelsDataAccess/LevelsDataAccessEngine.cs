@@ -219,7 +219,10 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             // Rating - Unsupported.
             // Popularity - Unsupported.
 
-            page = page ?? 1;
+            if (!page.HasValue || page.Value < 1)
+            {
+                page = 1;
+            }
 
             if (order == SearchOrder.Date)
             {
