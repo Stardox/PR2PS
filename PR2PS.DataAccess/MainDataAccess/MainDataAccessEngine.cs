@@ -106,7 +106,7 @@ namespace PR2PS.DataAccess.MainDataAccess
                 throw new PR2Exception(String.Format(
                     ErrorMessages.ERR_BANNED,
                     ban.Issuer.Username,
-                    String.IsNullOrWhiteSpace(ban.Reason) ? StatusMessages.STR_NO_REASON : ban.Reason,
+                    String.IsNullOrWhiteSpace(ban.Reason) ? StatusMessages.NONE : ban.Reason,
                     ban.Id,
                     ban.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString()));
             }
@@ -135,7 +135,7 @@ namespace PR2PS.DataAccess.MainDataAccess
                 throw new PR2Exception(String.Format(
                     ErrorMessages.ERR_BANNED,
                     ban.Issuer.Username,
-                    String.IsNullOrWhiteSpace(ban.Reason) ? StatusMessages.STR_NO_REASON : ban.Reason,
+                    String.IsNullOrWhiteSpace(ban.Reason) ? StatusMessages.NONE : ban.Reason,
                     ban.Id,
                     ban.ExpirationDate.ToUniversalTime().GetPrettyBanExpirationString()));
             }

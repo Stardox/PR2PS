@@ -173,6 +173,46 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             return levelRows;
         }
 
+        public RatingDataDTO SaveRating(Int64 levelId, Byte rating, Int64 userId, String ipAddress)
+        {
+            if (rating < 1 || rating > 5)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_INVALID_RATING);
+            }
+
+            Level level = this.dbContext.Levels.FirstOrDefault(l => l.Id == levelId && !l.IsDeleted);
+            if (level == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_LEVEL);
+            }
+
+            DateTime utcDateTimeMinusWeek = DateTime.UtcNow.AddDays(-7); // To prevent usage of SQL functions.
+            if (this.dbContext.LevelVotes.Any(v => v.Level.Id == levelId && (v.UserId == userId || v.VoterIP == ipAddress) && DateTime.Compare(v.VoteDate, utcDateTimeMinusWeek) > 0))
+            {
+                throw new PR2Exception(ErrorMessages.ERR_ALREADY_VOTED);
+            }
+
+            RatingDataDTO ratingData = new RatingDataDTO
+            {
+                Vote = rating,
+                OldRating = this.dbContext.LevelVotes.Where(l => l.Level.Id == levelId).Select(l => l.Vote).DefaultIfEmpty().Average(l => l)
+            };
+
+            this.dbContext.LevelVotes.Add(new LevelVote
+            {
+                Level = level,
+                UserId = userId,
+                Vote = rating,
+                VoteDate = DateTime.UtcNow,
+                VoterIP = ipAddress
+            });
+            this.dbContext.SaveChanges();
+
+            ratingData.NewRating = this.dbContext.LevelVotes.Where(l => l.Level.Id == levelId).Select(l => l.Vote).DefaultIfEmpty().Average(l => l);
+
+            return ratingData;
+        }
+
         /// <summary>
         /// Fills in missing meta data about latest version of levels.
         /// </summary>

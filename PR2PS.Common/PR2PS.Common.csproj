@@ -45,6 +45,7 @@
     <Compile Include="DTO\AccountDataDTO.cs" />
     <Compile Include="DTO\LevelDataDTO.cs" />
     <Compile Include="DTO\LevelRowDTO.cs" />
+    <Compile Include="DTO\RatingDataDTO.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />

@@ -47,6 +47,8 @@ namespace PR2PS.Common.Constants
         public const String ERR_NO_VERSION = "Failed to load version of the given level.";
         public const String ERR_UNSUPPORTED_SEARCH_ORDER = "Selected search order is not supported.";
         public const String ERR_SEARCH_TERM_TOO_SHORT = "Search term has to be at least 3 characters long.";
+        public const String ERR_INVALID_RATING = "Invalid level rating value.";
+        public const String ERR_ALREADY_VOTED = "You have already voted on this level. You can vote on it again in a week.";
     }
 
     public static class StatusKeys
@@ -68,7 +70,7 @@ namespace PR2PS.Common.Constants
         public const String STR_HOURS = " hours";
         public const String STR_MINUTES = " minutes";
         public const String STR_SHORT_MOMENT = "a short moment";
-        public const String STR_NO_REASON = "none";
+        public const String NONE = "none";
         public const String SERVER_OPEN = "open";
         public const String SERVER_DOWN = "down";
         public const String NAH = "nah";
@@ -78,6 +80,7 @@ namespace PR2PS.Common.Constants
         public const String PASSWORD_CHANGED = "The password has been changed succesfully!";
         public const String MESSAGE_SENT = "Your message was sent succesfully!";
         public const String SAVE_SUCCESSFUL = "The save was successful.";
+        public const String VOTE_CAST = "Thank you for voting! Your vote of {0} changed the average rating from {1} to {2}.";
     }
 
     public static class MimeTypes

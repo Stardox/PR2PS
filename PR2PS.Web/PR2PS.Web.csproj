@@ -148,6 +148,7 @@
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\FormModels\BanFormModel.cs" />
+    <Compile Include="Core\FormModels\SubmitRatingFormModel.cs" />
     <Compile Include="Core\FormModels\DeleteOrReportMessageFormModel.cs" />
     <Compile Include="Core\FormModels\ChangePassFormModel.cs" />
     <Compile Include="Core\FormModels\DeleteLevelFormModel.cs" />

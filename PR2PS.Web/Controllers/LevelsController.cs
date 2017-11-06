@@ -230,6 +230,42 @@ namespace PR2PS.Web.Controllers
         }
 
         /// <summary>
+        /// Submits level rating.
+        /// </summary>
+        /// <param name="ratingData">Data about level vote which is being cast.</param>
+        /// <returns>Status indicating whether voting has been successfully processed.</returns>
+        [HttpPost]
+        [Route("submit_rating.php")]
+        public HttpResponseMessage SubmitRating([FromBody] SubmitRatingFormModel ratingData)
+        {
+            try
+            {
+                if (ratingData == null || !ratingData.Level_Id.HasValue || !ratingData.Rating.HasValue)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_FORM_DATA);
+                }
+
+                SessionInstance mySession = SessionManager.Instance.GetSessionByToken(ratingData.Token);
+                if (mySession == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
+                }
+
+                RatingDataDTO ratingResult = this.levelsDAL.SaveRating(ratingData.Level_Id.Value, ratingData.Rating.Value, mySession.AccounData.UserId, this.Request.GetRemoteIPAddress());
+
+                return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, ratingResult.ToString());
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Performs search according to specified search query.
         /// </summary>
         /// <param name="searchData">Search query.</param>

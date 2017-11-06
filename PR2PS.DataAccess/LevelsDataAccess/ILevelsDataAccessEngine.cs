@@ -60,5 +60,15 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// <returns>Levels satisfying search term.
         /// Note, that not all meta data are filled in as they are not available in this database context.</returns>
         List<LevelRowDTO> SearchLevelsByTerm(String term, SearchOrder order, SearchDirection dir, Int16? page);
+
+        /// <summary>
+        /// Saves submitted level rating.
+        /// </summary>
+        /// <param name="levelId">Id of the level.</param>
+        /// <param name="rating">Level vote, expected 1-5.</param>
+        /// <param name="userId">Id of user who submitted rating.</param>
+        /// <param name="ipAddress">IP address of request from which rating request originates.</param>
+        /// <returns></returns>
+        RatingDataDTO SaveRating(Int64 levelId, Byte rating, Int64 userId, String ipAddress);
     }
 }
