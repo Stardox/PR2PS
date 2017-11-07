@@ -211,6 +211,19 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             return ratingData;
         }
 
+        public void UnpublishLevel(Int64 levelId)
+        {
+            Level level = this.dbContext.Levels.FirstOrDefault(l => l.Id == levelId && !l.IsDeleted);
+            if (level == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_LEVEL);
+            }
+
+            level.IsPublished = false;
+
+            this.dbContext.SaveChanges();
+        }
+
         /// <summary>
         /// Fills in missing meta data about latest version of levels.
         /// </summary>

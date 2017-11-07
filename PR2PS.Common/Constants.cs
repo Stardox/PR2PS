@@ -25,7 +25,7 @@ namespace PR2PS.Common.Constants
         public const String ERR_USER_EXISTS = "User with specified username already exists.";
         public const String ERR_ALREADY_IN = "This account was already logged in. Please relog in.";
         public const String ERR_NOT_LOGGED_IN = "You need to be logged in to do that.";
-        public const String ERR_NO_RIGHTS = "You lack privilegies to do this.";
+        public const String ERR_NO_RIGHTS = "You lack privileges to do this.";
         public const String ERR_BANNED = "This account or IP address has been banned by <i>{0}</i>. Reason for this ban is <i>{1}</i>.\nBan id: <i>{2}</i>\nThis ban will expire in <i>{3}</i>.";
         public const String ERR_INVALID_DURATION = "You have specified invalid duration.";
         public const String ERR_SEARCH_FAILED = "Error occured while searching through levels.";
@@ -49,6 +49,7 @@ namespace PR2PS.Common.Constants
         public const String ERR_SEARCH_TERM_TOO_SHORT = "Search term has to be at least 3 characters long.";
         public const String ERR_INVALID_RATING = "Invalid level rating value.";
         public const String ERR_ALREADY_VOTED = "You have already voted on this level. You can vote on it again in a week.";
+        public const String ERR_NO_LEVEL_ID = "No level id was given.";
     }
 
     public static class StatusKeys

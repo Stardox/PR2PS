@@ -38,7 +38,6 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// <param name="levelId">Id of the level.</param>
         void SoftDeleteLevel(Int64 userId, Int64 levelId);
 
-
         /// <summary>
         /// Seaches through levels belonging to specified user based on search criteria.
         /// </summary>
@@ -70,5 +69,11 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// <param name="ipAddress">IP address of request from which rating request originates.</param>
         /// <returns></returns>
         RatingDataDTO SaveRating(Int64 levelId, Byte rating, Int64 userId, String ipAddress);
+
+        /// <summary>
+        /// Marks level as unpublished.
+        /// </summary>
+        /// <param name="levelId">Id of the level.</param>
+        void UnpublishLevel(Int64 levelId);
     }
 }

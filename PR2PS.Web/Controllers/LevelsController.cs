@@ -266,6 +266,47 @@ namespace PR2PS.Web.Controllers
         }
 
         /// <summary>
+        /// Handles request for unpublishing level by moderators and administrators.
+        /// </summary>
+        /// <param name="levelData">Data about level which is getting unpublished.</param>
+        /// <returns>Status indicating whether level has been unpublished.</returns>
+        [HttpPost]
+        [Route("remove_level.php")]
+        public HttpResponseMessage RemoveLevel([FromBody] DeleteLevelFormModel levelData)
+        {
+            try
+            {
+                if (levelData == null || !levelData.Level_Id.HasValue)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_LEVEL_ID);
+                }
+
+                SessionInstance mySession = SessionManager.Instance.GetSessionByToken(levelData.Token);
+                if (mySession == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
+                }
+
+                if (mySession.AccounData.Group < UserGroup.MODERATOR)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_RIGHTS);
+                }
+
+                this.levelsDAL.UnpublishLevel(levelData.Level_Id.Value);
+
+                return HttpResponseFactory.Response200Plain(StatusKeys.SUCCESS, StatusMessages.TRUE);
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Performs search according to specified search query.
         /// </summary>
         /// <param name="searchData">Search query.</param>
