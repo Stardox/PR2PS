@@ -80,7 +80,6 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                 MaxTime = levelData.MaxTime,
                 Items = levelData.Items,
                 Data = levelData.Data,
-                Hash = levelData.Hash,
                 PassHash = levelData.PassHash
             });
 

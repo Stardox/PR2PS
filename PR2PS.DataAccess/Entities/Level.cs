@@ -42,7 +42,6 @@ namespace PR2PS.DataAccess.Entities
                 Song = version.Song,
                 Items = version.Items,
                 MaxTime = version.MaxTime,
-                Hash = version.Hash,
                 PassHash = version.PassHash,
                 Data = version.Data,
                 CowboyChance = version.CowboyChance,

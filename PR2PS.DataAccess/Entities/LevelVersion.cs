@@ -30,8 +30,6 @@ namespace PR2PS.DataAccess.Entities
         // TODO - How about compressing this?
         public String Data { get; set; }
 
-        public String Hash { get; set; }
-
         public String PassHash { get; set; }
     }
 }
