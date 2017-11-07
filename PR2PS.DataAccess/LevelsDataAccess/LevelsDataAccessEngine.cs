@@ -53,7 +53,6 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             Level level = this.dbContext.Levels
                                         .Include(l => l.Versions)
                                         .FirstOrDefault(l => l.AuthorId == userId && l.Title == levelData.Title);
-            DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQL functions.
 
             if (level == null)
             {
@@ -70,7 +69,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             level.IsPublished = levelData.Live;
             level.Versions.Add(new LevelVersion
             {
-                SubmittedDate = utcDateTime,
+                SubmittedDate = DateTime.UtcNow,
                 SubmittedIP = ipAddress,
                 Note = levelData.Note,
                 GameMode = levelData.GameMode,

@@ -155,8 +155,7 @@ namespace PR2PS.DataAccess.MainDataAccess
                 throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_USER);
             }
 
-            DateTime utcDateTime = DateTime.UtcNow; // To prevent usage of SQL functions.
-            account.LoginDate = utcDateTime;
+            account.LoginDate = DateTime.UtcNow;
             account.LoginIP = ipAddress;
             account.Status = status;
 
