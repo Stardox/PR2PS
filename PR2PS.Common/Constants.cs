@@ -50,6 +50,7 @@ namespace PR2PS.Common.Constants
         public const String ERR_INVALID_RATING = "Invalid level rating value.";
         public const String ERR_ALREADY_VOTED = "You have already voted on this level. You can vote on it again in a week.";
         public const String ERR_NO_LEVEL_ID = "No level id was given.";
+        public const String ERR_INVALID_ITEMS = "Level contains invalid item set.";
     }
 
     public static class StatusKeys
@@ -139,6 +140,7 @@ namespace PR2PS.Common.Constants
         public const String USERNAME_PATTERN = @"^[a-zA-Z0-9 \-!#\$%&\(\)\*\+\.:;=\?@~]*$";
         public const String PASSWORD_PATTERN = @"^[a-zA-Z0-9 \-!#\$%&\(\)\*\+\.:;=\?@~]*$";
         public const String EMAIL_PATTERN = @"^([0-9a-zA-Z]([-\.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})?$";
+        public const String LEVEL_ITEMS_PATTERN = @"^[1-9](`[1-9])*$";
     }
 
     public static class UserGroup

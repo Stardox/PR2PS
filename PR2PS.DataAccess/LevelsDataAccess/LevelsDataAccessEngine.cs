@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static PR2PS.Common.Enums;
 
 namespace PR2PS.DataAccess.LevelsDataAccess
@@ -42,8 +43,12 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             {
                 throw new PR2Exception(ErrorMessages.ERR_INVALID_GAME_MODE);
             }
+            else if (!String.IsNullOrEmpty(levelData.Items)
+                     && !Regex.IsMatch(levelData.Items, ValidationConstraints.LEVEL_ITEMS_PATTERN))
+            {
+                throw new PR2Exception(ErrorMessages.ERR_INVALID_ITEMS);
+            }
 
-            // TODO - Validation of items.
             // TODO - Validation of level data.
             // TODO - Validation of hash.
             // TODO - Validation of password hash.
