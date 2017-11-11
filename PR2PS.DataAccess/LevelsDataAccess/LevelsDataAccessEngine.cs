@@ -1,4 +1,5 @@
 ﻿using PR2PS.Common.Constants;
+using PR2PS.Common.Cryptography;
 using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
 using PR2PS.DataAccess.Entities;
@@ -29,7 +30,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             }
         }
 
-        public void SaveLevel(Int64 userId, LevelDataDTO levelData, String ipAddress)
+        public void SaveLevel(Int64 userId, String username, LevelDataDTO levelData, String ipAddress)
         {
             if (levelData == null)
             {
@@ -49,9 +50,17 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                 throw new PR2Exception(ErrorMessages.ERR_INVALID_ITEMS);
             }
 
+            using (MD5Wrapper md5 = new MD5Wrapper())
+            {
+                String hash = md5.GetHashedString(
+                    String.Concat(levelData.Title, username?.ToLower() ?? String.Empty, levelData.Data, Pepper.LEVEL_SAVE));
+                if (String.CompareOrdinal(hash, levelData.Hash) != 0)
+                {
+                    throw new PR2Exception(ErrorMessages.ERR_LEVEL_DATA_HASH_MISMATCH);
+                }
+            }
+
             // TODO - Validation of level data.
-            // TODO - Validation of hash.
-            // TODO - Validation of password hash.
             // TODO - Consider the difference based approach when saving levels.
             // TODO - Check interval between consequent saves.
 

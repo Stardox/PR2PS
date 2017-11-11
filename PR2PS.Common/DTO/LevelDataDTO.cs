@@ -56,7 +56,7 @@ namespace PR2PS.Common.DTO
 
             using (MD5Wrapper md5 = new MD5Wrapper())
             {
-                String hash = md5.GetHashedString(String.Concat(this.Version.ToString(), this.Id.ToString(), sb.ToString(), Pepper.LEVEL_DATA));
+                String hash = md5.GetHashedString(String.Concat(this.Version.ToString(), this.Id.ToString(), sb.ToString(), Pepper.LEVEL_LOAD));
                 sb.Append(hash);
             }
 

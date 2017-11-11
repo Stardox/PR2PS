@@ -51,6 +51,7 @@ namespace PR2PS.Common.Constants
         public const String ERR_ALREADY_VOTED = "You have already voted on this level. You can vote on it again in a week.";
         public const String ERR_NO_LEVEL_ID = "No level id was given.";
         public const String ERR_INVALID_ITEMS = "Level contains invalid item set.";
+        public const String ERR_LEVEL_DATA_HASH_MISMATCH = "Level data hashes did not match.";
     }
 
     public static class StatusKeys
@@ -166,8 +167,10 @@ namespace PR2PS.Common.Constants
 
     public static class Pepper
     {
-        public const String LIST_OF_LEVELS = "984cn98c54$";
-        public const String LEVEL_DATA = "0kg4%dsw";
+        public const String LEVEL_LIST = "984cn98c54$";
+        public const String LEVEL_LOAD = "0kg4%dsw";
+        public const String LEVEL_SAVE = "84ge5tnr";
+        public const String LEVEL_PASS = "WGZSL3JWcUE9L3Q4YipZIQ==";
     }
 
     public static class StringFormat

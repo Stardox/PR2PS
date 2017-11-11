@@ -120,7 +120,7 @@ namespace PR2PS.Web.Controllers
                     return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
                 }
 
-                this.levelsDAL.SaveLevel(mySession.AccounData.UserId, levelData.ToDTO(), this.Request.GetRemoteIPAddress());
+                this.levelsDAL.SaveLevel(mySession.AccounData.UserId, mySession.AccounData.Username, levelData.ToDTO(), this.Request.GetRemoteIPAddress());
 
                 return HttpResponseFactory.Response200Plain(StatusKeys.MESSAGE, StatusMessages.SAVE_SUCCESSFUL);
             }

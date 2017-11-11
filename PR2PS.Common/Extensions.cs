@@ -145,7 +145,7 @@ namespace PR2PS.Common.Extensions
 
             using (MD5Wrapper md5 = new MD5Wrapper())
             {
-                String hash = md5.GetHashedString(String.Concat(sb.ToString(), Pepper.LIST_OF_LEVELS));
+                String hash = md5.GetHashedString(String.Concat(sb.ToString(), Pepper.LEVEL_LIST));
                 sb.Append(String.Concat("&hash=", hash));
             }
 
