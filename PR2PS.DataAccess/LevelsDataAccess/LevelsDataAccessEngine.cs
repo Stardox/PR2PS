@@ -32,6 +32,9 @@ namespace PR2PS.DataAccess.LevelsDataAccess
 
         public void SaveLevel(Int64 userId, String username, LevelDataDTO levelData, String ipAddress)
         {
+            // TODO - Validation of level data.
+            // TODO - Consider the difference based approach when saving levels.
+
             if (levelData == null)
             {
                 throw new PR2Exception(ErrorMessages.ERR_NO_LEVEL_DATA);
@@ -54,15 +57,24 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             {
                 String hash = md5.GetHashedString(
                     String.Concat(levelData.Title, username?.ToLower() ?? String.Empty, levelData.Data, Pepper.LEVEL_SAVE));
+
                 if (String.CompareOrdinal(hash, levelData.Hash) != 0)
                 {
                     throw new PR2Exception(ErrorMessages.ERR_LEVEL_DATA_HASH_MISMATCH);
                 }
             }
 
-            // TODO - Validation of level data.
-            // TODO - Consider the difference based approach when saving levels.
-            // TODO - Check interval between consequent saves.
+            DateTime utcDateMinus2mins = DateTime.UtcNow.AddMinutes(-2); // To prevent usage of SQL functions.
+            LevelVersion lastSaved = this.dbContext.LevelVersions
+                .Where(v => v.Level != null && v.Level.AuthorId == userId && DateTime.Compare(v.SubmittedDate, utcDateMinus2mins) > 0)
+                .OrderByDescending(v => v.SubmittedDate).FirstOrDefault();
+
+            if (lastSaved != null)
+            {
+                throw new PR2Exception(String.Format(
+                    ErrorMessages.ERR_WAIT_BEFORE_SAVING,
+                    Math.Round(TimeSpan.FromMinutes(2).Subtract(DateTime.UtcNow.Subtract(lastSaved.SubmittedDate.ToUniversalTime())).TotalSeconds)));
+            }
 
             Level level = this.dbContext.Levels
                                         .Include(l => l.Versions)

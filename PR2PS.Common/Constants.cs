@@ -52,6 +52,7 @@ namespace PR2PS.Common.Constants
         public const String ERR_NO_LEVEL_ID = "No level id was given.";
         public const String ERR_INVALID_ITEMS = "Level contains invalid item set.";
         public const String ERR_LEVEL_DATA_HASH_MISMATCH = "Level data hashes did not match.";
+        public const String ERR_WAIT_BEFORE_SAVING = "Please wait {0} seconds before saving again.";
     }
 
     public static class StatusKeys
