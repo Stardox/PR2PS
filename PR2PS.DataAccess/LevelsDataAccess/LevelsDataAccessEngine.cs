@@ -64,16 +64,16 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                 }
             }
 
-            DateTime utcDateMinus2mins = DateTime.UtcNow.AddMinutes(-2); // To prevent usage of SQL functions.
+            DateTime utcDateMinus1min = DateTime.UtcNow.AddMinutes(-1); // To prevent usage of SQL functions.
             LevelVersion lastSaved = this.dbContext.LevelVersions
-                .Where(v => v.Level != null && v.Level.AuthorId == userId && DateTime.Compare(v.SubmittedDate, utcDateMinus2mins) > 0)
+                .Where(v => v.Level != null && v.Level.AuthorId == userId && DateTime.Compare(v.SubmittedDate, utcDateMinus1min) > 0)
                 .OrderByDescending(v => v.SubmittedDate).FirstOrDefault();
 
             if (lastSaved != null)
             {
                 throw new PR2Exception(String.Format(
                     ErrorMessages.ERR_WAIT_BEFORE_SAVING,
-                    Math.Round(TimeSpan.FromMinutes(2).Subtract(DateTime.UtcNow.Subtract(lastSaved.SubmittedDate.ToUniversalTime())).TotalSeconds)));
+                    Math.Round(TimeSpan.FromMinutes(1).Subtract(DateTime.UtcNow.Subtract(lastSaved.SubmittedDate.ToUniversalTime())).TotalSeconds)));
             }
 
             Level level = this.dbContext.Levels.FirstOrDefault(l => l.AuthorId == userId && l.Title == levelData.Title);
