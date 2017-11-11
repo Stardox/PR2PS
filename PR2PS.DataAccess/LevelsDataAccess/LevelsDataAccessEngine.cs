@@ -76,9 +76,7 @@ namespace PR2PS.DataAccess.LevelsDataAccess
                     Math.Round(TimeSpan.FromMinutes(2).Subtract(DateTime.UtcNow.Subtract(lastSaved.SubmittedDate.ToUniversalTime())).TotalSeconds)));
             }
 
-            Level level = this.dbContext.Levels
-                                        .Include(l => l.Versions)
-                                        .FirstOrDefault(l => l.AuthorId == userId && l.Title == levelData.Title);
+            Level level = this.dbContext.Levels.FirstOrDefault(l => l.AuthorId == userId && l.Title == levelData.Title);
 
             if (level == null)
             {
@@ -93,8 +91,10 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             }
 
             level.IsPublished = levelData.Live;
-            level.Versions.Add(new LevelVersion
+
+            this.dbContext.LevelVersions.Add(new LevelVersion
             {
+                Level = level,
                 SubmittedDate = DateTime.UtcNow,
                 SubmittedIP = ipAddress,
                 Note = levelData.Note,
