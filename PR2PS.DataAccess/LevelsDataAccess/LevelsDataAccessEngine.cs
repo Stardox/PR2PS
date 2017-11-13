@@ -250,6 +250,35 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             this.dbContext.SaveChanges();
         }
 
+        public List<LevelRowDTO> GetNewestLevels(Byte? page)
+        {
+            if (!page.HasValue && (page < 1 || page > 9))
+            {
+                throw new PR2Exception(ErrorMessages.ERR_INVALID_PAGE);
+            }
+
+            // If only SQLite was more powerful... WHOA, look at this beast right here!
+            Int64[] levelIds = this.dbContext.LevelVersions
+                .Where(v => v.Level != null && !v.Level.IsDeleted && v.Level.IsPublished)
+                .GroupBy(v => v.Level, (lev, ver) => new { LevelId = lev.Id, SubmittedDate = ver.Max(q => q.SubmittedDate) })
+                .OrderByDescending(l => l.SubmittedDate)
+                .Skip((page.Value - 1) * 9)
+                .Take(9)
+                .Select(l => l.LevelId)
+                .ToArray();
+
+            List<LevelRowDTO> levelRows = this.dbContext.Levels
+                .Where(l => levelIds.Contains(l.Id))
+                .Select(Level.ToLevelRowDTO)
+                .ToList()
+                .OrderBy(l => Array.IndexOf(levelIds, l.LevelId))
+                .ToList();
+
+            FillLevelVersionData(levelRows);
+
+            return levelRows;
+        }
+
         /// <summary>
         /// Fills in missing meta data about latest version of levels.
         /// </summary>

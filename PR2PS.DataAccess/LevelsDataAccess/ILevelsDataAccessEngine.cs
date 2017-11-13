@@ -76,5 +76,13 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// </summary>
         /// <param name="levelId">Id of the level.</param>
         void UnpublishLevel(Int64 levelId);
+
+        /// <summary>
+        /// Gets newest levels specified by page.
+        /// </summary>
+        /// <param name="page">Specifies desired page of levels to return. There are nine levels per page.</param>
+        /// <returns>Levels satisfying search term.
+        /// Note, that not all meta data are filled in as they are not available in this database context.</returns>
+        List<LevelRowDTO> GetNewestLevels(Byte? page);
     }
 }

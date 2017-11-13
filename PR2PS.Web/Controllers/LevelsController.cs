@@ -307,6 +307,34 @@ namespace PR2PS.Web.Controllers
         }
 
         /// <summary>
+        /// Requests list of levels for the newest tab.
+        /// </summary>
+        /// <param name="page">Page number.</param>
+        /// <param name="token">Unique session token.</param>
+        /// <param name="rand">Random string.</param>
+        /// <returns>String containing newest levels specified by page.</returns>
+        [HttpGet]
+        [Route("files/lists/newest/{page}")]
+        public HttpResponseMessage GetLevels(Byte? page, String token = "", String rand = "")
+        {
+            try
+            {
+                List<LevelRowDTO> levels = this.levelsDAL.GetNewestLevels(page);
+                this.mainDAL.FillLevelListMetadata(levels);
+
+                return HttpResponseFactory.Response200Plain(levels.GetLevelListString());
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Performs search according to specified search query.
         /// </summary>
         /// <param name="searchData">Search query.</param>
