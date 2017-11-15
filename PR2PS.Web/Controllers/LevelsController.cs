@@ -1,4 +1,5 @@
-﻿using PR2PS.Common.Constants;
+﻿using Newtonsoft.Json;
+using PR2PS.Common.Constants;
 using PR2PS.Common.DTO;
 using PR2PS.Common.Exceptions;
 using PR2PS.Common.Extensions;
@@ -323,6 +324,52 @@ namespace PR2PS.Web.Controllers
                 this.mainDAL.FillLevelListMetadata(levels);
 
                 return HttpResponseFactory.Response200Plain(levels.GetLevelListString());
+            }
+            catch (PR2Exception ex)
+            {
+                return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseFactory.Response500Plain(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Attempts to unlock password protected level.
+        /// </summary>
+        /// <param name="courseID">Id of level which user wants to unlock.</param>
+        /// <param name="hash">Hashed attempted level password that user entered.</param>
+        /// <param name="token">Unique session token.</param>
+        /// <param name="rand">Random string.</param>
+        /// <returns>Status indicating whether level has been successfully unlocked.</returns>
+        [HttpGet]
+        [Route("level_pass_check.php")]
+        public HttpResponseMessage PasswordCheck(Int64? courseID, String hash = "", String token = "", String rand = "")
+        {
+            try
+            {
+                if (!courseID.HasValue)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NO_LEVEL_ID);
+                }
+
+                SessionInstance mySession = SessionManager.Instance.GetSessionByToken(token);
+                if (mySession == null)
+                {
+                    return HttpResponseFactory.Response200Plain(StatusKeys.ERROR, ErrorMessages.ERR_NOT_LOGGED_IN);
+                }
+
+                Boolean unlocked = this.levelsDAL.CheckLevelPassword(courseID.Value, hash);
+                String serializedResult = JsonConvert.SerializeObject(new LevelPassCheckResultJson
+                {
+                    Access = unlocked ? StatusMessages.ONE : StatusMessages.ZERO,
+                    LevelId = courseID.Value.ToString(),
+                    UserId = mySession.AccounData.UserId.ToString()
+                });
+                String encodedResult = serializedResult.ToBase64();
+
+                return HttpResponseFactory.Response200Plain(StatusKeys.RESULT, encodedResult);
             }
             catch (PR2Exception ex)
             {

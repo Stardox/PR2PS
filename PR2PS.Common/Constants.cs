@@ -62,6 +62,7 @@ namespace PR2PS.Common.Constants
         public const String MESSAGE = "message";
         public const String SUCCESS = "success";
         public const String USERNAME = "user_name";
+        public const String RESULT = "result";
     }
 
     public static class StatusMessages
@@ -81,6 +82,7 @@ namespace PR2PS.Common.Constants
         public const String NAH = "nah";
         public const String FORFEIT = "forfeit";
         public const String ONE = "1";
+        public const String ZERO = "0";
         public const String TRUE = "true";
         public const String PASSWORD_CHANGED = "The password has been changed succesfully!";
         public const String MESSAGE_SENT = "Your message was sent succesfully!";

@@ -84,5 +84,13 @@ namespace PR2PS.DataAccess.LevelsDataAccess
         /// <returns>Levels satisfying search term.
         /// Note, that not all meta data are filled in as they are not available in this database context.</returns>
         List<LevelRowDTO> GetNewestLevels(Byte? page);
+
+        /// <summary>
+        /// Verifies whether level password is correct.
+        /// </summary>
+        /// <param name="levelId">Id of level which user tries to unlock.</param>
+        /// <param name="hash">Hash of level password sent in request.</param>
+        /// <returns>True if hash from request matches the hash in the database, false otherwise.</returns>
+        Boolean CheckLevelPassword(Int64 levelId, String hash);
     }
 }

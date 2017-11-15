@@ -279,6 +279,20 @@ namespace PR2PS.DataAccess.LevelsDataAccess
             return levelRows;
         }
 
+        public Boolean CheckLevelPassword(Int64 levelId, String hash)
+        {
+            LevelVersion latest = this.dbContext.LevelVersions
+                .OrderByDescending(v => v.Id)
+                .FirstOrDefault(v => v.Level != null && v.Level.Id == levelId && !v.Level.IsDeleted);
+
+            if (latest == null)
+            {
+                throw new PR2Exception(ErrorMessages.ERR_NO_SUCH_LEVEL);
+            }
+
+            return String.IsNullOrEmpty(latest.PassHash) || String.CompareOrdinal(hash, latest.PassHash) == 0;
+        }
+
         /// <summary>
         /// Fills in missing meta data about latest version of levels.
         /// </summary>
