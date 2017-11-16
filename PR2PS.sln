@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR2PS.Web", "PR2PS.Web\PR2PS.Web.csproj", "{7FE92B96-8C80-43D7-B08E-B79CA9F8DC52}"
 EndProject
@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PR2PS.LevelImporter", "PR2PS.LevelImporter\PR2PS.LevelImporter.csproj", "{6914AA55-44A7-4BF7-A775-4DA584852568}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{17BDD48F-E234-46CE-8A22-69DFEFB01179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17BDD48F-E234-46CE-8A22-69DFEFB01179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17BDD48F-E234-46CE-8A22-69DFEFB01179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6914AA55-44A7-4BF7-A775-4DA584852568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6914AA55-44A7-4BF7-A775-4DA584852568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6914AA55-44A7-4BF7-A775-4DA584852568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6914AA55-44A7-4BF7-A775-4DA584852568}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAC565E1-7301-4550-8282-1EEEBE8776D4}
 	EndGlobalSection
 EndGlobal
