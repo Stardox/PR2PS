@@ -182,4 +182,24 @@ namespace PR2PS.Common.Constants
         public const String HEX_LOWERCASE = "x2";
         public const String DECIMAL_TWO = "0.##";
     }
+
+    public static class LevelDataKeys
+    {
+        public const String LEVEL_ID = "level_id";
+        public const String VERSION = "version";
+        public const String USER_ID = "user_id";
+        public const String CREDITS = "credits";
+        public const String TITLE = "title";
+        public const String NOTE = "note";
+        public const String TIME = "time";
+        public const String MIN_LEVEL = "min_level";
+        public const String SONG = "song";
+        public const String GRAVITY = "gravity";
+        public const String MAX_TIME = "max_time";
+        public const String HAS_PASS = "has_pass";
+        public const String LIVE = "live";
+        public const String ITEMS = "items";
+        public const String GAME_MODE = "gameMode";
+        public const String DATA = "data";
+    }
 }
