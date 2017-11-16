@@ -106,6 +106,31 @@ namespace PR2PS.Common.Extensions
         }
 
         /// <summary>
+        /// Returns value of enumeration type annotated with Description attribute whose description matches the given string. 
+        /// </summary>
+        /// <typeparam name="T">Enumeration type.</typeparam>
+        /// <param name="description">Description string to look for.</param>
+        /// <param name="defaultValue">Default value which will be returned if type parameter is not a enum or if no description match was found.</param>
+        /// <returns></returns>
+        public static T FromEnumDescription<T>(this String description, T defaultValue) where T : struct
+        {
+            Type type = typeof(T);
+
+            if (!type.IsEnum)
+            {
+                return defaultValue;
+            }
+
+            T? found = (T?)type.GetFields().FirstOrDefault(f => String.CompareOrdinal((f.GetCustomAttributes(typeof(DescriptionAttribute), true)?.FirstOrDefault() as DescriptionAttribute)?.Description, description) == 0)?.GetValue(null);
+            if (found.HasValue)
+            {
+                return found.Value;
+            }
+
+            return defaultValue;
+        }
+
+        /// <summary>
         /// Processes list of levels and returns its string representation ready to be sent to client.
         /// </summary>
         /// <param name="levels">List of LevelRowDTO.</param>

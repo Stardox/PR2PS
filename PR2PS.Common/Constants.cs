@@ -108,10 +108,12 @@ namespace PR2PS.Common.Constants
         public const Char PERIOD_CHAR = '.';
         public const Char SPACE_CHAR = ' ';
         public const Char PLUS_CHAR = '+';
+        public const Char AMPERSAND_CHAR = '&';
         public static Char[] UNDERSCORE_SEPARATOR = new Char[] { '_' };
         public static Char[] COMMA_SEPARATOR = new Char[] { ',' };
         public static Char[] ARG_SEPARATOR = new Char[] { '`' };
         public static Char[] EOT_SEPARATOR = new Char[] { EOT_CHAR };
+        public static Char[] AMPERSAND_SEPARATOR = new Char[] { AMPERSAND_CHAR };
         public const String ARG_STR = "`";
         public const Char EQ_CHAR = '=';
         public const String AMPERSAND = "&";
@@ -196,6 +198,7 @@ namespace PR2PS.Common.Constants
         public const String SONG = "song";
         public const String GRAVITY = "gravity";
         public const String MAX_TIME = "max_time";
+        public const String COWBOY_CHANCE = "cowboyChance";
         public const String HAS_PASS = "has_pass";
         public const String LIVE = "live";
         public const String ITEMS = "items";
