@@ -19,6 +19,11 @@ namespace PR2PS.LevelImporter
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.comboBoxSearchUserMode.SelectedIndex = 0;
+            this.comboBoxSearchBy.SelectedIndex = 0;
+            this.comboBoxSortBy.SelectedIndex = 0;
+            this.comboBoxSortOrder.SelectedIndex = 0;
+
             this.MainForm_Resize(sender, e);
         }
 
@@ -27,7 +32,7 @@ namespace PR2PS.LevelImporter
             if (this.WindowState != FormWindowState.Minimized)
             {
                 this.splitContainerMain.SplitterDistance = this.splitContainerMain.Width - 250;
-                this.splitContainerSub.SplitterDistance = this.splitContainerSub.Height - 200;
+                this.splitContainerSub.SplitterDistance = this.splitContainerSub.Height - 150;
             }
         }
 
