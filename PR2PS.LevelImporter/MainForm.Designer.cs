@@ -110,6 +110,7 @@
             this.connDisconnBtn.Name = "connDisconnBtn";
             this.connDisconnBtn.Size = new System.Drawing.Size(56, 22);
             this.connDisconnBtn.Text = "Connect";
+            this.connDisconnBtn.Click += new System.EventHandler(this.connDisconnBtn_Click);
             // 
             // infoBtn
             // 
@@ -118,6 +119,7 @@
             this.infoBtn.Name = "infoBtn";
             this.infoBtn.Size = new System.Drawing.Size(74, 22);
             this.infoBtn.Text = "Information";
+            this.infoBtn.Click += new System.EventHandler(this.infoBtn_Click);
             // 
             // exitBtn
             // 
@@ -126,6 +128,7 @@
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(29, 22);
             this.exitBtn.Text = "Exit";
+            this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
             // 
             // splitContainerMain
             // 
