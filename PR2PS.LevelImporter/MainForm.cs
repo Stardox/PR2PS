@@ -16,5 +16,21 @@ namespace PR2PS.LevelImporter
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            this.MainForm_Resize(sender, e);
+        }
+
+        private void MainForm_Resize(Object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized)
+            {
+                this.splitContainerMain.SplitterDistance = this.splitContainerMain.Width - 250;
+                this.splitContainerSub.SplitterDistance = this.splitContainerSub.Height - 200;
+            }
+        }
+
+        
     }
 }
