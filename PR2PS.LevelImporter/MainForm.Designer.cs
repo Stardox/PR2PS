@@ -59,7 +59,6 @@
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.comboBoxSearchBy = new System.Windows.Forms.ComboBox();
             this.textBoxLevelsSearchTerm = new System.Windows.Forms.TextBox();
-            this.logTextBox = new System.Windows.Forms.TextBox();
             this.runBtn = new System.Windows.Forms.Button();
             this.delFromPipelineBtn = new System.Windows.Forms.Button();
             this.pipelineListBox = new System.Windows.Forms.ListBox();
@@ -72,6 +71,7 @@
             this.btnSearchLevels = new System.Windows.Forms.Button();
             this.btnAddSearchResultsToPipeline = new System.Windows.Forms.Button();
             this.dataGridViewLevelResults = new System.Windows.Forms.DataGridView();
+            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -436,19 +436,6 @@
             this.textBoxLevelsSearchTerm.Size = new System.Drawing.Size(100, 20);
             this.textBoxLevelsSearchTerm.TabIndex = 0;
             // 
-            // logTextBox
-            // 
-            this.logTextBox.BackColor = System.Drawing.Color.Black;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.logTextBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.logTextBox.Location = new System.Drawing.Point(0, 0);
-            this.logTextBox.Multiline = true;
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.Size = new System.Drawing.Size(756, 165);
-            this.logTextBox.TabIndex = 0;
-            // 
             // runBtn
             // 
             this.runBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -569,6 +556,20 @@
             this.dataGridViewLevelResults.Size = new System.Drawing.Size(734, 342);
             this.dataGridViewLevelResults.TabIndex = 12;
             // 
+            // logTextBox
+            // 
+            this.logTextBox.BackColor = System.Drawing.Color.Black;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
+            this.logTextBox.Location = new System.Drawing.Point(0, 0);
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.logTextBox.Size = new System.Drawing.Size(756, 165);
+            this.logTextBox.TabIndex = 0;
+            this.logTextBox.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -589,7 +590,6 @@
             this.splitContainerMain.ResumeLayout(false);
             this.splitContainerSub.Panel1.ResumeLayout(false);
             this.splitContainerSub.Panel2.ResumeLayout(false);
-            this.splitContainerSub.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerSub)).EndInit();
             this.splitContainerSub.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
@@ -616,7 +616,6 @@
         private System.Windows.Forms.ToolStripButton exitBtn;
         private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.SplitContainer splitContainerSub;
-        private System.Windows.Forms.TextBox logTextBox;
         private System.Windows.Forms.ListBox pipelineListBox;
         private System.Windows.Forms.Label pipelineLabel;
         private System.Windows.Forms.Button runBtn;
@@ -654,6 +653,7 @@
         private System.Windows.Forms.Button btnAddSearchResultsToPipeline;
         private System.Windows.Forms.Button btnSearchLevels;
         private System.Windows.Forms.DataGridView dataGridViewLevelResults;
+        private CustomControls.DebugTextbox logTextBox;
     }
 }
 

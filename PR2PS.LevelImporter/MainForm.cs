@@ -19,12 +19,17 @@ namespace PR2PS.LevelImporter
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.Log("Initializing...");
+
             this.comboBoxSearchUserMode.SelectedIndex = 0;
             this.comboBoxSearchBy.SelectedIndex = 0;
             this.comboBoxSortBy.SelectedIndex = 0;
             this.comboBoxSortOrder.SelectedIndex = 0;
 
             this.MainForm_Resize(sender, e);
+
+            this.Log("Ready.");
+
         }
 
         private void MainForm_Resize(Object sender, EventArgs e)
@@ -36,6 +41,9 @@ namespace PR2PS.LevelImporter
             }
         }
 
-        
+        private void Log(String message)
+        {
+            this.logTextBox.Write(message);
+        }
     }
 }
