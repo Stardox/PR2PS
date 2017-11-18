@@ -29,7 +29,8 @@
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.connDisconnBtn = new System.Windows.Forms.ToolStripButton();
+            this.btnConnectMainDb = new System.Windows.Forms.ToolStripButton();
+            this.btnConnectLevelsDb = new System.Windows.Forms.ToolStripButton();
             this.infoBtn = new System.Windows.Forms.ToolStripButton();
             this.exitBtn = new System.Windows.Forms.ToolStripButton();
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
@@ -54,24 +55,24 @@
             this.labelLevelVersion = new System.Windows.Forms.Label();
             this.labelLevelId = new System.Windows.Forms.Label();
             this.tabImportBySearch = new System.Windows.Forms.TabPage();
+            this.dataGridViewLevelResults = new System.Windows.Forms.DataGridView();
+            this.btnAddSearchResultsToPipeline = new System.Windows.Forms.Button();
+            this.btnSearchLevels = new System.Windows.Forms.Button();
+            this.labelSearchLevelsPageNumber = new System.Windows.Forms.Label();
+            this.labelSearchLevelsSortOrder = new System.Windows.Forms.Label();
+            this.labelSearchLevelsSortBy = new System.Windows.Forms.Label();
+            this.labelSearchLevelsBy = new System.Windows.Forms.Label();
+            this.labelSearchLevelsTerm = new System.Windows.Forms.Label();
             this.numericPage = new System.Windows.Forms.NumericUpDown();
             this.comboBoxSortOrder = new System.Windows.Forms.ComboBox();
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.comboBoxSearchBy = new System.Windows.Forms.ComboBox();
             this.textBoxLevelsSearchTerm = new System.Windows.Forms.TextBox();
+            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.runBtn = new System.Windows.Forms.Button();
             this.delFromPipelineBtn = new System.Windows.Forms.Button();
             this.pipelineListBox = new System.Windows.Forms.ListBox();
             this.pipelineLabel = new System.Windows.Forms.Label();
-            this.labelSearchLevelsTerm = new System.Windows.Forms.Label();
-            this.labelSearchLevelsBy = new System.Windows.Forms.Label();
-            this.labelSearchLevelsSortBy = new System.Windows.Forms.Label();
-            this.labelSearchLevelsSortOrder = new System.Windows.Forms.Label();
-            this.labelSearchLevelsPageNumber = new System.Windows.Forms.Label();
-            this.btnSearchLevels = new System.Windows.Forms.Button();
-            this.btnAddSearchResultsToPipeline = new System.Windows.Forms.Button();
-            this.dataGridViewLevelResults = new System.Windows.Forms.DataGridView();
-            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -87,14 +88,15 @@
             this.tabImportFromFile.SuspendLayout();
             this.tabImportById.SuspendLayout();
             this.tabImportBySearch.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericPage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLevelResults)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericPage)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.connDisconnBtn,
+            this.btnConnectMainDb,
+            this.btnConnectLevelsDb,
             this.infoBtn,
             this.exitBtn});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
@@ -103,14 +105,23 @@
             this.toolStrip.TabIndex = 0;
             this.toolStrip.Text = "toolStrip";
             // 
-            // connDisconnBtn
+            // btnConnectMainDb
             // 
-            this.connDisconnBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.connDisconnBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.connDisconnBtn.Name = "connDisconnBtn";
-            this.connDisconnBtn.Size = new System.Drawing.Size(56, 22);
-            this.connDisconnBtn.Text = "Connect";
-            this.connDisconnBtn.Click += new System.EventHandler(this.connDisconnBtn_Click);
+            this.btnConnectMainDb.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnConnectMainDb.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnConnectMainDb.Name = "btnConnectMainDb";
+            this.btnConnectMainDb.Size = new System.Drawing.Size(137, 22);
+            this.btnConnectMainDb.Text = "Connect Main Database";
+            this.btnConnectMainDb.Click += new System.EventHandler(this.btnAttachDb_Click);
+            // 
+            // btnConnectLevelsDb
+            // 
+            this.btnConnectLevelsDb.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnConnectLevelsDb.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnConnectLevelsDb.Name = "btnConnectLevelsDb";
+            this.btnConnectLevelsDb.Size = new System.Drawing.Size(142, 22);
+            this.btnConnectLevelsDb.Text = "Connect Levels Database";
+            this.btnConnectLevelsDb.Click += new System.EventHandler(this.btnAttachDb_Click);
             // 
             // infoBtn
             // 
@@ -169,7 +180,7 @@
             // 
             this.splitContainerSub.Panel2.Controls.Add(this.logTextBox);
             this.splitContainerSub.Size = new System.Drawing.Size(758, 656);
-            this.splitContainerSub.SplitterDistance = 485;
+            this.splitContainerSub.SplitterDistance = 484;
             this.splitContainerSub.TabIndex = 0;
             // 
             // tabControl
@@ -182,7 +193,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(756, 483);
+            this.tabControl.Size = new System.Drawing.Size(756, 482);
             this.tabControl.TabIndex = 0;
             // 
             // tabAssignUser
@@ -198,7 +209,7 @@
             this.tabAssignUser.Location = new System.Drawing.Point(4, 22);
             this.tabAssignUser.Name = "tabAssignUser";
             this.tabAssignUser.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAssignUser.Size = new System.Drawing.Size(748, 457);
+            this.tabAssignUser.Size = new System.Drawing.Size(748, 456);
             this.tabAssignUser.TabIndex = 0;
             this.tabAssignUser.Text = "Assign User";
             // 
@@ -210,7 +221,7 @@
             this.dataGridViewUserResuts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewUserResuts.Location = new System.Drawing.Point(10, 60);
             this.dataGridViewUserResuts.Name = "dataGridViewUserResuts";
-            this.dataGridViewUserResuts.Size = new System.Drawing.Size(732, 391);
+            this.dataGridViewUserResuts.Size = new System.Drawing.Size(732, 390);
             this.dataGridViewUserResuts.TabIndex = 6;
             // 
             // btnAssignUser
@@ -277,7 +288,7 @@
             this.tabImportFromFile.Location = new System.Drawing.Point(4, 22);
             this.tabImportFromFile.Name = "tabImportFromFile";
             this.tabImportFromFile.Padding = new System.Windows.Forms.Padding(3);
-            this.tabImportFromFile.Size = new System.Drawing.Size(748, 457);
+            this.tabImportFromFile.Size = new System.Drawing.Size(748, 456);
             this.tabImportFromFile.TabIndex = 1;
             this.tabImportFromFile.Text = "Import From File";
             // 
@@ -320,7 +331,7 @@
             this.tabImportById.Controls.Add(this.labelLevelId);
             this.tabImportById.Location = new System.Drawing.Point(4, 22);
             this.tabImportById.Name = "tabImportById";
-            this.tabImportById.Size = new System.Drawing.Size(748, 457);
+            this.tabImportById.Size = new System.Drawing.Size(748, 456);
             this.tabImportById.TabIndex = 2;
             this.tabImportById.Text = "Import By Id";
             // 
@@ -383,9 +394,85 @@
             this.tabImportBySearch.Controls.Add(this.textBoxLevelsSearchTerm);
             this.tabImportBySearch.Location = new System.Drawing.Point(4, 22);
             this.tabImportBySearch.Name = "tabImportBySearch";
-            this.tabImportBySearch.Size = new System.Drawing.Size(748, 457);
+            this.tabImportBySearch.Size = new System.Drawing.Size(748, 456);
             this.tabImportBySearch.TabIndex = 3;
             this.tabImportBySearch.Text = "Import By Search";
+            // 
+            // dataGridViewLevelResults
+            // 
+            this.dataGridViewLevelResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewLevelResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewLevelResults.Location = new System.Drawing.Point(11, 112);
+            this.dataGridViewLevelResults.Name = "dataGridViewLevelResults";
+            this.dataGridViewLevelResults.Size = new System.Drawing.Size(734, 342);
+            this.dataGridViewLevelResults.TabIndex = 12;
+            // 
+            // btnAddSearchResultsToPipeline
+            // 
+            this.btnAddSearchResultsToPipeline.Location = new System.Drawing.Point(117, 82);
+            this.btnAddSearchResultsToPipeline.Name = "btnAddSearchResultsToPipeline";
+            this.btnAddSearchResultsToPipeline.Size = new System.Drawing.Size(100, 23);
+            this.btnAddSearchResultsToPipeline.TabIndex = 11;
+            this.btnAddSearchResultsToPipeline.Text = "Add To Pipeline";
+            this.btnAddSearchResultsToPipeline.UseVisualStyleBackColor = true;
+            // 
+            // btnSearchLevels
+            // 
+            this.btnSearchLevels.Location = new System.Drawing.Point(11, 82);
+            this.btnSearchLevels.Name = "btnSearchLevels";
+            this.btnSearchLevels.Size = new System.Drawing.Size(100, 23);
+            this.btnSearchLevels.TabIndex = 10;
+            this.btnSearchLevels.Text = "Search";
+            this.btnSearchLevels.UseVisualStyleBackColor = true;
+            // 
+            // labelSearchLevelsPageNumber
+            // 
+            this.labelSearchLevelsPageNumber.AutoSize = true;
+            this.labelSearchLevelsPageNumber.Location = new System.Drawing.Point(8, 58);
+            this.labelSearchLevelsPageNumber.Name = "labelSearchLevelsPageNumber";
+            this.labelSearchLevelsPageNumber.Size = new System.Drawing.Size(32, 13);
+            this.labelSearchLevelsPageNumber.TabIndex = 9;
+            this.labelSearchLevelsPageNumber.Text = "Page";
+            // 
+            // labelSearchLevelsSortOrder
+            // 
+            this.labelSearchLevelsSortOrder.AutoSize = true;
+            this.labelSearchLevelsSortOrder.Location = new System.Drawing.Point(203, 33);
+            this.labelSearchLevelsSortOrder.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
+            this.labelSearchLevelsSortOrder.Name = "labelSearchLevelsSortOrder";
+            this.labelSearchLevelsSortOrder.Size = new System.Drawing.Size(55, 13);
+            this.labelSearchLevelsSortOrder.TabIndex = 8;
+            this.labelSearchLevelsSortOrder.Text = "Sort Order";
+            // 
+            // labelSearchLevelsSortBy
+            // 
+            this.labelSearchLevelsSortBy.AutoSize = true;
+            this.labelSearchLevelsSortBy.Location = new System.Drawing.Point(8, 32);
+            this.labelSearchLevelsSortBy.Name = "labelSearchLevelsSortBy";
+            this.labelSearchLevelsSortBy.Size = new System.Drawing.Size(41, 13);
+            this.labelSearchLevelsSortBy.TabIndex = 7;
+            this.labelSearchLevelsSortBy.Text = "Sort By";
+            // 
+            // labelSearchLevelsBy
+            // 
+            this.labelSearchLevelsBy.AutoSize = true;
+            this.labelSearchLevelsBy.Location = new System.Drawing.Point(203, 6);
+            this.labelSearchLevelsBy.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
+            this.labelSearchLevelsBy.Name = "labelSearchLevelsBy";
+            this.labelSearchLevelsBy.Size = new System.Drawing.Size(56, 13);
+            this.labelSearchLevelsBy.TabIndex = 6;
+            this.labelSearchLevelsBy.Text = "Search By";
+            // 
+            // labelSearchLevelsTerm
+            // 
+            this.labelSearchLevelsTerm.AutoSize = true;
+            this.labelSearchLevelsTerm.Location = new System.Drawing.Point(8, 6);
+            this.labelSearchLevelsTerm.Name = "labelSearchLevelsTerm";
+            this.labelSearchLevelsTerm.Size = new System.Drawing.Size(68, 13);
+            this.labelSearchLevelsTerm.TabIndex = 5;
+            this.labelSearchLevelsTerm.Text = "Search Term";
             // 
             // numericPage
             // 
@@ -439,6 +526,20 @@
             this.textBoxLevelsSearchTerm.Size = new System.Drawing.Size(100, 20);
             this.textBoxLevelsSearchTerm.TabIndex = 0;
             // 
+            // logTextBox
+            // 
+            this.logTextBox.BackColor = System.Drawing.Color.Black;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
+            this.logTextBox.Location = new System.Drawing.Point(0, 0);
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.logTextBox.Size = new System.Drawing.Size(756, 166);
+            this.logTextBox.TabIndex = 0;
+            this.logTextBox.Text = "";
+            // 
             // runBtn
             // 
             this.runBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -483,96 +584,6 @@
             this.pipelineLabel.TabIndex = 0;
             this.pipelineLabel.Text = "Pipeline Of Levels To Be Imported:";
             // 
-            // labelSearchLevelsTerm
-            // 
-            this.labelSearchLevelsTerm.AutoSize = true;
-            this.labelSearchLevelsTerm.Location = new System.Drawing.Point(8, 6);
-            this.labelSearchLevelsTerm.Name = "labelSearchLevelsTerm";
-            this.labelSearchLevelsTerm.Size = new System.Drawing.Size(68, 13);
-            this.labelSearchLevelsTerm.TabIndex = 5;
-            this.labelSearchLevelsTerm.Text = "Search Term";
-            // 
-            // labelSearchLevelsBy
-            // 
-            this.labelSearchLevelsBy.AutoSize = true;
-            this.labelSearchLevelsBy.Location = new System.Drawing.Point(203, 6);
-            this.labelSearchLevelsBy.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
-            this.labelSearchLevelsBy.Name = "labelSearchLevelsBy";
-            this.labelSearchLevelsBy.Size = new System.Drawing.Size(56, 13);
-            this.labelSearchLevelsBy.TabIndex = 6;
-            this.labelSearchLevelsBy.Text = "Search By";
-            // 
-            // labelSearchLevelsSortBy
-            // 
-            this.labelSearchLevelsSortBy.AutoSize = true;
-            this.labelSearchLevelsSortBy.Location = new System.Drawing.Point(8, 32);
-            this.labelSearchLevelsSortBy.Name = "labelSearchLevelsSortBy";
-            this.labelSearchLevelsSortBy.Size = new System.Drawing.Size(41, 13);
-            this.labelSearchLevelsSortBy.TabIndex = 7;
-            this.labelSearchLevelsSortBy.Text = "Sort By";
-            // 
-            // labelSearchLevelsSortOrder
-            // 
-            this.labelSearchLevelsSortOrder.AutoSize = true;
-            this.labelSearchLevelsSortOrder.Location = new System.Drawing.Point(203, 33);
-            this.labelSearchLevelsSortOrder.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
-            this.labelSearchLevelsSortOrder.Name = "labelSearchLevelsSortOrder";
-            this.labelSearchLevelsSortOrder.Size = new System.Drawing.Size(55, 13);
-            this.labelSearchLevelsSortOrder.TabIndex = 8;
-            this.labelSearchLevelsSortOrder.Text = "Sort Order";
-            // 
-            // labelSearchLevelsPageNumber
-            // 
-            this.labelSearchLevelsPageNumber.AutoSize = true;
-            this.labelSearchLevelsPageNumber.Location = new System.Drawing.Point(8, 58);
-            this.labelSearchLevelsPageNumber.Name = "labelSearchLevelsPageNumber";
-            this.labelSearchLevelsPageNumber.Size = new System.Drawing.Size(32, 13);
-            this.labelSearchLevelsPageNumber.TabIndex = 9;
-            this.labelSearchLevelsPageNumber.Text = "Page";
-            // 
-            // btnSearchLevels
-            // 
-            this.btnSearchLevels.Location = new System.Drawing.Point(11, 82);
-            this.btnSearchLevels.Name = "btnSearchLevels";
-            this.btnSearchLevels.Size = new System.Drawing.Size(100, 23);
-            this.btnSearchLevels.TabIndex = 10;
-            this.btnSearchLevels.Text = "Search";
-            this.btnSearchLevels.UseVisualStyleBackColor = true;
-            // 
-            // btnAddSearchResultsToPipeline
-            // 
-            this.btnAddSearchResultsToPipeline.Location = new System.Drawing.Point(117, 82);
-            this.btnAddSearchResultsToPipeline.Name = "btnAddSearchResultsToPipeline";
-            this.btnAddSearchResultsToPipeline.Size = new System.Drawing.Size(100, 23);
-            this.btnAddSearchResultsToPipeline.TabIndex = 11;
-            this.btnAddSearchResultsToPipeline.Text = "Add To Pipeline";
-            this.btnAddSearchResultsToPipeline.UseVisualStyleBackColor = true;
-            // 
-            // dataGridViewLevelResults
-            // 
-            this.dataGridViewLevelResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewLevelResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewLevelResults.Location = new System.Drawing.Point(11, 112);
-            this.dataGridViewLevelResults.Name = "dataGridViewLevelResults";
-            this.dataGridViewLevelResults.Size = new System.Drawing.Size(734, 342);
-            this.dataGridViewLevelResults.TabIndex = 12;
-            // 
-            // logTextBox
-            // 
-            this.logTextBox.BackColor = System.Drawing.Color.Black;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
-            this.logTextBox.Location = new System.Drawing.Point(0, 0);
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(756, 165);
-            this.logTextBox.TabIndex = 0;
-            this.logTextBox.Text = "";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -582,7 +593,7 @@
             this.Controls.Add(this.toolStrip);
             this.Name = "MainForm";
             this.Text = "PR2PS Level Importer";
-            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
@@ -604,8 +615,8 @@
             this.tabImportById.PerformLayout();
             this.tabImportBySearch.ResumeLayout(false);
             this.tabImportBySearch.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericPage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLevelResults)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericPage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -614,7 +625,7 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton connDisconnBtn;
+        private System.Windows.Forms.ToolStripButton btnConnectMainDb;
         private System.Windows.Forms.ToolStripButton infoBtn;
         private System.Windows.Forms.ToolStripButton exitBtn;
         private System.Windows.Forms.SplitContainer splitContainerMain;
@@ -657,6 +668,7 @@
         private System.Windows.Forms.Button btnSearchLevels;
         private System.Windows.Forms.DataGridView dataGridViewLevelResults;
         private CustomControls.DebugTextbox logTextBox;
+        private System.Windows.Forms.ToolStripButton btnConnectLevelsDb;
     }
 }
 

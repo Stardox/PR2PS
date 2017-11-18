@@ -1,5 +1,6 @@
 ﻿using PR2PS.DataAccess.Entities;
 using System;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
@@ -14,6 +15,8 @@ namespace PR2PS.DataAccess.MainDataAccess
         public DbSet<Message> Messages { get; set; }
 
         public MainContext(String connectionString) : base(connectionString) { }
+
+        public MainContext(DbConnection connection) : base(connection, true) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PR2PS.LevelImporter.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,12 +27,15 @@ namespace PR2PS.LevelImporter
             + "- Import By Search - Used to search and import live levels according to given criteria\n\n"
             + "4.) Click on Run Import Procedure to initiate the import process.";
 
+        private DatabaseConnector database;
+
         #endregion
 
         #region Constructor.
 
         public MainForm()
         {
+
             InitializeComponent();
         }
 
@@ -39,19 +43,25 @@ namespace PR2PS.LevelImporter
 
         #region Form event handlers.
 
-        private void MainForm_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             this.Log("Initializing...");
+
+            this.database = new DatabaseConnector();
 
             this.comboBoxSearchUserMode.SelectedIndex = 0;
             this.comboBoxSearchBy.SelectedIndex = 0;
             this.comboBoxSortBy.SelectedIndex = 0;
             this.comboBoxSortOrder.SelectedIndex = 0;
 
-            this.MainForm_Resize(sender, e);
+            this.btnConnectMainDb.Tag = AttachType.Main;
+            this.btnConnectLevelsDb.Tag = AttachType.Levels;
+
+            this.MainForm_Resize(null, null);
 
             this.Log("Ready.");
-
         }
 
         private void MainForm_Resize(Object sender, EventArgs e)
@@ -63,26 +73,78 @@ namespace PR2PS.LevelImporter
             }
         }
 
+        private void MainForm_FormClosing(Object sender, FormClosingEventArgs e)
+        {
+            this.Log("Closing and cleaning up...");
+
+            this.database.Dispose();
+        }
+
         #endregion
+
+        private void btnAttachDb_Click(Object sender, EventArgs e)
+        {
+            ToolStripButton btn = sender as ToolStripButton;
+            if (btn == null)
+            {
+                return;
+            }
+
+            AttachType? attachType = btn.Tag as AttachType?;
+            if (!attachType.HasValue)
+            {
+                return;
+            }
+
+            using (OpenFileDialog fileDialog = new OpenFileDialog())
+            {
+                fileDialog.Filter = "SQLite Database File |*.sqlite";
+
+                if (fileDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    Log(String.Format("Attempting to attach database file '{0}'.", fileDialog.FileName));
+
+                    try
+                    {
+                        this.database.Attach(fileDialog.FileName, attachType.Value);
+                        btn.Enabled = false;
+
+                        Log("Database attached successfully!", Color.LimeGreen);
+                    }
+                    catch (DbValidationException ex)
+                    {
+                        Log(String.Concat("Attached database is invalid: ", ex.Message), Color.Red);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(String.Concat("Error occured during while attaching database:\n", ex), Color.Red);
+                    }
+                }
+            }
+        }
+
+        private void infoBtn_Click(Object sender, EventArgs e)
+        {
+            MessageBox.Show(this, INFO, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void exitBtn_Click(Object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        #region Logging methods.
 
         private void Log(String message)
         {
             this.logTextBox.Write(message);
         }
 
-        private void connDisconnBtn_Click(object sender, EventArgs e)
+        private void Log(String message, Color color)
         {
-
+            this.logTextBox.Write(message, color);
         }
 
-        private void infoBtn_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(this, INFO, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void exitBtn_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        #endregion
     }
 }
