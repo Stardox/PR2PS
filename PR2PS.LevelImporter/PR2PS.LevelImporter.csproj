@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\DatabaseConnector.cs" />
+    <Compile Include="Core\Enums.cs" />
+    <Compile Include="Core\Exceptions.cs" />
     <Compile Include="CustomControls\DebugTextBox.cs">
       <SubType>Component</SubType>
     </Compile>

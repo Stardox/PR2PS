@@ -10,21 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using PR2PS.DataAccess.Entities;
 using PR2PS.LevelImporter.Models;
+using static PR2PS.LevelImporter.Core.Enums;
 
 namespace PR2PS.LevelImporter.Core
 {
-    public enum AttachType
-    {
-        Main,
-        Levels
-    }
-
-    public enum UserSearchMode
-    {
-        UserName,
-        Id
-    }
-
     public class DatabaseConnector : IDisposable
     {
         #region Fields.
@@ -201,10 +190,5 @@ namespace PR2PS.LevelImporter.Core
                 this.levelsCtx = null;
             }
         }
-    }
-
-    public class DbValidationException : Exception
-    {
-        public DbValidationException(String message) : base(message) { }
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static PR2PS.LevelImporter.Core.Enums;
 
 namespace PR2PS.LevelImporter
 {
