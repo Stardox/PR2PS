@@ -1,4 +1,5 @@
 ﻿using PR2PS.LevelImporter.Core;
+using PR2PS.LevelImporter.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +29,7 @@ namespace PR2PS.LevelImporter
             + "4.) Click on Run Import Procedure to initiate the import process.";
 
         private DatabaseConnector database;
+        private UserModel selectedUser;
 
         #endregion
 
@@ -146,5 +148,48 @@ namespace PR2PS.LevelImporter
         }
 
         #endregion
+
+        private void btnSearchUser_Click(Object sender, EventArgs e)
+        {
+            try
+            {
+                String term = this.textBoxSearchUserTerm.Text;
+                if (String.IsNullOrEmpty(term))
+                {
+                    Log("Please enter search term into the text box.", Color.Orange);
+                    return;
+                }
+
+                if (!this.database.IsMainDbAttached)
+                {
+                    Log("You need to attach the main database firstly.", Color.Orange);
+                    return;
+                }
+
+                Log("Searching...");
+
+                IEnumerable<UserModel> results = this.database.FindUsers(term, (UserSearchMode)this.comboBoxSearchUserMode.SelectedIndex);
+
+                Log("Search completed.");
+
+                this.dataGridViewUserResuts.DataSource = results;
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured during while searching database:\n", ex), Color.Red);
+            }
+        }
+
+        private void btnAssignUser_Click(Object sender, EventArgs e)
+        {
+            UserModel selected = (UserModel)this.dataGridViewUserResuts.CurrentRow?.DataBoundItem;
+            if (selected == null)
+            {
+                Log("You have to select user from the grid below.", Color.Orange);
+                return;
+            }
+
+            this.selectedUser = selected;
+        }
     }
 }

@@ -68,11 +68,11 @@
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.comboBoxSearchBy = new System.Windows.Forms.ComboBox();
             this.textBoxLevelsSearchTerm = new System.Windows.Forms.TextBox();
-            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.runBtn = new System.Windows.Forms.Button();
             this.delFromPipelineBtn = new System.Windows.Forms.Button();
             this.pipelineListBox = new System.Windows.Forms.ListBox();
             this.pipelineLabel = new System.Windows.Forms.Label();
+            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -215,12 +215,17 @@
             // 
             // dataGridViewUserResuts
             // 
+            this.dataGridViewUserResuts.AllowUserToAddRows = false;
+            this.dataGridViewUserResuts.AllowUserToDeleteRows = false;
+            this.dataGridViewUserResuts.AllowUserToResizeRows = false;
             this.dataGridViewUserResuts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewUserResuts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewUserResuts.Location = new System.Drawing.Point(10, 60);
+            this.dataGridViewUserResuts.MultiSelect = false;
             this.dataGridViewUserResuts.Name = "dataGridViewUserResuts";
+            this.dataGridViewUserResuts.ReadOnly = true;
             this.dataGridViewUserResuts.Size = new System.Drawing.Size(732, 390);
             this.dataGridViewUserResuts.TabIndex = 6;
             // 
@@ -232,6 +237,7 @@
             this.btnAssignUser.TabIndex = 5;
             this.btnAssignUser.Text = "Assign";
             this.btnAssignUser.UseVisualStyleBackColor = true;
+            this.btnAssignUser.Click += new System.EventHandler(this.btnAssignUser_Click);
             // 
             // btnSearchUser
             // 
@@ -241,6 +247,7 @@
             this.btnSearchUser.TabIndex = 4;
             this.btnSearchUser.Text = "Search";
             this.btnSearchUser.UseVisualStyleBackColor = true;
+            this.btnSearchUser.Click += new System.EventHandler(this.btnSearchUser_Click);
             // 
             // comboBoxSearchUserMode
             // 
@@ -526,20 +533,6 @@
             this.textBoxLevelsSearchTerm.Size = new System.Drawing.Size(100, 20);
             this.textBoxLevelsSearchTerm.TabIndex = 0;
             // 
-            // logTextBox
-            // 
-            this.logTextBox.BackColor = System.Drawing.Color.Black;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
-            this.logTextBox.Location = new System.Drawing.Point(0, 0);
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(756, 166);
-            this.logTextBox.TabIndex = 0;
-            this.logTextBox.Text = "";
-            // 
             // runBtn
             // 
             this.runBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -583,6 +576,20 @@
             this.pipelineLabel.Size = new System.Drawing.Size(171, 13);
             this.pipelineLabel.TabIndex = 0;
             this.pipelineLabel.Text = "Pipeline Of Levels To Be Imported:";
+            // 
+            // logTextBox
+            // 
+            this.logTextBox.BackColor = System.Drawing.Color.Black;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
+            this.logTextBox.Location = new System.Drawing.Point(0, 0);
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.logTextBox.Size = new System.Drawing.Size(756, 166);
+            this.logTextBox.TabIndex = 0;
+            this.logTextBox.Text = "";
             // 
             // MainForm
             // 
