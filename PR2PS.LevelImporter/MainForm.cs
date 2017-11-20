@@ -62,6 +62,9 @@ namespace PR2PS.LevelImporter
             this.btnConnectMainDb.Tag = AttachType.Main;
             this.btnConnectLevelsDb.Tag = AttachType.Levels;
 
+            this.listBoxLocalLevels.DataSource = new List<String>();
+            this.pipelineListBox.DataSource = new List<LevelModel>();
+
             this.MainForm_Resize(null, null);
 
             this.Log("Ready.");
@@ -84,6 +87,8 @@ namespace PR2PS.LevelImporter
         }
 
         #endregion
+
+        #region Menu buttons handlers.
 
         private void btnAttachDb_Click(Object sender, EventArgs e)
         {
@@ -120,7 +125,7 @@ namespace PR2PS.LevelImporter
                     }
                     catch (Exception ex)
                     {
-                        Log(String.Concat("Error occured during while attaching database:\n", ex), Color.Red);
+                        Log(String.Concat("Error occured while attaching database:\n", ex), Color.Red);
                     }
                 }
             }
@@ -136,19 +141,9 @@ namespace PR2PS.LevelImporter
             Application.Exit();
         }
 
-        #region Logging methods.
-
-        private void Log(String message)
-        {
-            this.logTextBox.Write(message);
-        }
-
-        private void Log(String message, Color color)
-        {
-            this.logTextBox.Write(message, color);
-        }
-
         #endregion
+
+        #region Search user tab handlers.
 
         private void btnSearchUser_Click(Object sender, EventArgs e)
         {
@@ -177,20 +172,123 @@ namespace PR2PS.LevelImporter
             }
             catch (Exception ex)
             {
-                Log(String.Concat("Error occured during while searching database:\n", ex), Color.Red);
+                Log(String.Concat("Error occured while searching database for users:\n", ex), Color.Red);
             }
         }
 
         private void btnAssignUser_Click(Object sender, EventArgs e)
         {
-            UserModel selected = (UserModel)this.dataGridViewUserResuts.CurrentRow?.DataBoundItem;
-            if (selected == null)
+            try
             {
-                Log("You have to select user from the grid below.", Color.Orange);
+                UserModel selected = (UserModel)this.dataGridViewUserResuts.CurrentRow?.DataBoundItem;
+                if (selected == null)
+                {
+                    Log("You have to select user from the grid below.", Color.Orange);
+                    return;
+                }
+
+                this.selectedUser = selected;
+
+                Log(String.Format("User {0} selected.", selected.ToString()));
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured while selecting user:\n", ex), Color.Red);
+            }
+        }
+
+        #endregion
+
+        #region Import from file tab handlers.
+
+        private void btnBrowse_Click(Object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog fileDialog = new OpenFileDialog { Multiselect = true })
+                {
+                    fileDialog.Filter = "All Files |*.*";
+
+                    if (fileDialog.ShowDialog(this) == DialogResult.OK)
+                    {
+                        List<String> dataSource = (List<String>)this.listBoxLocalLevels.DataSource;
+                        dataSource.AddRange(fileDialog.FileNames);
+
+                        this.RebindListBoxDataSource(this.listBoxLocalLevels, dataSource, null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured while loading levels:\n", ex), Color.Red);
+            }
+        }
+
+        private void btnAddLocalToPipeline_Click(Object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.selectedUser == null)
+                {
+                    Log("You have to select the user who will become the owner of selected levels.", Color.Orange);
+                    return;
+                }
+
+                String[] selected = this.listBoxLocalLevels.SelectedItems.Cast<String>().ToArray();
+                if (!selected.Any())
+                {
+                    Log("You have to select level(s) from the list below.", Color.Orange);
+                    return;
+                }
+
+                List<String> dataSource = (List<String>)this.listBoxLocalLevels.DataSource;
+                dataSource = dataSource.Except(selected).ToList();
+                this.RebindListBoxDataSource(this.listBoxLocalLevels, dataSource, null);
+
+                this.AddToPipeline(selected.Select(f => new LevelModel(this.selectedUser, f)));
+
+                Log(String.Format("Successfully added {0} item(s) to the pipeline.", selected.Length));
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured during while adding levels to the pipeline:\n", ex), Color.Red);
+            }
+        }
+
+        #endregion
+
+        private void AddToPipeline(IEnumerable<LevelModel> levels)
+        {
+            if (levels == null || !levels.Any())
+            {
                 return;
             }
 
-            this.selectedUser = selected;
+            List<LevelModel> dataSource = (List<LevelModel>)this.pipelineListBox.DataSource;
+            dataSource.AddRange(levels);
+
+            this.RebindListBoxDataSource(this.pipelineListBox, dataSource, "Render");
         }
+
+        private void RebindListBoxDataSource(ListBox listBox, Object dataSource, String displayMember)
+        {
+            listBox.DataSource = null; // We have to do this for some strange reason...
+            listBox.DataSource = dataSource;
+            listBox.DisplayMember = displayMember;
+        }
+
+        #region Logging methods.
+
+        private void Log(String message)
+        {
+            this.logTextBox.Write(message);
+        }
+
+        private void Log(String message, Color color)
+        {
+            this.logTextBox.Write(message, color);
+        }
+
+        #endregion
     }
 }

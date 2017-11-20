@@ -13,5 +13,11 @@
             UserName,
             Id
         }
+
+        public enum SourceType
+        {
+            Local,
+            Remote
+        }
     }
 }

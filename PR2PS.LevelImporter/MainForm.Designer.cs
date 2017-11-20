@@ -307,6 +307,7 @@
             this.listBoxLocalLevels.FormattingEnabled = true;
             this.listBoxLocalLevels.Location = new System.Drawing.Point(8, 37);
             this.listBoxLocalLevels.Name = "listBoxLocalLevels";
+            this.listBoxLocalLevels.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxLocalLevels.Size = new System.Drawing.Size(734, 394);
             this.listBoxLocalLevels.TabIndex = 2;
             // 
@@ -318,6 +319,7 @@
             this.btnAddLocalToPipeline.TabIndex = 1;
             this.btnAddLocalToPipeline.Text = "Add To Pipeline";
             this.btnAddLocalToPipeline.UseVisualStyleBackColor = true;
+            this.btnAddLocalToPipeline.Click += new System.EventHandler(this.btnAddLocalToPipeline_Click);
             // 
             // btnBrowse
             // 
@@ -327,6 +329,7 @@
             this.btnBrowse.TabIndex = 0;
             this.btnBrowse.Text = "Browse";
             this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // tabImportById
             // 
