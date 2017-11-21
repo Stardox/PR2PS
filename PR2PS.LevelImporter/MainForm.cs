@@ -257,6 +257,35 @@ namespace PR2PS.LevelImporter
 
         #endregion
 
+        #region Import by id and version tab handlers.
+
+        private void btnAddExactToPipeLine_Click(Object sender, EventArgs e)
+        {
+            if (this.selectedUser == null)
+            {
+                Log("You have to select the user who will become the owner of given level.", Color.Orange);
+                return;
+            }
+
+            if (!Int64.TryParse(this.textBoxLevelId.Text, out Int64 dummyLevelId))
+            {
+                Log("Level id needs to be a number.", Color.Orange);
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(this.textBoxLevelVersion.Text) && !Int64.TryParse(this.textBoxLevelVersion.Text, out Int64 dummyVersion))
+            {
+                Log("Version (if specified) needs to be a number.", Color.Orange);
+                return;
+            }
+
+            this.AddToPipeline(new[] { new LevelModel(this.selectedUser, this.textBoxLevelId.Text, this.textBoxLevelVersion.Text) });
+
+            Log("Successfully added 1 item to the pipeline.");
+        }
+        
+        #endregion
+
         private void AddToPipeline(IEnumerable<LevelModel> levels)
         {
             if (levels == null || !levels.Any())
