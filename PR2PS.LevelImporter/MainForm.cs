@@ -353,6 +353,34 @@ namespace PR2PS.LevelImporter
 
         #endregion
 
+        private void delFromPipelineBtn_Click(Object sender, EventArgs e)
+        {
+            try
+            {
+                LevelModel[] selected = this.pipelineListBox.SelectedItems.Cast<LevelModel>().ToArray();
+                if (!selected.Any())
+                {
+                    Log("You have to select level(s) from the pipeline.", Color.Orange);
+                    return;
+                }
+
+                List<LevelModel> dataSource = (List<LevelModel>)this.pipelineListBox.DataSource;
+                dataSource = dataSource.Except(selected).ToList();
+                this.RebindListBoxDataSource(this.pipelineListBox, dataSource, "Render");
+
+                Log(String.Format("Successfully removed {0} item(s) from the pipeline.", selected.Length));
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured while removing levels from the pipeline:\n", ex), Color.Red);
+            }
+        }
+
+        private void runBtn_Click(Object sender, EventArgs e)
+        {
+
+        }
+
         private void AddToPipeline(IEnumerable<LevelModel> levels)
         {
             if (levels == null || !levels.Any())

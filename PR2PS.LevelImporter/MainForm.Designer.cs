@@ -559,6 +559,7 @@
             this.runBtn.TabIndex = 3;
             this.runBtn.Text = "Run Import Procedure";
             this.runBtn.UseVisualStyleBackColor = true;
+            this.runBtn.Click += new System.EventHandler(this.runBtn_Click);
             // 
             // delFromPipelineBtn
             // 
@@ -570,6 +571,7 @@
             this.delFromPipelineBtn.TabIndex = 2;
             this.delFromPipelineBtn.Text = "Delete Selected Items";
             this.delFromPipelineBtn.UseVisualStyleBackColor = true;
+            this.delFromPipelineBtn.Click += new System.EventHandler(this.delFromPipelineBtn_Click);
             // 
             // pipelineListBox
             // 
@@ -579,6 +581,7 @@
             this.pipelineListBox.FormattingEnabled = true;
             this.pipelineListBox.Location = new System.Drawing.Point(5, 21);
             this.pipelineListBox.Name = "pipelineListBox";
+            this.pipelineListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.pipelineListBox.Size = new System.Drawing.Size(204, 537);
             this.pipelineListBox.TabIndex = 1;
             // 
