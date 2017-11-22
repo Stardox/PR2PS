@@ -40,6 +40,11 @@ namespace PR2PS.Common.Extensions
         {
             return WebUtility.UrlEncode(data);
         }
+
+        public static String ToUrlDecodedString(this String data)
+        {
+            return WebUtility.UrlDecode(data);
+        }
     }
 
     // What about more appropriate name?

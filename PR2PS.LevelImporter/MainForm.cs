@@ -31,6 +31,7 @@ namespace PR2PS.LevelImporter
 
         private DatabaseConnector database;
         private UserModel selectedUser;
+        private LevelSearcher levelSearcher;
 
         #endregion
 
@@ -38,7 +39,6 @@ namespace PR2PS.LevelImporter
 
         public MainForm()
         {
-
             InitializeComponent();
         }
 
@@ -53,6 +53,7 @@ namespace PR2PS.LevelImporter
             this.Log("Initializing...");
 
             this.database = new DatabaseConnector();
+            this.levelSearcher = new LevelSearcher();
 
             this.comboBoxSearchUserMode.SelectedIndex = 0;
             this.comboBoxSearchBy.SelectedIndex = 0;
@@ -251,7 +252,7 @@ namespace PR2PS.LevelImporter
             }
             catch (Exception ex)
             {
-                Log(String.Concat("Error occured during while adding levels to the pipeline:\n", ex), Color.Red);
+                Log(String.Concat("Error occured while adding levels to the pipeline:\n", ex), Color.Red);
             }
         }
 
@@ -283,8 +284,48 @@ namespace PR2PS.LevelImporter
 
             Log("Successfully added 1 item to the pipeline.");
         }
-        
+
         #endregion
+
+        private async void btnSearchLevels_Click(Object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.textBoxLevelsSearchTerm.TextLength < 1)
+                {
+                    Log("Search term needs to be at least 1 character.", Color.Orange);
+                    return;
+                }
+
+                if (this.levelSearcher.IsBusy)
+                {
+                    Log("Search is already in progress.", Color.Orange);
+                    return;
+                }
+
+                Log("Searching, please wait...");
+
+                List<LevelResult> results = await this.levelSearcher.DoSearch(
+                    this.textBoxLevelsSearchTerm.Text,
+                    this.comboBoxSearchBy.SelectedItem.ToString(),
+                    this.comboBoxSortBy.SelectedItem.ToString(),
+                    this.comboBoxSortOrder.SelectedItem.ToString(),
+                    this.numericPage.Value.ToString());
+
+                this.dataGridViewLevelResults.DataSource = results;
+
+                Log("Search completed.");
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured while performing search:\n", ex), Color.Red);
+            }
+        }
+
+        private void btnAddSearchResultsToPipeline_Click(Object sender, EventArgs e)
+        {
+            Log("Not implemented.", Color.Orange);
+        }
 
         private void AddToPipeline(IEnumerable<LevelModel> levels)
         {

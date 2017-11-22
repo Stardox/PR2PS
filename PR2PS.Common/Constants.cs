@@ -205,4 +205,20 @@ namespace PR2PS.Common.Constants
         public const String GAME_MODE = "gameMode";
         public const String DATA = "data";
     }
+
+    public static class LevelListKeys
+    {
+        public const String LEVEL_ID = "levelID";
+        public const String VERSION = "version";
+        public const String TITLE = "title";
+        public const String PLAY_COUNT = "playCount";
+        public const String MIN_LEVEL = "minLevel";
+        public const String NOTE = "note";
+        public const String USERNAME = "userName";
+        public const String GROUP = "group";
+        public const String LIVE = "live";
+        public const String PASS = "pass";
+        public const String TYPE = "type";
+        public const String HASH = "hash";
+    }
 }

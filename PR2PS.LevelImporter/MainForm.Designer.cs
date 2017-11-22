@@ -68,11 +68,11 @@
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.comboBoxSearchBy = new System.Windows.Forms.ComboBox();
             this.textBoxLevelsSearchTerm = new System.Windows.Forms.TextBox();
-            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.runBtn = new System.Windows.Forms.Button();
             this.delFromPipelineBtn = new System.Windows.Forms.Button();
             this.pipelineListBox = new System.Windows.Forms.ListBox();
             this.pipelineLabel = new System.Windows.Forms.Label();
+            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -411,12 +411,17 @@
             // 
             // dataGridViewLevelResults
             // 
+            this.dataGridViewLevelResults.AllowUserToAddRows = false;
+            this.dataGridViewLevelResults.AllowUserToDeleteRows = false;
+            this.dataGridViewLevelResults.AllowUserToResizeRows = false;
             this.dataGridViewLevelResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewLevelResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewLevelResults.Location = new System.Drawing.Point(11, 112);
+            this.dataGridViewLevelResults.MultiSelect = false;
             this.dataGridViewLevelResults.Name = "dataGridViewLevelResults";
+            this.dataGridViewLevelResults.ReadOnly = true;
             this.dataGridViewLevelResults.Size = new System.Drawing.Size(734, 342);
             this.dataGridViewLevelResults.TabIndex = 12;
             // 
@@ -428,6 +433,7 @@
             this.btnAddSearchResultsToPipeline.TabIndex = 11;
             this.btnAddSearchResultsToPipeline.Text = "Add To Pipeline";
             this.btnAddSearchResultsToPipeline.UseVisualStyleBackColor = true;
+            this.btnAddSearchResultsToPipeline.Click += new System.EventHandler(this.btnAddSearchResultsToPipeline_Click);
             // 
             // btnSearchLevels
             // 
@@ -437,6 +443,7 @@
             this.btnSearchLevels.TabIndex = 10;
             this.btnSearchLevels.Text = "Search";
             this.btnSearchLevels.UseVisualStyleBackColor = true;
+            this.btnSearchLevels.Click += new System.EventHandler(this.btnSearchLevels_Click);
             // 
             // labelSearchLevelsPageNumber
             // 
@@ -491,14 +498,19 @@
             this.numericPage.Name = "numericPage";
             this.numericPage.Size = new System.Drawing.Size(100, 20);
             this.numericPage.TabIndex = 4;
+            this.numericPage.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // comboBoxSortOrder
             // 
             this.comboBoxSortOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSortOrder.FormattingEnabled = true;
             this.comboBoxSortOrder.Items.AddRange(new object[] {
-            "Descending",
-            "Ascending"});
+            "Desc",
+            "Asc"});
             this.comboBoxSortOrder.Location = new System.Drawing.Point(265, 30);
             this.comboBoxSortOrder.Name = "comboBoxSortOrder";
             this.comboBoxSortOrder.Size = new System.Drawing.Size(100, 21);
@@ -523,8 +535,8 @@
             this.comboBoxSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSearchBy.FormattingEnabled = true;
             this.comboBoxSearchBy.Items.AddRange(new object[] {
-            "User Name",
-            "Course Line"});
+            "User",
+            "Title"});
             this.comboBoxSearchBy.Location = new System.Drawing.Point(265, 3);
             this.comboBoxSearchBy.Name = "comboBoxSearchBy";
             this.comboBoxSearchBy.Size = new System.Drawing.Size(100, 21);
@@ -536,20 +548,6 @@
             this.textBoxLevelsSearchTerm.Name = "textBoxLevelsSearchTerm";
             this.textBoxLevelsSearchTerm.Size = new System.Drawing.Size(100, 20);
             this.textBoxLevelsSearchTerm.TabIndex = 0;
-            // 
-            // logTextBox
-            // 
-            this.logTextBox.BackColor = System.Drawing.Color.Black;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
-            this.logTextBox.Location = new System.Drawing.Point(0, 0);
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(756, 166);
-            this.logTextBox.TabIndex = 0;
-            this.logTextBox.Text = "";
             // 
             // runBtn
             // 
@@ -594,6 +592,20 @@
             this.pipelineLabel.Size = new System.Drawing.Size(171, 13);
             this.pipelineLabel.TabIndex = 0;
             this.pipelineLabel.Text = "Pipeline Of Levels To Be Imported:";
+            // 
+            // logTextBox
+            // 
+            this.logTextBox.BackColor = System.Drawing.Color.Black;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
+            this.logTextBox.Location = new System.Drawing.Point(0, 0);
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.logTextBox.Size = new System.Drawing.Size(756, 166);
+            this.logTextBox.TabIndex = 0;
+            this.logTextBox.Text = "";
             // 
             // MainForm
             // 
