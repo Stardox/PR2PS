@@ -287,6 +287,8 @@ namespace PR2PS.LevelImporter
 
         #endregion
 
+        #region Import by search tab hanlders.
+
         private async void btnSearchLevels_Click(Object sender, EventArgs e)
         {
             try
@@ -324,8 +326,32 @@ namespace PR2PS.LevelImporter
 
         private void btnAddSearchResultsToPipeline_Click(Object sender, EventArgs e)
         {
-            Log("Not implemented.", Color.Orange);
+            try
+            {
+                if (this.selectedUser == null)
+                {
+                    Log("You have to select the user who will become the owner of given level.", Color.Orange);
+                    return;
+                }
+
+                LevelResult selected = (LevelResult)this.dataGridViewLevelResults.CurrentRow?.DataBoundItem;
+                if (selected == null)
+                {
+                    Log("You have to select level from the grid below.", Color.Orange);
+                    return;
+                }
+
+                this.AddToPipeline(new[] { new LevelModel(this.selectedUser, selected.LevelId, selected.Version) });
+
+                Log("Successfully added 1 item to the pipeline.");
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured while adding item to pipeline:\n", ex), Color.Red);
+            }
         }
+
+        #endregion
 
         private void AddToPipeline(IEnumerable<LevelModel> levels)
         {
