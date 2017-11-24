@@ -85,6 +85,7 @@ namespace PR2PS.LevelImporter
             this.Log("Closing and cleaning up...");
 
             this.database.Dispose();
+            this.levelSearcher.Dispose();
         }
 
         #endregion

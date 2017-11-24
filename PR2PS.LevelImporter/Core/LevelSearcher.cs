@@ -11,9 +11,16 @@ using System.Threading.Tasks;
 
 namespace PR2PS.LevelImporter.Core
 {
-    public class LevelSearcher
+    public class LevelSearcher : IDisposable
     {
-        public Boolean IsBusy { get; set; }
+        private WebClient downloader;
+
+        public Boolean IsBusy { get; private set; }
+
+        public LevelSearcher()
+        {
+            this.downloader = new WebClient();
+        }
 
         public async Task<List<LevelResult>> DoSearch(String term, String mode, String order, String direction, String page)
         {
@@ -21,23 +28,20 @@ namespace PR2PS.LevelImporter.Core
             {
                 this.IsBusy = true;
 
-                using (WebClient downloader = new WebClient())
+                NameValueCollection data = new NameValueCollection
                 {
-                    NameValueCollection data = new NameValueCollection
-                    {
-                        { "search_str", term },
-                        { "mode", mode.ToLower() },
-                        { "order", order.ToLower() },
-                        { "dir", direction.ToLower() },
-                        { "page", page }
-                    };
+                    { "search_str", term },
+                    { "mode", mode.ToLower() },
+                    { "order", order.ToLower() },
+                    { "dir", direction.ToLower() },
+                    { "page", page }
+                };
 
-                    Byte[] response = await downloader.UploadValuesTaskAsync("http://pr2hub.com/search_levels.php", data);
-                    String result = Encoding.UTF8.GetString(response);
-                    List<LevelResult> results = this.Parse(result);
+                Byte[] response = await this.downloader.UploadValuesTaskAsync("http://pr2hub.com/search_levels.php", data);
+                String result = Encoding.UTF8.GetString(response);
+                List<LevelResult> results = this.Parse(result);
 
-                    return results;
-                }
+                return results;
             }
             finally
             {
@@ -96,6 +100,14 @@ namespace PR2PS.LevelImporter.Core
                 case "o": return "Objective";
                 case "e": return "Egg";
                 default: return "Unknown";
+            }
+        }
+
+        public void Dispose()
+        {
+            if (this.downloader != null)
+            {
+                this.downloader.Dispose();
             }
         }
     }
