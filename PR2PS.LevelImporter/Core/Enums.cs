@@ -19,5 +19,12 @@
             Local,
             Remote
         }
+
+        public enum ProgressType
+        {
+            Info,
+            Warning,
+            Error
+        }
     }
 }

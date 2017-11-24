@@ -1,13 +1,11 @@
-﻿using PR2PS.LevelImporter.Core;
+﻿using PR2PS.DataAccess.Entities;
+using PR2PS.LevelImporter.Core;
 using PR2PS.LevelImporter.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static PR2PS.LevelImporter.Core.Enums;
 
@@ -32,6 +30,8 @@ namespace PR2PS.LevelImporter
         private DatabaseConnector database;
         private UserModel selectedUser;
         private LevelSearcher levelSearcher;
+        private LevelConvertor levelConvertor;
+        private Boolean preventClosing;
 
         #endregion
 
@@ -54,6 +54,7 @@ namespace PR2PS.LevelImporter
 
             this.database = new DatabaseConnector();
             this.levelSearcher = new LevelSearcher();
+            this.levelConvertor = new LevelConvertor();
 
             this.comboBoxSearchUserMode.SelectedIndex = 0;
             this.comboBoxSearchBy.SelectedIndex = 0;
@@ -82,10 +83,18 @@ namespace PR2PS.LevelImporter
 
         private void MainForm_FormClosing(Object sender, FormClosingEventArgs e)
         {
+            if (this.preventClosing && e.CloseReason == CloseReason.UserClosing)
+            {
+                this.Log("Please wait until the import procedure completes.", Color.Orange);
+                e.Cancel = true;
+                return;
+            }
+
             this.Log("Closing and cleaning up...");
 
             this.database.Dispose();
             this.levelSearcher.Dispose();
+            this.levelConvertor.Dispose();
         }
 
         #endregion
@@ -354,6 +363,8 @@ namespace PR2PS.LevelImporter
 
         #endregion
 
+        #region Pipeline handlers.
+
         private void delFromPipelineBtn_Click(Object sender, EventArgs e)
         {
             try
@@ -362,6 +373,12 @@ namespace PR2PS.LevelImporter
                 if (!selected.Any())
                 {
                     Log("You have to select level(s) from the pipeline.", Color.Orange);
+                    return;
+                }
+
+                if (this.preventClosing)
+                {
+                    Log("It is not possible to delete level(s) from the pipeline at the moment.", Color.Orange);
                     return;
                 }
 
@@ -377,10 +394,88 @@ namespace PR2PS.LevelImporter
             }
         }
 
-        private void runBtn_Click(Object sender, EventArgs e)
+        private async void runBtn_Click(Object sender, EventArgs e)
         {
+            try
+            {
+                if (!this.database.IsLevelsDbAttached)
+                {
+                    Log("You need to attach the levels database firstly.", Color.Orange);
+                    return;
+                }
 
+                List<LevelModel> dataSource = (List<LevelModel>)this.pipelineListBox.DataSource;
+                if (!dataSource.Any())
+                {
+                    Log("There are no levels in the pipeline to import.", Color.Orange);
+                    return;
+                }
+
+                Log("Initiating import procedure...");
+
+                this.preventClosing = true;
+                this.ToggleState(false);
+
+                List<LevelModel> failed = new List<LevelModel>();
+
+                Action<ImportProgress> progressHandler = (p =>
+                {
+                    if (p.ProgressType == ProgressType.Info)
+                    {
+                        Log(p.Message);
+                    }
+                    else
+                    {
+                        failed.Add(p.LevelModel);
+                        Log(p.Message, p.ProgressType == ProgressType.Warning ? Color.Orange : Color.Red);
+                    }
+                });
+
+                // Short story here. Initially I wanted to take advantage of the IProgress interface to nicely report progress
+                // from the async method. The problem is that due to synchronization context, the reported progress was being
+                // delayed. Therefore, I am passing the action.
+
+                List<Level> levels = await this.levelConvertor.GetAndConvert(dataSource, progressHandler);
+
+                if (levels.Count == dataSource.Count)
+                {
+                    Log(String.Format("Successfully materialized all {0} levels!", levels.Count));
+                }
+                else
+                {
+                    Log(String.Format("Materialized {0} levels out of {1}.", levels.Count, dataSource.Count), Color.Orange);
+                }
+
+                if (levels.Any())
+                {
+                    Log("Proceeding with importing levels to the database...");
+
+                    await this.database.ImportLevels(levels);
+
+                    this.RebindListBoxDataSource(this.pipelineListBox, failed, "Render");
+
+                    Log(String.Format("Successfully imported {0} levels into database!", levels.Count), Color.LimeGreen);
+                }
+                else
+                {
+                    Log("Import procedure has finished. No levels were imported.", Color.Orange);
+                }
+
+                this.ToggleState(true);
+            }
+            catch (Exception ex)
+            {
+                Log(String.Concat("Error occured while importing levels:\n", ex), Color.Red);
+            }
+            finally
+            {
+                this.preventClosing = false;
+            }
         }
+
+        #endregion
+
+        #region Helpers.
 
         private void AddToPipeline(IEnumerable<LevelModel> levels)
         {
@@ -401,6 +496,18 @@ namespace PR2PS.LevelImporter
             listBox.DataSource = dataSource;
             listBox.DisplayMember = displayMember;
         }
+
+        private void ToggleState(Boolean enabled)
+        {
+            this.exitBtn.Enabled = enabled;
+            this.tabControl.Enabled = enabled;
+
+            this.pipelineListBox.Enabled = enabled;
+            this.delFromPipelineBtn.Enabled = enabled;
+            this.runBtn.Enabled = enabled;
+        }
+
+        #endregion
 
         #region Logging methods.
 

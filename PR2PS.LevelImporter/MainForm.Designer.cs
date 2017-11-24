@@ -68,11 +68,11 @@
             this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
             this.comboBoxSearchBy = new System.Windows.Forms.ComboBox();
             this.textBoxLevelsSearchTerm = new System.Windows.Forms.TextBox();
+            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.runBtn = new System.Windows.Forms.Button();
             this.delFromPipelineBtn = new System.Windows.Forms.Button();
             this.pipelineListBox = new System.Windows.Forms.ListBox();
             this.pipelineLabel = new System.Windows.Forms.Label();
-            this.logTextBox = new PR2PS.LevelImporter.CustomControls.DebugTextbox();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -549,6 +549,20 @@
             this.textBoxLevelsSearchTerm.Size = new System.Drawing.Size(100, 20);
             this.textBoxLevelsSearchTerm.TabIndex = 0;
             // 
+            // logTextBox
+            // 
+            this.logTextBox.BackColor = System.Drawing.Color.Black;
+            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
+            this.logTextBox.Location = new System.Drawing.Point(0, 0);
+            this.logTextBox.Name = "logTextBox";
+            this.logTextBox.ReadOnly = true;
+            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.logTextBox.Size = new System.Drawing.Size(756, 166);
+            this.logTextBox.TabIndex = 0;
+            this.logTextBox.Text = "";
+            // 
             // runBtn
             // 
             this.runBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -596,20 +610,6 @@
             this.pipelineLabel.TabIndex = 0;
             this.pipelineLabel.Text = "Pipeline Of Levels To Be Imported:";
             // 
-            // logTextBox
-            // 
-            this.logTextBox.BackColor = System.Drawing.Color.Black;
-            this.logTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.logTextBox.ForeColor = System.Drawing.Color.LightGray;
-            this.logTextBox.Location = new System.Drawing.Point(0, 0);
-            this.logTextBox.Name = "logTextBox";
-            this.logTextBox.ReadOnly = true;
-            this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.logTextBox.Size = new System.Drawing.Size(756, 166);
-            this.logTextBox.TabIndex = 0;
-            this.logTextBox.Text = "";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -617,6 +617,7 @@
             this.ClientSize = new System.Drawing.Size(984, 681);
             this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.toolStrip);
+            this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "MainForm";
             this.Text = "PR2PS Level Importer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

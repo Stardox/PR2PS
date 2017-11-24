@@ -1,15 +1,13 @@
-﻿using PR2PS.DataAccess.LevelsDataAccess;
+﻿using PR2PS.DataAccess.Entities;
+using PR2PS.DataAccess.LevelsDataAccess;
 using PR2PS.DataAccess.MainDataAccess;
-using PR2PS.Common.Extensions;
+using PR2PS.LevelImporter.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using PR2PS.DataAccess.Entities;
-using PR2PS.LevelImporter.Models;
 using static PR2PS.LevelImporter.Core.Enums;
 
 namespace PR2PS.LevelImporter.Core
@@ -174,6 +172,12 @@ namespace PR2PS.LevelImporter.Core
             }
 
             return Enumerable.Empty<UserModel>();
+        }
+
+        public Task<Int32> ImportLevels(IEnumerable<Level> levels)
+        {
+            this.levelsCtx.Levels.AddRange(levels);
+            return this.levelsCtx.SaveChangesAsync();
         }
 
         public void Dispose()
