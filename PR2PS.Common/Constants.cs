@@ -126,6 +126,7 @@ namespace PR2PS.Common.Constants
         public const String ROOM_CAMPAIGN = "campaign";
         public const String ROOM_ALLTIMEBEST = "best";
         public const String ROOM_TODAYSBEST = "best_today";
+        public const String ROOM_NEWEST = "newest";
         public const String ROOM_SEARCH = "search";
     }
 

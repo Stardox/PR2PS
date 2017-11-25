@@ -74,6 +74,7 @@ namespace PR2PS.GameServer
             this.rightRooms.Add(GameRooms.ROOM_CAMPAIGN, new RightRoom(GameRooms.ROOM_CAMPAIGN, this));
             this.rightRooms.Add(GameRooms.ROOM_ALLTIMEBEST, new RightRoom(GameRooms.ROOM_ALLTIMEBEST, this));
             this.rightRooms.Add(GameRooms.ROOM_TODAYSBEST, new RightRoom(GameRooms.ROOM_TODAYSBEST, this));
+            this.rightRooms.Add(GameRooms.ROOM_NEWEST, new RightRoom(GameRooms.ROOM_NEWEST, this));
             this.rightRooms.Add(GameRooms.ROOM_SEARCH, new RightRoom(GameRooms.ROOM_SEARCH, this));
         }
 
@@ -434,6 +435,7 @@ namespace PR2PS.GameServer
                 case GameRooms.ROOM_CAMPAIGN:
                 case GameRooms.ROOM_ALLTIMEBEST:
                 case GameRooms.ROOM_TODAYSBEST:
+                case GameRooms.ROOM_NEWEST:
                 case GameRooms.ROOM_SEARCH:
                     if (client.RightRoom == null)
                     {
