@@ -12,7 +12,7 @@ namespace PR2PS.Web.Core
             FILE_POLICY_XML = File.ReadAllText(PATH_POLICY_XML);
             FILE_CAMPAIGN = new Dictionary<Int32, String>();
 
-            for (Int32 i = 1; i <= 7; i++)
+            for (Int32 i = 1; i <= 8; i++)
             { 
                 FILE_CAMPAIGN.Add(i, File.ReadAllText(Path.Combine(PATH_CAMPAIGN, i.ToString())));
             }

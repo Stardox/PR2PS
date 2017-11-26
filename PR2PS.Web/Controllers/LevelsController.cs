@@ -44,6 +44,11 @@ namespace PR2PS.Web.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(ConfigurationManager.Instance.SearchUrl))
+                {
+                    campaignId = 8;
+                }
+
                 String campaignMaps;
                 if (!WebConstants.FILE_CAMPAIGN.TryGetValue(campaignId, out campaignMaps))
                 {
