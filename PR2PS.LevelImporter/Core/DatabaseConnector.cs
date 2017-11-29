@@ -5,6 +5,7 @@ using PR2PS.LevelImporter.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,13 +59,11 @@ namespace PR2PS.LevelImporter.Core
             return new SQLiteConnection(new SQLiteConnectionStringBuilder { DataSource = path }.ToString());
         }
 
-        private void ValidateDbSchema(IDbConnection connection, IDictionary<String, List<String>> schemaMetaData)
+        private void ValidateDbSchema(Database database, IDictionary<String, List<String>> schemaMetaData)
         {
-            connection.Open();
-
             foreach (String table in schemaMetaData.Keys)
             {
-                Boolean tableExists = TableExists(connection, table);
+                Boolean tableExists = TableExists(database, table);
                 if (!tableExists)
                 {
                     throw new DbValidationException(String.Format("Database does not contain table '{0}'.", table));
@@ -72,46 +71,29 @@ namespace PR2PS.LevelImporter.Core
 
                 foreach (String column in schemaMetaData[table])
                 {
-                    Boolean columnExists = ColumnExists(connection, table, column);
+                    Boolean columnExists = ColumnExists(database, table, column);
                     if (!columnExists)
                     {
                         throw new DbValidationException(String.Format("Table '{0}' does not contain column '{1}'.", table, column));
                     }
                 }
             }
-
-            connection.Close();
         }
 
-        public Boolean TableExists(IDbConnection connection, String tableName)
+        public Boolean TableExists(Database database, String tableName)
         {
-            using (IDbCommand cmd = connection.CreateCommand())
-            {
-                cmd.CommandText = String.Format("SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = '{0}'", tableName);
-                Int64 result = (Int64)cmd.ExecuteScalar();
+            Int64 result = database.SqlQuery<Int64>(
+                String.Format("SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = '{0}'", tableName)).SingleOrDefault();
 
-                return result == 1;
-            }
+            return result == 1;
         }
 
-        private Boolean ColumnExists(IDbConnection connection, String tableName, String columnName)
+        private Boolean ColumnExists(Database database, String tableName, String columnName)
         {
-            using (IDbCommand cmd = connection.CreateCommand())
-            {
-                cmd.CommandText = string.Format("PRAGMA table_info({0})", tableName);
-                IDataReader reader = cmd.ExecuteReader();
-                Int32 nameIndex = reader.GetOrdinal("Name");
+            Boolean exists = database.SqlQuery<TableInfo>(String.Format("PRAGMA table_info('{0}')", tableName))
+                .Any(ti => String.CompareOrdinal(ti.Name, columnName) == 0);
 
-                while (reader.Read())
-                {
-                    if (String.CompareOrdinal(reader.GetString(nameIndex), columnName) == 0)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
+            return exists;
         }
 
         #endregion
@@ -123,7 +105,7 @@ namespace PR2PS.LevelImporter.Core
                 try
                 {
                     this.mainCtx = new MainContext(this.BuildConnection(path));
-                    this.ValidateDbSchema(this.mainCtx.Database.Connection, this.mainDbSchema);
+                    this.ValidateDbSchema(this.mainCtx.Database, this.mainDbSchema);
                 }
                 catch
                 {
@@ -141,7 +123,7 @@ namespace PR2PS.LevelImporter.Core
                 try
                 {
                     this.levelsCtx = new LevelsContext(this.BuildConnection(path));
-                    this.ValidateDbSchema(this.levelsCtx.Database.Connection, this.levelDbSchema);
+                    this.ValidateDbSchema(this.levelsCtx.Database, this.levelDbSchema);
                 }
                 catch
                 {

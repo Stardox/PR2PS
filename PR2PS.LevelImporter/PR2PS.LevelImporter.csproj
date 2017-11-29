@@ -111,6 +111,7 @@
     <Compile Include="Models\ImportProgress.cs" />
     <Compile Include="Models\LevelModel.cs" />
     <Compile Include="Models\SearchResult.cs" />
+    <Compile Include="Models\TableInfo.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
