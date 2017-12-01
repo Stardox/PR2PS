@@ -86,7 +86,7 @@ namespace PR2PS.Web.Controllers
                     if (session != null)
                     {
                         // He already has session. Lets remove it.
-                        HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, session.IP);
+                        HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, null);
                         SessionManager.Instance.RemoveSession(session);
                     }
 
@@ -102,7 +102,7 @@ namespace PR2PS.Web.Controllers
                 else
                 {
                     // He has session, lets try to log him out of GameServer and update his session.
-                    HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, session.IP);
+                    HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, null);
 
                     acc = this.dataAccess.AuthenticateUser(session.AccounData.Username, this.Request.GetRemoteIPAddress());
                     accData = acc.ToAccountDataDTO();
