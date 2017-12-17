@@ -85,13 +85,13 @@ namespace PR2PS.Web.Controllers
 
                     if (session != null)
                     {
-                        // He already has session. Lets remove it.
+                        // He already has session. Lets remove it and raise error.
                         HubCtxProvider.Instance.ForceLogout(server.SignalRClientId, session.AccounData.UserId, null);
                         SessionManager.Instance.RemoveSession(session);
                     }
 
                     session = new SessionInstance(
-                            session != null ? session.Token : Guid.NewGuid(),
+                            Guid.NewGuid(),
                             loginDataJSON.LoginId,
                             accData,
                             loginDataJSON.Server.Server_name,

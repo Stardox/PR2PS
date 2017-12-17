@@ -1,8 +1,10 @@
 ﻿using PR2PS.Common.Constants;
 using System;
+using System.Diagnostics;
 
 namespace PR2PS.Common.DTO
 {
+    [DebuggerDisplay("{Username} ({UserId})")]
     public class AccountDataDTO
     {
         public Int64 UserId { get; set; }
