@@ -225,7 +225,6 @@
             this.textBoxLevelsServerURL.Name = "textBoxLevelsServerURL";
             this.textBoxLevelsServerURL.Size = new System.Drawing.Size(235, 20);
             this.textBoxLevelsServerURL.TabIndex = 16;
-            this.textBoxLevelsServerURL.Text = "http://pr2hub.com/levels";
             // 
             // labelLevelsServerURL
             // 

@@ -145,7 +145,7 @@ namespace PR2PS.Web.Controllers
         /// </summary>
         /// <param name="id">Unique session token.</param>
         /// <param name="version">Random string.</param>
-        /// <returns>String containing all levels created by current user.</returns>
+        /// <returns>Level in string format.</returns>
         [HttpGet]
         [Route("levels/{id}.txt")]
         public HttpResponseMessage DownloadLevel(Int64? id, Int32? version = -1)

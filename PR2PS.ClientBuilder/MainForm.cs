@@ -45,9 +45,11 @@ namespace PR2PS.ClientBuilder
            + "- https://mydomain.com";
 
         private const String HELP_LEVELS_URL =
-           "Since the level editor functionality is not yet implemented, you can leave the "
-           + "'http://pr2hub.com/levels' URL as it is, so that the client can download the PR2 maps from there. "
-           + "Once the level editor and the level host functionalities will be implemented, you can change this.";
+            "Enter 'http://pr2hub.com/levels' if you want to ensure that maps will be downloaded from the original "
+            + "Platform racing 2 servers. However level editor together with local level host is now implemented, "
+            + "therefore you can also enter URL of the game web server here followed by /levels. Valid examples:\n"
+            + "- http://localhost:8080/levels\n"
+            + "- https://mydomain.com/levels";
 
         private const String HELP_DESTINATION =
             "You need to specify the destination folder path. Once the build finishes, this folder will contain "
